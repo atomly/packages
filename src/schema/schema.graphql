@@ -1,0 +1,23 @@
+type Query {
+  hello(name: String!): String!
+  users: [User]
+  user(id: ID!): User
+}
+
+type User {
+  id: ID!
+  email: ID!
+  firstName: String!
+  lastName: String!
+  password: String!
+  age: Int
+}
+
+type Mutation {
+  newUser(email: String!, firstName: String!, lastName: String!, password: String!, age: Int): User
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

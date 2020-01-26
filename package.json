@@ -1,0 +1,62 @@
+{
+  "name": "beast-backend",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=8.10.0"
+  },
+  "description": "Awesome project developed with TypeORM.",
+  "devDependencies": {
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "@types/node": "^13.5.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.6.0",
+    "eslint-plugin-node": "^11.0.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "ts-node": "8.6.2",
+    "typescript": "3.7.5"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.0.0-preview020.3",
+    "dotenv": "^8.2.0",
+    "graphql-codegen": "^0.4.0",
+    "graphql-import": "^0.7.1",
+    "graphql-tools": "^4.0.6",
+    "graphql-yoga": "^1.18.3",
+    "merge-graphql-schemas": "^1.7.6",
+    "module-alias": "^2.2.2",
+    "nexus": "^0.12.0-rc.9",
+    "nexus-prisma": "^0.7.0-next.2",
+    "pg": "^7.17.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.22"
+  },
+  "scripts": {
+    "build": "npm -s run generate && tsc",
+    "start": "nodemon --exec ts-node -r dotenv/config --files ./src/index.ts",
+    "introspect:prisma": "npx prisma2 introspect",
+    "generate:prisma": "npx prisma2 generate",
+    "generate:nexus": "ts-node --transpile-only ./src/index.ts",
+    "generate:schema": "ts-node ./src/schema/generateSchema.ts",
+    "generate:types": "npx gql2ts ./src/schema/schema.graphql -o ./src/types/schema.d.ts",
+    "generate": "npm -s run generate:prisma && npm -s run generate:nexus"
+  },
+  "_moduleAliases": {
+    "@root/*": [
+      "./src/*"
+    ],
+    "@typings/*": [
+      "./src/types/*"
+    ],
+    "@generatedPrisma/*": [
+      "./prisma/*"
+    ],
+    "@resolvers/*": [
+      "./src/resolvers/*"
+    ]
+  }
+}
