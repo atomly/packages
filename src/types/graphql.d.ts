@@ -30,6 +30,8 @@ declare namespace Prisma {
       newUser: TMutationNewUser
     }
   }
+  // Custom Query resolvers
+  type TQueryHello = GPrismaResolver<null, GQL.IHelloOnQueryArguments, string>
 
   // User resolvers
   type TQueryUser = GPrismaResolver<null, GQL.IUserOnQueryArguments, usersClient<users | null>>

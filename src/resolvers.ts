@@ -2,13 +2,12 @@
 import { Prisma } from '@typings/graphql';
 
 // Resolvers
+import queryResolvers from '@resolvers/query';
 import userResolvers from '@resolvers/user';
 
 export const resolvers: Prisma.IResolverMap = {
   Query: {
-    hello(_, { name }): string {
-      return `Hello ${name || 'World'}`;
-    },
+    ...queryResolvers.Query,
     ...userResolvers.Query,
   },
   Mutation: {
