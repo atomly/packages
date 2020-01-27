@@ -21,7 +21,7 @@ declare namespace Prisma {
   interface IResolverMap extends IResolvers {
     // Queries
     Query: {
-      hello: GPrismaResolver<null, GQL.IHelloOnQueryArguments, string>
+      hello: TQueryHello
       user: TQueryUser
       users: TQueryUsers
     }
