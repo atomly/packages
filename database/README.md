@@ -10,36 +10,39 @@
 ## Install
 
 1. Install Vagrant with the respective Vagrantfile from the Beast repository.
-   - That Vagrantfile is configured to also install docker in the machine image.
+    - That Vagrantfile is configured to also install docker in the machine image.
 2. Docker pull the postgres:alpine image.
-   - `sudo docker pull postgres:alpine`
-   - Check if the docker image is installed with `sudo docker images`
+    - `sudo docker pull postgres:alpine`
+    - Check if the docker image is installed with `sudo docker images`
 3. Start a docker instance of the postgres image.
-   - `sudo docker run --name beast-postgres-0 -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine`
-     - The name of the container is `beast-postgres-0`.
-     - The default username is `postgres`.
-     - The password is `password`.
-     - It's ran in dettached mode with the `postgres:alpine` image.
-     - The port 5432 is exposed.
-     - Check if the Docker container is running with `sudo docker ps`.
+    - `sudo docker run --name beast-postgres-0 -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine`
+      - The name of the container is `beast-postgres-0`.
+      - The default username is `postgres`.
+      - The password is `password`.
+      - It's ran in dettached mode with the `postgres:alpine` image.
+      - The port 5432 is exposed.
+      - Check if the Docker container is running with `sudo docker ps`.
 4. Bash into the postgres instance with `sudo docker exec -it beast-postgres-0 bash`.
-   - It's set in interactive mode.
+    - It's set in interactive mode.
 5. Access the postgres instance with root access by running `psql -U postgres`.
-   - `postgres` is the username which has root access.
-   - With this access, we can create databases, execute commands, etc.
+    - `postgres` is the username which has root access.
+    - With this access, we can create databases, execute commands, etc.
 6. Check the user by executing `\du`.
-   - This will display the superuser details.
+    - This will display the superuser details.
 7. Create a test database by running `create database test;`, make sure to include the colon.
 8. Display the database information by running `\l`.
 9. Connect to the database by running `\c test`.
-   - `test` is the name of the database.
+    - `test` is the name of the database.
 10. Check relations to the database by running `\d`, no relations will be found of course.
 
 ## Access
 
 1. Start the Vagrant machine with `vagrant up; vagrant ssh`.
-2. Bash into the postgres instance with `sudo docker exec -it beast-postgres-0 bash`.
-3. Access the postgres instance with root access by running `psql -U postgres`.
+2. Start the container with `sudo docker start beast-postgres-0`.
+3. Bash into the postgres instance with `sudo docker exec -it beast-postgres-0 bash`.
+4. Access the postgres instance with root access by running `psql -U postgres`.
+5. Connect to the database by running `\c test`.
+    - `test` is the name of the database.
 
 ## Troubleshooting
 

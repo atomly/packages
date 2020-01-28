@@ -74,7 +74,7 @@ module.exports = {
     '@typescript-eslint/prefer-nullish-coalescing': 'error',
     '@typescript-eslint/prefer-optional-chain': 'error',
     '@typescript-eslint/unbound-method': 'off',
-    'no-empty-function': 'off',
+    'no-empty-function': 'off', // replaced by @typescript-eslint/no-empty-function
     '@typescript-eslint/no-empty-function': [
       'error',
       { allow: ['arrowFunctions'] },
@@ -152,6 +152,14 @@ module.exports = {
       rules: {
         // allow console logs in tools and tests
         'no-console': 'off',
+      },
+    },
+    // generated schema.d.ts file
+    {
+      files: ['./src/types/schema.d.ts'],
+      rules: {
+        // allow explicit any on the generated files
+        '@typescript-eslint/no-explicit-any': 'off',
       },
     },
   ],

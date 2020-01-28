@@ -41,17 +41,9 @@
     "generate": "npm -s run generate:prisma"
   },
   "_moduleAliases": {
-    "@root/*": [
-      "./src/*"
-    ],
-    "@typings/*": [
-      "./src/types/*"
-    ],
-    "@generatedPrisma/*": [
-      "./prisma/*"
-    ],
-    "@resolvers/*": [
-      "./src/resolvers/*"
-    ]
+    "@root": "src/",
+    "@typings": "src/types",
+    "@generatedPrisma": "./prisma",
+    "@resolvers": "src/resolvers"
   }
 }
