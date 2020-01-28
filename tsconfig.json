@@ -24,7 +24,8 @@
       "@root/*": ["./src/*"],
       "@typings/*": ["./src/types/*"],
       "@generatedPrisma/*": ["./prisma/*"],
-      "@resolvers/*": ["./src/resolvers/*"]
+      "@resolvers/*": ["./src/resolvers/*"],
+      "@utils/*": ["./src/utils/*"],
     }
   },
   "exclude": ["node_modules"],

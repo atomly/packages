@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Types
 import { ContextParameters } from 'graphql-yoga/dist/types';
 import { IResolvers } from 'graphql-tools';
@@ -16,6 +17,18 @@ declare namespace Prisma {
   // Resolvers type
   type GPrismaResolver<T, R, X> = (parent: T, args: R, prisma: PrismaClient<{}, never>, info: GraphQLResolveInfo) => X;
   type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, prisma: PrismaClient<{}, never>, info: GraphQLResolveInfo) => X>
+
+  interface IResolver {
+    Query?: {
+      [key: string]: Prisma.GPrismaResolver<any, any, any>
+    }
+    Mutation?: {
+      [key: string]: Prisma.GPrismaResolver<any, any, any>
+    }
+    Subscription?: {
+      [key: string]: Prisma.GPrismaResolver<any, any, any>
+    }
+  }
 
   // GraphQLServer.resolvers
   interface IResolverMap extends IResolvers {
