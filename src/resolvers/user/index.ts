@@ -1,13 +1,13 @@
 // Types
 import { Prisma } from '@typings/graphql';
 
-const user: Prisma.TQueryUser = function user(_, { id }, prisma) {
-  const user = prisma.users.findOne({ where: { id: Number(id) } });
+const user: Prisma.TQueryUser = function user(_, { id }, context) {
+  const user = context.prisma.users.findOne({ where: { id: Number(id) } });
   return user;
 }
 
-const users: Prisma.TQueryUsers = function users(_, __, prisma) {
-  const user = prisma.users.findMany();
+const users: Prisma.TQueryUsers = function users(_, __, context) {
+  const user = context.prisma.users.findMany();
   return user;
 }
 

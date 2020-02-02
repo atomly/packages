@@ -7,7 +7,7 @@ import userResolvers from '@resolvers/user';
 
 export const resolvers: Prisma.IResolverMap = {
   Query: {
-    ...queryResolvers.Query,
+    ...queryResolvers,
     ...userResolvers.Query,
   },
   Mutation: {

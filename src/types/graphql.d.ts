@@ -15,8 +15,8 @@ declare namespace Prisma {
   type Client = PrismaClient<{}, never>
 
   // Resolvers type
-  type GPrismaResolver<T, R, X> = (parent: T, args: R, prisma: PrismaClient<{}, never>, info: GraphQLResolveInfo) => X;
-  type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, prisma: PrismaClient<{}, never>, info: GraphQLResolveInfo) => X>
+  type GPrismaResolver<T, R, X> = (parent: T, args: R, context: IPrismaContext, info: GraphQLResolveInfo) => X;
+  type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IPrismaContext, info: GraphQLResolveInfo) => X>
 
   interface IResolver {
     Query?: {
