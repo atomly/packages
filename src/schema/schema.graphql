@@ -17,7 +17,12 @@ type Mutation {
   newUser(email: String!, firstName: String!, lastName: String!, password: String!, age: Int): User
 }
 
+type Subscription {
+  hello(name: String!): String!
+}
+
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }

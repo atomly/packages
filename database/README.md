@@ -33,7 +33,7 @@
 8. Display the database information by running `\l`.
 9. Connect to the database by running `\c test`.
     - `test` is the name of the database.
-10. Check relations to the database by running `\d`, no relations will be found of course.
+10. Check relations to the database by running `\d`, no relations will be found initially.
 
 ## Access
 

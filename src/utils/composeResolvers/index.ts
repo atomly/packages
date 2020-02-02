@@ -1,16 +1,26 @@
 // Types
 import { Prisma } from '@typings/graphql';
 
-export function composeResolvers(...resolvers: Prisma.IResolver[]): Prisma.IResolver {
-  const globalResolver = {
+export function composeResolvers<T>(...resolvers: Prisma.IResolver[]): T {
+  const globalResolver = resolvers.reduce((resolvers, resolver) => {
+    return {
+      Query: {
+        ...resolvers.Query,
+        ...resolver.Query,
+      },
+      Mutation: {
+        ...resolvers.Mutation,
+        ...resolver.Mutation,
+      },
+      Subscription: {
+        ...resolvers.Subscription,
+        ...resolver.Subscription,
+      },
+    };
+  }, {
     Query: {},
     Mutation: {},
     Subscription: {},
-  };
-  resolvers.forEach(resolver => {
-    Object.assign(globalResolver.Query, resolver.Query);
-    Object.assign(globalResolver.Mutation, resolver.Mutation);
-    Object.assign(globalResolver.Subscription, resolver.Subscription);
   });
-  return globalResolver;
+  return globalResolver as T;
 }

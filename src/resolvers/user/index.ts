@@ -1,6 +1,9 @@
 // Types
 import { Prisma } from '@typings/graphql';
 
+// Utils
+import { resolverFactory } from '@utils/index';
+
 const user: Prisma.TQueryUser = function user(_, { id }, context) {
   const user = context.prisma.users.findOne({ where: { id: Number(id) } });
   return user;
@@ -15,12 +18,12 @@ const newUser: Prisma.TMutationNewUser = function newUser(_, { email, password }
   return email + password;
 }
 
-export default {
-  Query: {
+export default resolverFactory(
+  {
     user,
     users,
   },
-  Mutation: {
+  {
     newUser,
   },
-};
+);

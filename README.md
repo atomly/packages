@@ -10,10 +10,11 @@
 - Write a resolver factory function.
 - Add `.env` template for necessary settings.
 
-
 ## Environmental Variables File Template
 
-```env
+```.env
+NODE_PATH=./
+TS_NODE_FILES=true
 NODE_ENV=development
 TYPEORM_HOST=192.168.99.101
 POSTGRESQL_URL=postgresql://postgres:password@192.168.99.101:5432/test
