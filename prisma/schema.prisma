@@ -2,8 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// The env("NAME") parameters come from a .env file.
-// README.md for more info.
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRESQL_URL")

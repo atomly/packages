@@ -15,7 +15,8 @@
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-prettier": "^3.1.2",
     "nodemon": "^2.0.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "prisma2": "^2.0.0-preview021"
   },
   "dependencies": {
     "@prisma/client": "^2.0.0-preview021",
@@ -37,8 +38,7 @@
     "introspect:prisma": "npx prisma2 introspect",
     "generate:prisma": "npx prisma2 generate",
     "generate:schema": "ts-node ./src/schema/generateSchema.ts",
-    "generate:types": "npx gql2ts ./src/schema/schema.graphql -o ./src/types/schema.d.ts",
-    "generate": "npm -s run generate:prisma"
+    "generate:types": "npx gql2ts ./src/schema/schema.graphql -o ./src/types/schema.d.ts"
   },
   "_moduleAliases": {
     "@root": "src/",

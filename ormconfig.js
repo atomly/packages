@@ -2,19 +2,20 @@ module.exports = {
   //
   // DB Connection
   //
-  type: "postgres",
-  // The process.env.TYPEORM_HOST parameter
-  // come from a .env file.
+  // The process.env variables come from a .env file.
   // README.md for more info.
-  host: 'localhost',
-  port: 5432,
-  username: "postgres",
-  password: "password",
-  database: "test",
+  type: process.env.TYPEORM_CONNECTION,
+  host: process.env.TYPEORM_HOST,
+  port: process.env.TYPEORM_PORT,
+  username: process.env.TYPEORM_USERNAME,
+  password: process.env.TYPEORM_PASSWORD,
+  database: process.env.TYPEORM_DATABASE,
   //
   // ORM
   //
-  synchronize: true,
+  // Only synchronize the database in development to avoid
+  // potential loss of data.
+  synchronize: Boolean(process.env.NODE_ENV === 'development'),
   logging: false,
   entities: [
     "src/entity/**/*.ts"
