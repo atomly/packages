@@ -64,7 +64,7 @@ Changes to our actual GraphQL schema will have to be done manually. **It's impor
 
 ## Environmental Variables File Template
 
-The following configuration is necessary to run the application. The following env. variables are working examples, make sure to fill them with the valid host IP and port where your local database is, as well as the user. It's possible to add a cloud-hosted database as well.
+The following configuration is necessary to run the application. The following env. variables are working examples, make sure to fill them with the valid host IP and port where your local database is hosted, as well as the user. It's possible to add a cloud-hosted database as well.
 
 ```.env
 # Node #
