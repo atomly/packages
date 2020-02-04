@@ -1,2 +1,2 @@
 #!/bin/bash
-npx typeorm schema:sync
+npm run synchronize:typeorm

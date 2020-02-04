@@ -14,7 +14,7 @@
 ### Installation: TL;DR
 
 1. Git clone this repository.
-2. Install all of the dependencies.
+2. Install all of the dependencies found in the `package.json`.
 3. Start and connect the PostgreSQL database on port 5432 running on Docker.
     - [Detailed steps found here.](https://github.com/beast-app/beast-backend/blob/master/database/README.md)
 4. Set up the development environmental variables.

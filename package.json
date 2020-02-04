@@ -35,6 +35,7 @@
   "scripts": {
     "build": "npm -s run generate && tsc",
     "start": "nodemon --exec ts-node -r dotenv/config --files ./src/index.ts",
+    "synchronize:typeorm": "ts-node -r dotenv/config --files ./src/synchronize_typeorm.ts",
     "introspect:prisma": "npx prisma2 introspect",
     "generate:prisma": "npx prisma2 generate",
     "generate:schema": "ts-node ./src/schema/generateSchema.ts",

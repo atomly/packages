@@ -20,6 +20,9 @@ export class User {
   @Column('varchar', { length: 255 })
   gametag: string;
 
+  @Column('varchar', { length: 255 })
+  profilePicture: string;
+
   @Column()
   age: number;
 }

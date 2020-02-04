@@ -1,8 +1,7 @@
 // Absolute Paths & TypeORM
 import 'module-alias/register';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
-// import { User } from "./entity/User";
+import { createConnection, getConnectionOptions } from 'typeorm';
 
 // Libraries
 import { GraphQLServer } from 'graphql-yoga';
@@ -14,6 +13,9 @@ import typeDefs from '@root/schema';
 
 // Types
 import { Prisma } from '@typings/graphql';
+
+// TypeORM configuration
+import ormConfig from '../ormconfig';
 
 // GraphQL server setup
 const prisma = new PrismaClient();
@@ -28,17 +30,21 @@ const server = new GraphQLServer({
   },
 });
 
-// createConnection().then(async connection => {
-createConnection().then(() => {
-  server.start(() => {
+getConnectionOptions().then(connectionOptions => {
+  createConnection({
+    ...connectionOptions,
+    ...ormConfig,
+  }).then(() => {
+    server.start(() => {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log('🚀🚀 Server ready at: http://localhost:4000  \n');
+      }
+    });
+  }).catch(error => {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      console.log('🚀🚀 Server ready at: http://localhost:4000  \n');
+      console.log('Something went wrong: ', error);
     }
   });
-}).catch(error => {
-  if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.log('Something went wrong: ', error)
-  }
 });
