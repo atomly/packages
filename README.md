@@ -1,5 +1,10 @@
 # Beast Backend (WIP)
 
+## TODO
+
+- Mac OS shell scripts.
+- Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
+
 ---
 
 ## Installation
