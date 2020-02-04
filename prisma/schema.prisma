@@ -7,12 +7,23 @@ datasource db {
   url      = env("POSTGRESQL_URL")
 }
 
+model posts {
+  body      String
+  comments  Int
+  id        Int      @id
+  likes     Int
+  timestamp DateTime
+  userId    users?
+}
+
 model users {
-  age       Int
-  email     String @unique
-  firstName String
-  gametag   String
-  id        Int    @id
-  lastName  String
-  password  String
+  age            Int
+  email          String  @unique
+  firstName      String
+  gametag        String
+  id             Int     @id
+  lastName       String
+  password       String
+  profilePicture String
+  postses        posts[]
 }
