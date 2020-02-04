@@ -1,3 +1,3 @@
 #!/bin/bash
-source scripts/introspect.sh
+npm run introspect:prisma
 npm run generate:prisma

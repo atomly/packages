@@ -1,16 +1,36 @@
 # Beast Backend (WIP)
 
-## TODO
+---
 
-- Installation and first run section.
+## Installation
+
+### Requirements
+
+- Have Node.js installed.
+- Have Docker installed. If you can't install Docker (e.g. Windows 10 Home Edition), you can fall back to Vagrant then installing Docker inside the guest OS as a good alternative among many.
+- Have NPM installed.
+- Git Bash CLI recommended.
+
+### Installation: TL;DR
+
+1. Git clone this repository.
+2. Install all of the dependencies.
+3. Start and connect the PostgreSQL database on port 5432 running on Docker.
+    - [Detailed steps found here.](https://github.com/beast-app/beast-backend/blob/master/database/README.md)
+4. Set up the development environmental variables.
+    - [More details in the environmental variables.](#Environmental-Variables-File-Template)
+5. Synchronize the database with our Entities by executing the `synchronize_typeorm.sh` script.
+6. Introspect the database then generate the Prisma schema and client by executing the `generate_prisma_client.sh` script.
+7. Once the database is ready, and the Prisma client has been successfuly generated, it is now safe to start the server by running `npm start`.
 
 ---
 
 ## Scripts & Workflow
 
-### TL;DR
+### Scripts & Workflow: TL;DR
 
 - If the database schema changes when changing our TypeORM entities (entity directory), execute the `generate_prisma_client.sh` shell script to update our Prisma schema and client.
+- Note that for this to work, TypeORM must have synchronized the database before re-generating the client. If for some reason it does not work, execute the `synchronize_typeorm.sh` script.
 - If our server's GraphQL schema (`schema.graphql`) changes, we need to regenerate our `GQL` namespace which contains the type definitions for our GraphQL queries, mutations, subscriptions, etc. To do this, execute the `generate_types.sh` shell script to update our Prisma schema and client.
 
 ### Overview
@@ -35,7 +55,7 @@ If our GraphQL schema is changed, then we need to regenerate our `GQL` namespace
 
 [Source.](https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md)
 
-> Indicates if database schema should be auto created on every application launch. Be careful with this option and don't use this in production - otherwise you can lose production data. This option is useful during debug and development. As an alternative to it, you can use CLI and run schema:sync command.
+> Indicates if database schema should be auto created on every application launch. Be careful with this option and don't use this in production - otherwise you can lose production data. This option is useful during debug and development. As an alternative to it, you can use CLI and run schema:sync command, or execute the `synchronize_typeorm.sh` script located inside the `scripts` directory.
 
 Whenever this option is set to `true` inside the `ormconfig.js` file, our database schema will be recreated after every change, thanks to `nodemon` detecting any of the changes and restarting the server.
 
