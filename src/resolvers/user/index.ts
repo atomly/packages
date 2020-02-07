@@ -1,6 +1,9 @@
 // Types
 import { Prisma } from '@typings/graphql';
 
+// Entity
+import { User } from '@entity/User';
+
 // Utils
 import { resolverFactory } from '@utils/index';
 
@@ -14,8 +17,23 @@ const users: Prisma.TQueryUsers = function users(_, __, context) {
   return user;
 }
 
-const newUser: Prisma.TMutationNewUser = function newUser(_, { email, password }): string {
-  return email + password;
+const newUser: Prisma.TMutationNewUser = async function newUser(
+  _,
+  args,
+  context,
+) {
+  const createdUser = User.create({
+    email: args.email,
+    password: args.password,
+  });
+  const user = await context.prisma.users.create({
+    data: {
+      id: createdUser.id,
+      email: createdUser.email,
+      password: createdUser.password,
+    },
+  })
+  return user;
 }
 
 export default resolverFactory(

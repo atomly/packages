@@ -8,7 +8,7 @@ const { writeFileSync } = require('fs');
 const typesArray = fileLoader(`${__dirname}/**/*.graphql`);
 
 // Schema
-const schema = mergeTypes(typesArray, { all: true });
+const schema: string = mergeTypes(typesArray, { all: true });
 
 // Generate schema file
 writeFileSync(`${__dirname}/schema.graphql`, schema);

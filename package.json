@@ -7,19 +7,28 @@
   },
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
+    "@types/jest": "^25.1.1",
     "@types/node": "^13.5.0",
+    "@types/shelljs": "^0.8.6",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "graphql-tag": "^2.10.3",
+    "jest": "^25.1.0",
+    "jest-dev-server": "^4.4.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "prisma2": "^2.0.0-preview021"
+    "prisma2": "^2.0.0-preview021",
+    "shelljs": "^0.8.3",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@prisma/client": "^2.0.0-preview021",
+    "@types/jest-dev-server": "^4.2.0",
     "dotenv": "^8.2.0",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.6",
@@ -28,14 +37,17 @@
     "module-alias": "^2.2.2",
     "pg": "^7.17.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.22",
     "ts-node": "8.6.2",
-    "typescript": "3.7.5"
+    "typeorm": "^0.2.22"
   },
   "scripts": {
     "build": "npm -s run generate && tsc",
-    "start": "nodemon --exec ts-node -r dotenv/config --files ./src/index.ts",
-    "synchronize:typeorm": "ts-node -r dotenv/config --files ./src/synchronize_typeorm.ts",
+    "start": "nodemon --exec ts-node --files ./src/index.ts",
+    "start:prod": "nodemon --exec ts-node --files ./src/prod.ts",
+    "start:test": "nodemon --exec ts-node --files ./src/jest.ts",
+    "test": "npm run test:db_setup && npx jest",
+    "test:db_setup": "ts-node --files .src/tests/utils/setup.ts",
+    "synchronize:typeorm": "ts-node --files ./src/synchronize_typeorm.ts",
     "introspect:prisma": "npx prisma2 introspect",
     "generate:prisma": "npx prisma2 generate",
     "generate:schema": "ts-node ./src/schema/generateSchema.ts",
@@ -43,9 +55,11 @@
   },
   "_moduleAliases": {
     "@root": "src/",
+    "@entity": "src/entity",
     "@typings": "src/types",
     "@generatedPrisma": "./prisma",
     "@resolvers": "src/resolvers",
-    "@utils": "src/utils"
+    "@utils": "src/utils",
+    "@tests": "src/tests"
   }
 }

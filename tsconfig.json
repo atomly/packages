@@ -21,10 +21,12 @@
     "baseUrl": "./",
     "paths" : {
       "@root/*": ["./src/*"],
+      "@entity/*": ["./src/entity/*"],
       "@typings/*": ["./src/types/*"],
       "@generatedPrisma/*": ["./prisma/*"],
       "@resolvers/*": ["./src/resolvers/*"],
       "@utils/*": ["./src/utils/*"],
+      "@tests/*": ["./src/tests/*"]
     }
   },
   "exclude": ["node_modules"],

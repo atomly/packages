@@ -4,21 +4,18 @@ type Query {
   user(id: ID!): User
 }
 
+type Subscription {
+  hello(name: String!): String!
+}
+
 type User {
   id: ID!
   email: ID!
-  firstName: String!
-  lastName: String!
   password: String!
-  age: Int
 }
 
 type Mutation {
-  newUser(email: String!, firstName: String!, lastName: String!, password: String!, age: Int): User
-}
-
-type Subscription {
-  hello(name: String!): String!
+  newUser(email: String!, password: String!): User
 }
 
 schema {

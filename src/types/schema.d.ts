@@ -39,10 +39,7 @@ interface IUser {
 __typename: "User";
 id: string;
 email: string;
-firstName: string;
-lastName: string;
 password: string;
-age: number | null;
 }
 
 interface IMutation {
@@ -52,10 +49,7 @@ newUser: IUser | null;
 
 interface INewUserOnMutationArguments {
 email: string;
-firstName: string;
-lastName: string;
 password: string;
-age?: number | null;
 }
 
 interface ISubscription {

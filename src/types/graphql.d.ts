@@ -49,5 +49,5 @@ declare namespace Prisma {
   // User resolvers
   type TQueryUser = GPrismaResolver<null, GQL.IUserOnQueryArguments, usersClient<users | null>>
   type TQueryUsers = GPrismaResolver<null, null, Promise<users[]>>
-  type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, string>
+  type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, Promise<users>>
 }

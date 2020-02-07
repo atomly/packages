@@ -2,9 +2,12 @@ export default {
   //
   // ORM
   //
-  // Only synchronize the database in development to avoid
-  // potential loss of data.
-  synchronize: Boolean(process.env.NODE_ENV === 'development'),
+  // Only synchronize the database in development or test
+  // to avoid potential loss of data.
+  synchronize: Boolean(
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test',
+  ),
   logging: false,
   entities: [
     `${__dirname}/src/entity/**/*.ts`,

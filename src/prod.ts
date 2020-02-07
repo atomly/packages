@@ -4,6 +4,6 @@ import { startServer } from './server';
 // Setting up our configuration
 import { setupConfig } from '@root/config';
 
-setupConfig(setupConfig.ENodeEnvConfig.DEVELOPMENT);
+setupConfig(setupConfig.ENodeEnvConfig.PRODUCTION);
 
 startServer();
