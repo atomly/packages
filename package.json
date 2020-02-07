@@ -10,6 +10,7 @@
     "@types/jest": "^25.1.1",
     "@types/node": "^13.5.0",
     "@types/shelljs": "^0.8.6",
+    "@types/uuid": "^3.4.7",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
     "eslint": "^6.8.0",
@@ -38,7 +39,8 @@
     "pg": "^7.17.1",
     "reflect-metadata": "^0.1.13",
     "ts-node": "8.6.2",
-    "typeorm": "^0.2.22"
+    "typeorm": "^0.2.22",
+    "uuid": "^3.4.0"
   },
   "scripts": {
     "build": "npm -s run generate && tsc",
@@ -46,7 +48,7 @@
     "start:prod": "nodemon --exec ts-node --files ./src/prod.ts",
     "start:test": "nodemon --exec ts-node --files ./src/jest.ts",
     "test": "npm run test:db_setup && npx jest",
-    "test:db_setup": "ts-node --files .src/tests/utils/setup.ts",
+    "test:db_setup": "ts-node --files ./src/tests/utils/setup.ts",
     "synchronize:typeorm": "ts-node --files ./src/synchronize_typeorm.ts",
     "introspect:prisma": "npx prisma2 introspect",
     "generate:prisma": "npx prisma2 generate",

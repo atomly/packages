@@ -9,7 +9,7 @@ import {
 import { TSJest } from '@typings/tests';
 
 // Dependencies
-import schema from '@root/schema';
+import schema from '../../schema';
 
 export const tsGlobal = global as unknown as TSJest.Global
 

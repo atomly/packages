@@ -17,13 +17,8 @@ model posts {
 }
 
 model users {
-  age            Int
-  email          String  @unique
-  firstName      String
-  gametag        String
-  id             Int     @id
-  lastName       String
-  password       String
-  profilePicture String
-  postses        posts[]
+  email    String  @unique
+  id       String  @id
+  password String
+  postses  posts[]
 }

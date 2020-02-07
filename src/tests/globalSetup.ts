@@ -1,3 +1,7 @@
+// Absolute Paths & TypeORM
+import 'module-alias/register';
+import 'reflect-metadata';
+
 // Libraries
 import { setup as setupDevServer, getServers } from 'jest-dev-server';
 import { PrismaClient } from '@prisma/client';

@@ -1,12 +1,12 @@
 // Libraries
-import gql from 'graphql-tag';
 import { Connection } from 'typeorm';
 
 // Dependencies
-import { testConnection } from '@tests/utils/testConnection';
-import { tsGlobal } from '@tests/utils';
+import { testConnection } from '../utils/testConnection';
+import { gqlCall } from '../utils';
+import * as userFixtures from '../fixtures/User';
 
-const mutation = gql`
+const mutation = `
   {
     user(id: 5) {
       firstName
@@ -25,7 +25,12 @@ afterAll(async () => {
 });
 
 describe('register resolver', () => {
-  it('creates user correctly', () => {
-    
+it('creates user correctly', async () => {
+    console.log((
+      await gqlCall({
+        source: mutation,
+        variableValues: userFixtures,
+      })
+    ));
   });
 });
