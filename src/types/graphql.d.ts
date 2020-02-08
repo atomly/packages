@@ -3,12 +3,12 @@
 import { ContextParameters } from 'graphql-yoga/dist/types';
 import { IResolvers } from 'graphql-tools';
 import { GraphQLResolveInfo } from 'graphql';
-import { PrismaClient, usersClient, users } from '@prisma/client';
+import { PrismaClient, users } from '@prisma/client';
 
-declare namespace Prisma {
+declare namespace Beast {
   // GraphQLServer.context
   interface IPrismaContext extends ContextParameters {
-    prisma: Prisma.Client
+    prisma: Beast.Client
   }
 
   // GraphQLServer.context.prisma
@@ -20,13 +20,13 @@ declare namespace Prisma {
 
   interface IResolver {
     Query?: {
-      [key: string]: Prisma.GPrismaResolver<any, any, any>
+      [key: string]: Beast.GPrismaResolver<any, any, any>
     }
     Mutation?: {
-      [key: string]: Prisma.GPrismaResolver<any, any, any>
+      [key: string]: Beast.GPrismaResolver<any, any, any>
     }
     Subscription?: {
-      [key: string]: Prisma.GPrismaResolver<any, any, any>
+      [key: string]: Beast.GPrismaResolver<any, any, any>
     }
   }
 

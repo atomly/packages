@@ -1,6 +1,6 @@
 // Libraries
 import { Connection } from 'typeorm';
-import * as faker from 'faker';
+import faker from 'faker';
 
 // Dependencies
 import { User } from '@root/entity/User';
@@ -12,7 +12,6 @@ const newUserMutation = `
     newUser(input: $input) {
       id
       email
-      password
     }
   }
 `;
@@ -48,7 +47,6 @@ it('creates user correctly', async () => {
       data: {
         newUser: {
           email: user.email,
-          password: user.password,
         },
       },
     });

@@ -31,8 +31,10 @@
   },
   "dependencies": {
     "@prisma/client": "^2.0.0-preview021",
+    "@types/bcrypt": "^3.0.0",
     "@types/jest-dev-server": "^4.2.0",
     "bcrypt": "^3.0.8",
+    "class-validator": "^0.11.0",
     "dotenv": "^8.2.0",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.6",

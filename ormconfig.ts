@@ -4,9 +4,9 @@ export default {
   //
   // Only synchronize the database in development or test
   // to avoid potential loss of data.
-  synchronize: Boolean(
+  synchronize: (
     process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test',
+    process.env.NODE_ENV === 'test'
   ),
   logging: false,
   entities: [

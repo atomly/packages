@@ -1,5 +1,5 @@
 // Types
-import { Prisma } from '@typings/graphql';
+import { Beast } from '@typings/graphql';
 
 // Utils
 import { composeResolvers } from '@utils/index';
@@ -8,7 +8,7 @@ import { composeResolvers } from '@utils/index';
 import queryResolvers from '@resolvers/query';
 import userResolvers from '@resolvers/user';
 
-export const resolvers: Prisma.IResolverMap = composeResolvers(
+export const resolvers: Beast.IResolverMap = composeResolvers(
   queryResolvers,
   userResolvers,
 )

@@ -1,7 +1,7 @@
 // Types
-import { Prisma } from '@typings/graphql';
+import { Beast } from '@typings/graphql';
 
-export function composeResolvers<T>(...resolvers: Prisma.IResolver[]): T {
+export function composeResolvers<T>(...resolvers: Beast.IResolver[]): T {
   const globalResolver = resolvers.reduce((resolvers, resolver) => {
     return {
       Query: {

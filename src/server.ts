@@ -1,6 +1,4 @@
-// Absolute Paths & TypeORM
-import 'module-alias/register';
-import 'reflect-metadata';
+// TypeORM
 import { createConnection, getConnectionOptions } from 'typeorm';
 
 // Libraries
@@ -12,7 +10,7 @@ import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
 
 // Types
-import { Prisma } from '@typings/graphql';
+import { Beast } from '@typings/graphql';
 
 // TypeORM configuration
 import ormConfig from '../ormconfig';
@@ -27,7 +25,7 @@ export async function startServer(): Promise<void> {
   const server = new GraphQLServer({
     typeDefs,
     resolvers,
-    context(request): Prisma.IPrismaContext {
+    context(request): Beast.IPrismaContext {
       return {
         ...request,
         prisma,

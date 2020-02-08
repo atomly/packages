@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Types
-import { Prisma } from '@typings/graphql';
+import { Beast } from '@typings/graphql';
 
 interface IResolverObject {
-  [key: string]: Prisma.GPrismaResolver<any, any, any>
+  [key: string]: Beast.GPrismaResolver<any, any, any>
 }
 
 export function resolverFactory(
   queries?: IResolverObject,
   mutation?: IResolverObject,
   subscription?: IResolverObject,
-): Prisma.IResolver {
+): Beast.IResolver {
   return {
     Query: queries,
     Mutation: mutation,

@@ -2,9 +2,13 @@
 
 ## TODO
 
+- Replace `nodemon` with `ts-node-dev` for faster restarts.
+  - `nodemon exec --files` will be replaced by `ts-node-dev -respawn`.
+- Add Jest overview section.
+- Add Entities & Validation section.
+- Update ENV section to include `.env.test` file to be able to run tests in a test database. Add this information to the Jest setion.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
-- Figure out why erratic SQL mutation queries are increasing the database tables ID sequences when they shouldn't, and fix it.
 
 ---
 
