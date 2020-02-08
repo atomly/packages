@@ -22,8 +22,8 @@ const newUser: Prisma.TMutationNewUser = async function newUser(
   args,
 ) {
   const user = User.create({
-    email: args.email,
-    password: args.password,
+    email: args.input.email,
+    password: args.input.password,
   });
   await user.save();
   return user;

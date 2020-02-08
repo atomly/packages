@@ -7,8 +7,8 @@ declare namespace TSJest {
   interface Global {
     document: Document;
     window: Window;
-    prisma: PrismaClient<{}, never>;
-    server: ChildProcess;
+    prisma?: PrismaClient<{}, never>;
+    server?: ChildProcess;
     onStart() : void;
   }
   interface IGqlCallOptions {

@@ -48,6 +48,10 @@ newUser: IUser | null;
 }
 
 interface INewUserOnMutationArguments {
+input: INewUserInput;
+}
+
+interface INewUserInput {
 email: string;
 password: string;
 }

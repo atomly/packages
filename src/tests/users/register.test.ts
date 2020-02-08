@@ -1,36 +1,66 @@
 // Libraries
 import { Connection } from 'typeorm';
+import * as faker from 'faker';
 
 // Dependencies
-import { testConnection } from '../utils/testConnection';
-import { gqlCall } from '../utils';
-import * as userFixtures from '../fixtures/User';
+import { User } from '@root/entity/User';
+import { testConnection } from '@tests/utils/testConnection';
+import { gqlCall } from '@tests/utils';
 
-const mutation = `
-  {
-    user(id: 5) {
-      firstName
-      lastName
+const newUserMutation = `
+  mutation NewUser($input: NewUserInput!) {
+    newUser(input: $input) {
+      id
+      email
+      password
     }
   }
 `;
 
-let connection: Connection;
+let connection: Connection | undefined;
+
 beforeAll(async () => {
-  connection = await testConnection(false);
+  connection = await testConnection(true);
 });
 
 afterAll(async () => {
-  await connection.close();
+  if (connection) {
+    await connection.close();
+  }
+  connection = undefined;
 });
 
 describe('register resolver', () => {
 it('creates user correctly', async () => {
-    console.log((
-      await gqlCall({
-        source: mutation,
-        variableValues: userFixtures,
-      })
-    ));
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    }
+    const response = await gqlCall({
+      source: newUserMutation,
+      variableValues: {
+        input: user,
+      },
+    });
+
+    // Expect response snapshot to match randomly generated user.
+    expect(response).toMatchObject({
+      data: {
+        newUser: {
+          email: user.email,
+          password: user.password,
+        },
+      },
+    });
+
+    // Expect user to exist in database.
+    const dbUser = await User.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+
+    expect(dbUser).toBeDefined();
+    expect(dbUser?.email).toBe(user.email);
   });
 });

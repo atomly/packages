@@ -1,17 +1,22 @@
-// Libraries
+// Libraries  
 import {
   graphql,
-  buildSchema,
   ExecutionResult,
+  GraphQLSchema,
 } from 'graphql';
+import { makeExecutableSchema } from 'graphql-tools';
 
 // Typings
 import { TSJest } from '@typings/tests';
 
 // Dependencies
-import schema from '../../schema';
+import { resolvers } from '@root/resolvers';
+import typeDefs from '@root/schema';
 
 export const tsGlobal = global as unknown as TSJest.Global
+
+// Schema "cache"
+let cachedSchema: GraphQLSchema;
 
 /**
  * Returns a graphql call.
@@ -19,8 +24,16 @@ export const tsGlobal = global as unknown as TSJest.Global
 export async function gqlCall(
   { source, variableValues }: TSJest.IGqlCallOptions,
 ): Promise<ExecutionResult> {
+  if (!cachedSchema) {
+    // ALWAYS use makeExecutableSchema over buildSchema
+    // More here: https://stackoverflow.com/a/53987189/10246377
+    cachedSchema = await makeExecutableSchema({
+      typeDefs,
+      resolvers,
+    });
+  }
   return graphql({
-    schema: await buildSchema(schema),
+    schema: cachedSchema,
     source,
     variableValues,
   });

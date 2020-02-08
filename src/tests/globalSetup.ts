@@ -1,4 +1,4 @@
-// Absolute Paths & TypeORM
+// Absolute Paths
 import 'module-alias/register';
 import 'reflect-metadata';
 
@@ -11,14 +11,16 @@ import { tsGlobal } from './utils';
 
 const prisma = new PrismaClient();
 
-// Check global.
+// Setup global only if the server hasn't started (first run).
 export default async (): Promise<void> => {
-  await setupDevServer({
-    command: `npm run start:test`,
-    launchTimeout: 50000,
-    port: 4000,
-    debug: false,
-  });
-  tsGlobal.prisma = prisma;
-  tsGlobal.server = await getServers()[0];
+  if (!tsGlobal.server) {
+    await setupDevServer({
+      command: `npm run start:test`,
+      launchTimeout: 50000,
+      port: 4000,
+      debug: false,
+    });
+    tsGlobal.prisma = prisma;
+    tsGlobal.server = await getServers()[0];
+  }
 };

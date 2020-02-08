@@ -4,6 +4,7 @@
 
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
+- Figure out why erratic SQL mutation queries are increasing the database tables ID sequences when they shouldn't, and fix it.
 
 ---
 

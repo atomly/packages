@@ -7,6 +7,7 @@
   },
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
+    "@types/faker": "^4.1.9",
     "@types/jest": "^25.1.1",
     "@types/node": "^13.5.0",
     "@types/shelljs": "^0.8.6",
@@ -17,6 +18,7 @@
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "faker": "^4.1.0",
     "graphql-tag": "^2.10.3",
     "jest": "^25.1.0",
     "jest-dev-server": "^4.4.0",
@@ -30,6 +32,7 @@
   "dependencies": {
     "@prisma/client": "^2.0.0-preview021",
     "@types/jest-dev-server": "^4.2.0",
+    "bcrypt": "^3.0.8",
     "dotenv": "^8.2.0",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.6",
@@ -47,7 +50,7 @@
     "start": "nodemon --exec ts-node --files ./src/index.ts",
     "start:prod": "nodemon --exec ts-node --files ./src/prod.ts",
     "start:test": "nodemon --exec ts-node --files ./src/jest.ts",
-    "test": "npm run test:db_setup && npx jest",
+    "test": "npm run test:db_setup && npx jest --watch",
     "test:db_setup": "ts-node --files ./src/tests/utils/setup.ts",
     "synchronize:typeorm": "ts-node --files ./src/synchronize_typeorm.ts",
     "introspect:prisma": "npx prisma2 introspect",

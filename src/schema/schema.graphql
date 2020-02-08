@@ -14,8 +14,13 @@ type User {
   password: String!
 }
 
+input NewUserInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  newUser(email: String!, password: String!): User
+  newUser(input: NewUserInput!): User
 }
 
 schema {
