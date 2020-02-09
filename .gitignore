@@ -6,8 +6,14 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# Vagrant
-database/.vagrant
+# Vagrant stuff
+acceptance_config.yml
+boxes/*
+/.vagrant
+/website/.vagrant
+/website/build
+/vagrant-spec.config.rb
+test/vagrant-spec/.vagrant/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
