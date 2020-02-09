@@ -2,6 +2,8 @@
 
 ## TODO
 
+- Add email fields to `lowerCase` parse.
+- Add Redis install and overview section.
 - Replace `nodemon` with `ts-node-dev` for faster restarts.
   - `nodemon exec --files` will be replaced by `ts-node-dev -respawn`.
 - Add Jest overview section.
@@ -9,6 +11,8 @@
 - Update ENV section to include `.env.test` file to be able to run tests in a test database. Add this information to the Jest setion.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
+- Set up Docker containers for Node.js, Redis, and PostgreSQL with docker-compose.
+  - [Source.](https://www.youtube.com/watch?v=aetqo2nkQcA)
 
 ---
 
@@ -109,6 +113,9 @@ TYPEORM_PORT = 5432
 TYPEORM_USERNAME = postgres
 TYPEORM_PASSWORD = password
 TYPEORM_DATABASE = test
+
+# Redis #
+SESSION_SECRET_KEY = GUaibfrDISUE37d11Je5PWl4vCeB5nHB
 
 # Prisma #
 # postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA

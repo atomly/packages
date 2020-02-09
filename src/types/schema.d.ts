@@ -25,6 +25,8 @@ __typename: "Query";
 hello: string;
 users: Array<IUser | null> | null;
 user: IUser | null;
+authenticate: IUser | null;
+me: IUser | null;
 }
 
 interface IHelloOnQueryArguments {
@@ -35,9 +37,17 @@ interface IUserOnQueryArguments {
 id: string;
 }
 
+interface IAuthenticateOnQueryArguments {
+input: IAuthenticateInput;
+}
+
 interface IUser {
 __typename: "User";
 id: string;
+email: string;
+}
+
+interface IAuthenticateInput {
 email: string;
 password: string;
 }

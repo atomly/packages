@@ -20,10 +20,15 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", 2048]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-    vb.name = "beast-postgresql"
+    vb.name = "beast"
   end
 
+  # Redis port
+  config.vm.network "forwarded_port", guest: 6379, host: 6379
+
+  # PostgreSQL port
   config.vm.network "forwarded_port", guest: 5432, host: 5432
+
   config.vm.provision "shell", inline: <<-SHELL
     systemctl disable apt-daily.service
     systemctl disable apt-daily.timer

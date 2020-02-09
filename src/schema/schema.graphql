@@ -2,6 +2,8 @@ type Query {
   hello(name: String!): String!
   users: [User]
   user(id: ID!): User
+  authenticate(input: AuthenticateInput!): User
+  me: User
 }
 
 type Subscription {
@@ -13,6 +15,11 @@ type User {
   email: ID!
 }
 
+input AuthenticateInput {
+  email: String!
+  password: String!
+}
+
 input NewUserInput {
   email: String!
   password: String!
@@ -20,6 +27,7 @@ input NewUserInput {
 
 type Mutation {
   newUser(input: NewUserInput!): User
+  authenticate(input: AuthenticateInput!): User
 }
 
 schema {

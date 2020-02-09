@@ -1,7 +1,7 @@
 
 # Beast Database
 
-[Source](https://hub.docker.com/_/postgres "Permalink to ")
+[Source](https://hub.docker.com/_/postgres "Permalink to Docker Hub - PostgreSQL")
 
 ---
 

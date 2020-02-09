@@ -18,7 +18,7 @@ model posts {
 
 model users {
   email    String  @unique
-  id       String  @id
+  id       Int     @id
   password String
   postses  posts[]
 }
