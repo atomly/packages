@@ -2,6 +2,7 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
+- Add redis `.env` parameters.
 - Replace `nodemon` with `ts-node-dev` for faster restarts.
   - `nodemon exec --files` will be replaced by `ts-node-dev -respawn`.
 - Set up Docker containers for Node.js, Redis, and PostgreSQL with docker-compose.
