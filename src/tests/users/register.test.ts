@@ -16,23 +16,20 @@ const newUserMutation = `
   }
 `;
 
-let connection: Connection | undefined;
+let connection: Connection;
 
 beforeAll(async () => {
   connection = await testConnection(true);
 });
 
 afterAll(async () => {
-  if (connection) {
-    await connection.close();
-  }
-  connection = undefined;
+  await connection.close();
 });
 
 describe('register resolver', () => {
 it('creates user correctly', async () => {
     const user = {
-      email: faker.internet.email(),
+      email: faker.internet.email(), // The server will lowercase the email.
       password: faker.internet.password(),
     }
     const response = await gqlCall({
@@ -46,7 +43,7 @@ it('creates user correctly', async () => {
     expect(response).toMatchObject({
       data: {
         newUser: {
-          email: user.email,
+          email: user.email.toLowerCase(),
         },
       },
     });
@@ -54,11 +51,11 @@ it('creates user correctly', async () => {
     // Expect user to exist in database.
     const dbUser = await User.findOne({
       where: {
-        email: user.email,
+        email: user.email.toLowerCase(),
       },
     });
 
     expect(dbUser).toBeDefined();
-    expect(dbUser?.email).toBe(user.email);
+    expect(dbUser?.email).toBe(user.email.toLowerCase());
   });
 });

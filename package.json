@@ -23,12 +23,11 @@
     "faker": "^4.1.0",
     "graphql-tag": "^2.10.3",
     "jest": "^25.1.0",
-    "jest-dev-server": "^4.4.0",
-    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "prisma2": "^2.0.0-preview021",
     "shelljs": "^0.8.3",
     "ts-jest": "^25.2.0",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5"
   },
   "dependencies": {
@@ -50,16 +49,13 @@
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "8.6.2",
-    "typeorm": "^0.2.22",
-    "uuid": "^3.4.0"
+    "typeorm": "^0.2.22"
   },
   "scripts": {
     "build": "npm -s run generate && tsc",
-    "start": "nodemon --exec ts-node --files ./src/index.ts",
-    "start:prod": "nodemon --exec ts-node --files ./src/prod.ts",
-    "start:test": "nodemon --exec ts-node --files ./src/jest.ts",
-    "test": "npm run test:db_setup && npx jest --watch",
-    "test:db_setup": "ts-node --files ./src/tests/utils/setup.ts",
+    "start": "ts-node-dev --respawn ./src/index.ts",
+    "start:prod": "ts-node --files ./src/prod.ts",
+    "test": "npx jest --watch",
     "synchronize:typeorm": "ts-node --files ./src/synchronize_typeorm.ts",
     "introspect:prisma": "npx prisma2 introspect",
     "generate:prisma": "npx prisma2 generate",

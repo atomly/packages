@@ -13,8 +13,6 @@ import { TSJest } from '@typings/tests';
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
 
-export const tsGlobal = global as unknown as TSJest.Global
-
 // Schema "cache"
 let cachedSchema: GraphQLSchema;
 

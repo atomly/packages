@@ -31,13 +31,17 @@ const me: Beast.TQueryMe = async function authenticate(
   __,
   context,
 ) {
-  const user = await context.prisma.users.findOne({
-    where: {
-      id: context.request.session!.userId,
-    },
-  });
-
-  if (!user) {
+  let user;
+  if (context.request.session?.userId) {
+    user = await context.prisma.users.findOne({
+      where: {
+        id: context.request.session.userId,
+      },
+    });
+  }
+  if (user) {
+    return user;
+  } else {
     if (
       process.env.NODE_ENV === 'development' ||
       process.env.NODE_ENV === 'test'
@@ -47,12 +51,6 @@ const me: Beast.TQueryMe = async function authenticate(
       return null;
     }
   }
-
-  // Save user's ID to the session.
-  // TODO: Possibly save more than just the user id to the session.
-  context.request.session!.userId = user.id;
-
-  return user;
 }
 
 //
@@ -79,7 +77,7 @@ const newUser: Beast.TMutationNewUser = async function newUser(
   }
 }
 
-const authenticate: Beast.TQueryAuthenticate = async function authenticate(
+const authenticate: Beast.TMutationAuthenticate = async function authenticate(
   _,
   args,
   context,
