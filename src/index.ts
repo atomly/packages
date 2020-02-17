@@ -1,4 +1,4 @@
-// Module Alias Setup
+// Absolute Paths & TypeORM
 import 'module-alias/register';
 import 'reflect-metadata';
 
