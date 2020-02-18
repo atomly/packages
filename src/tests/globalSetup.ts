@@ -8,5 +8,5 @@ import { setupConfig } from '../config';
 setupConfig(setupConfig.ENodeEnvConfig.TEST);
 
 export default async (): Promise<void> => {
-  console.log('Starting tests, and setting up module aliases.');
+  console.log('\nStarting tests, and setting up module aliases.\n');
 };

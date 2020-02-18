@@ -7,9 +7,9 @@ import Redis from "ioredis";
 // NOTE: For this to work, make sure the request credentials setting is
 // set up correctly in the playground: "request.credentials": "include".
 export const redis = new Redis({
-  port: 6379, // Redis port
-  host: 'localhost', // Redis host - TODO: Add to .env
-  family: 4, // 4 (IPv4) or 6 (IPv6)
-  password: 'password',
-  db: 0,
+  port: process.env.REDIS_PORT as unknown as number, // Redis port
+  host: process.env.REDIS_HOST as unknown as string, // Redis host
+  family: process.env.REDIS_FAMILY as unknown as number, // 4 (IPv4) or 6 (IPv6)
+  password: process.env.REDIS_PASSWORD as unknown as string,
+  db: process.env.REDIS_DB as unknown as number,
 });

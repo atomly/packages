@@ -12,10 +12,11 @@ import ormConfig from '../../../ormconfig';
  */
 export async function testConnection(drop: boolean): Promise<Connection> {
   const connectionOptions = await getConnectionOptions();
-  return createConnection({
+  const connection = await createConnection({
     ...connectionOptions,
     ...ormConfig,
     synchronize: drop,
     dropSchema: drop,
   });
+  return connection;
 }

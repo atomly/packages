@@ -59,6 +59,7 @@
   },
   "_moduleAliases": {
     "@root": "src/",
+    "@redis": "redis/",
     "@entity": "src/entity",
     "@typings": "src/types",
     "@generatedPrisma": "./prisma",

@@ -2,13 +2,11 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Add redis `.env` parameters.
-- Set up Docker containers for Node.js, Redis, and PostgreSQL with docker-compose.
-  - [Source.](https://www.youtube.com/watch?v=aetqo2nkQcA)
+- Explain `docker-compose.yml` file, `.env` dependencies, shell script `databasecreate-multiple-databases.sh` on `db` container start, and future `web` container and the `wait-for-it.sh` script, as well as the `Dockerfile` on root.
+- Update ENV section to include `.env.test` file to be able to run tests in a test database. Add this information to the Jest setion.
 - Add specs section to explain stack including PostgreSQL and Redis.
 - Add Jest overview section.
 - Add Entities & Validation section.
-- Update ENV section to include `.env.test` file to be able to run tests in a test database. Add this information to the Jest setion.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
 
@@ -105,15 +103,15 @@ NODE_ENV=development
 TS_NODE_FILES=true
 
 # TypeORM #
-TYPEORM_CONNECTION = postgres
-TYPEORM_HOST = 192.168.99.101
-TYPEORM_PORT = 5432
-TYPEORM_USERNAME = postgres
-TYPEORM_PASSWORD = password
-TYPEORM_DATABASE = test
+TYPEORM_CONNECTION=postgres
+TYPEORM_HOST=192.168.99.101
+TYPEORM_PORT=5432
+TYPEORM_USERNAME=postgres
+TYPEORM_PASSWORD=password
+TYPEORM_DATABASE=test
 
 # Redis #
-SESSION_SECRET_KEY = GUaibfrDISUE37d11Je5PWl4vCeB5nHB
+SESSION_SECRET_KEY=GUaibfrDISUE37d11Je5PWl4vCeB5nHB
 
 # Prisma #
 # postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA

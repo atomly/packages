@@ -18,8 +18,9 @@ const newUserMutation = `
 
 let connection: Connection;
 
-beforeAll(async () => {
+beforeAll(async done => {
   connection = await testConnection(true);
+  done();
 });
 
 afterAll(async () => {

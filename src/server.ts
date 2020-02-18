@@ -10,7 +10,7 @@ import connectRedisStore from 'connect-redis';
 // Dependencies
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
-import { redis } from '@root/redis';
+import { redis } from '@redis/index';
 
 // Types
 import { Beast } from '@typings/graphql';
@@ -49,7 +49,7 @@ export async function startServer(): Promise<void> {
       resave: true,
       saveUninitialized: true,
       cookie: {
-        // httpOnly: true,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
       },

@@ -1,0 +1,37 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+      - "${REDIS_CONTAINER_PORT}"
+    # Setting the server password on start.
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    networks:
+      - webnet
+  db:
+    image: postgres:alpine
+    ports:
+      - "${DB_CONTAINER_PORT}"
+    # Runs every shell script found in this directory by using volumes.
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    networks:
+      - webnet
+    environment:
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: ${DB_DATABASES}
+  # web:
+  #   image: beast-backend-server
+  #   ports:
+  #     - "4000:4000"
+  #   depends_on:
+  #     - "db"
+  #   command: ["./sripts/wait-for-it.sh", "db:5432", "--", "node", "index.js"]
+  #   networks:
+  #     - webnet
+  #   environment:
+  #     DB_HOST: db
+  #     REDIS_HOST: redis
+networks:
+  webnet:

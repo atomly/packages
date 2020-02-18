@@ -8,6 +8,7 @@ module.exports = {
   // Module Aliases
   moduleNameMapper: {
     '^@root(.*)$': '<rootDir>/src/$1',
+    '^@redis(.*)$': '<rootDir>/redis/$1',
     '^@entity(.*)$': '<rootDir>/src/entity$1',
     '^@typings(.*)$': '<rootDir>/src/types$1',
     '^@generatedPrisma(.*)$': '<rootDir>/src/prisma$1',

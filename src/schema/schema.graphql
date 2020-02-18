@@ -2,7 +2,6 @@ type Query {
   hello(name: String!): String!
   users: [User]
   user(id: ID!): User
-  authenticate(input: AuthenticateInput!): User
   me: User
 }
 
@@ -15,12 +14,12 @@ type User {
   email: ID!
 }
 
-input AuthenticateInput {
+input NewUserInput {
   email: String!
   password: String!
 }
 
-input NewUserInput {
+input AuthenticateInput {
   email: String!
   password: String!
 }
