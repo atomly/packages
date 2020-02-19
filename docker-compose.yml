@@ -27,7 +27,7 @@ services:
   #     - "4000:4000"
   #   depends_on:
   #     - "db"
-  #   command: ["./sripts/wait-for-it.sh", "db:5432", "--", "node", "index.js"]
+  #   command: ["./scripts/wait-for-it.sh", "db:5432", "--", "node", "index.js"]
   #   networks:
   #     - webnet
   #   environment:
