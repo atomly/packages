@@ -2,9 +2,7 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Explain `docker-compose.yml` file, `.env` dependencies, shell script `databasecreate-multiple-databases.sh` on `db` container start, and future `web` container and the `wait-for-it.sh` script, as well as the `Dockerfile` on root.
-- Update ENV section to include `.env.test` file to be able to run tests in a test database. Add this information to the Jest setion.
-- Add specs section to explain stack including PostgreSQL and Redis.
+- Remove dependency of a `.env.test` file by adding more variables to `.env` and configuring starting scripts for a testing environment.
 - Add Jest overview section.
 - Add Entities & Validation section.
 - Mac OS shell scripts.
@@ -17,7 +15,7 @@
 ### Requirements
 
 - Have Node.js installed.
-- Have Docker installed. If you can't install Docker (e.g. Windows 10 Home Edition), you can fall back to Vagrant then installing Docker inside the guest OS as a good alternative among many.
+- Have Docker installed. If you can't install Docker (e.g. Windows 10 Home Edition), you can fall back to a Vagrant machine image then install Docker inside the guest OS.
 - Have NPM installed.
 - Git Bash CLI recommended.
 
@@ -25,13 +23,86 @@
 
 1. Git clone this repository.
 2. Install all of the dependencies found in the `package.json`.
-3. Start and connect the PostgreSQL database on port 5432 running on Docker.
-    - [Detailed steps found here.](https://github.com/beast-app/beast-backend/blob/master/database/README.md)
+3. Run `docker-compose up` to start and run the containers.
+    - [Detailed steps for the PostgreSQL Docker container here.](https://github.com/beast-app/beast-backend/blob/master/database/README.md)
+    - [Detailed steps for the Redis Docker container here.](https://github.com/beast-app/beast-backend/blob/master/redis/README.md)
 4. Set up the development environmental variables.
     - [More details in the environmental variables.](#Environmental-Variables-File-Template)
 5. Synchronize the database with our Entities by executing the `synchronize_typeorm.sh` script.
 6. Introspect the database then generate the Prisma schema and client by executing the `generate_prisma_client.sh` script.
-7. Once the database is ready, and the Prisma client has been successfuly generated, it is now safe to start the server by running `npm start`.
+7. Once the Docker containers are running, the database is synchronized and introspected, and the Prisma client has been successfuly generated, it is now safe to start the server by running `npm start`.
+
+---
+
+## Docker Compose
+
+[Source](https://docs.docker.com/compose/ "Permalink to Overview of Docker Compose | Docker Documentation")
+
+## Overview of Docker Compose | Docker Documentation
+
+Compose is a tool for defining and running multi-container Docker applications. With Compose, we use a YAML file to configure your application's services. Then, with a single command, we create and start all the services from our configuration.
+
+Using Compose is basically a three-step process:
+
+1. We define our app's environment with a `Dockerfile` so it can be reproduced anywhere.
+
+2. We define the services that make up our app in `docker-compose.yml` so they can be run together in an isolated environment.
+
+3. Run `docker-compose up` and Compose starts and runs our entire app.
+
+Our `docker-compose.yml` looks like this:
+
+```yml
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+      - "${REDIS_CONTAINER_PORT}"
+    # Setting the server password on start.
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    networks:
+      - webnet
+  db:
+    image: postgres:alpine
+    ports:
+      - "${DB_CONTAINER_PORT}"
+    # Runs every shell script found in this directory by using volumes.
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    networks:
+      - webnet
+    environment:
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: ${DB_DATABASES}
+networks:
+  webnet:
+```
+
+Where `redis`, and `db` are our two containers hosting our Redis server and our PostgreSQL database respectively.
+
+- Our Redis server is based on the `redis` Docker image, started with a required password `REDIS_PASSWORD` and on port `REDIS_CONTAINER_PORT` on the `webnet` network.
+- Our PostgreSQL database is based on the `postgres:alpine` image, hosted on port `DB_CONTAINER_PORT`, on the `webnet` network. It also mounts a volume to create multiple databases (e.g. for testing and development environments) when the container is started, by mounting a volume, after the entrypoint calls `initdb` to create the default `postgres` user and database, it will run any `*.sql` files and source any `*.sh` scripts found in the `database` to do further initialization before starting the service, in this case, the script found in `database` will create the databases declared in `DB_DATABASES`, e.g. `development,test` (in that format separated by commas without empty spaces).
+- The `webnet` network will fallback to the default network.
+- **Important:** the variables shown as template literals, e.g. `${REDIS_CONTAINER_PORT}`, are all derived from the `.env` variable, [more information here](https://docs.docker.com/compose/environment-variables/#the-env-file). The environmental file template is structured in a "plug and play" way for our `docker-compose` YAML file to work.
+
+Compose has commands for managing the whole lifecycle of your application:
+
+- Start, stop, and rebuild services.
+- View the status of running services.
+- Stream the log output of running services.
+- Run a one-off command on a service.
+
+### Automated testing environments
+
+An important part of any Continuous Deployment or Continuous Integration process is the automated test suite. Automated end-to-end testing requires an environment in which to run tests. Compose provides a convenient way to create and destroy isolated testing environments for your test suite. By defining the full environment in a Compose file, we can create and destroy these environments in just a few commands:
+
+```linux
+docker-compose up -d
+npm run test
+docker-compose down
+```
 
 ---
 
@@ -92,9 +163,16 @@ Changes to our actual GraphQL schema will have to be done manually. **It's impor
 
 ---
 
+## Stack
+
+- PostgreSQL relational database setup in the `.env` file. The database is synchronized by `TypeORM` and introspected by `Prisma` to improve our GraphQL developer experience.
+- Redis data structure store is perfect for storing persistent sessions for our users. We're using the `ioredis` library to generate our Redis client in our server, finally, the Redis client is passed to `graphql-yoga` express based server for the sessions.
+
+---
+
 ## Environmental Variables File Template
 
-The following configuration is necessary to run the application. The following env. variables are working examples, make sure to fill them with the valid host IP and port where your local database is hosted, as well as the user. It's possible to add a cloud-hosted database as well.
+The following configuration is necessary to run the application. The following env. variables are working examples, make sure to fill them with the valid host IP and port where your local Docker containers are hosted, as well as the other information. It's possible to add cloud-hosted services as well.
 
 ```.env
 # Node #
