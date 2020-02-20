@@ -4,8 +4,7 @@ import faker from 'faker';
 
 // Dependencies
 import { User } from '@root/entity/User';
-import { testConnection } from '@tests/utils/testConnection';
-import { gqlCall } from '@tests/utils';
+import { gqlCall, testConnection } from '@tests/utils';
 
 const newUserMutation = `
   mutation NewUser($input: NewUserInput!) {

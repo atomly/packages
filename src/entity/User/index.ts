@@ -10,7 +10,7 @@ import { IsEmail } from 'class-validator';
 // Dependencies
 import { IsEmailAlreadyTaken } from './constraints';
 
-@Entity("users")
+@Entity('users')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

@@ -4,8 +4,8 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from "class-validator";
-import { User } from ".";
+} from 'class-validator';
+import { User } from '.';
 
 @ValidatorConstraint({ async: true })
 export class IsEmailAlreadyTakenConstraint implements ValidatorConstraintInterface {
