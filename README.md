@@ -30,6 +30,10 @@
 6. Introspect the database then generate the Prisma schema and client by executing the `generate_prisma_client.sh` script.
 7. Once the Docker containers are running, the database is synchronized and introspected, and the Prisma client has been successfuly generated, it is now safe to start the server by running `npm start`.
 
+### Troubleshooting
+
+- If you're getting `Not able to execute a .sh file: /bin/bash^M: bad interpreter` errors on Windows when Docker Compose tries to run the containers, make sure the respective `.sh` scripts have LF line endings, [more here](https://askubuntu.com/questions/304999/not-able-to-execute-a-sh-file-bin-bashm-bad-interpreter).
+
 ---
 
 ## Docker Compose
@@ -310,7 +314,7 @@ TS_NODE_FILES=true
 
 # TypeORM #
 TYPEORM_CONNECTION=postgres
-TYPEORM_HOST=192.168.99.101
+TYPEORM_HOST=localhost
 TYPEORM_PORT=5432
 TYPEORM_USERNAME=postgres
 TYPEORM_PASSWORD=password
@@ -318,7 +322,7 @@ TYPEORM_DATABASE=development
 
 # Redis #
 REDIS_PORT=6379
-REDIS_HOST=192.168.99.101
+REDIS_HOST=localhost
 REDIS_FAMILY=4 # 4 (IPv4) or 6 (IPv6)
 REDIS_PASSWORD=password
 REDIS_DB=0
@@ -328,7 +332,7 @@ SESSION_SECRET_KEY=GUaibfrDISUE37d11Je5PWl4vCeB5nHB
 
 # Prisma #
 # postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA
-POSTGRESQL_URL=postgresql://postgres:password@192.168.99.101:5432/development
+POSTGRESQL_URL=postgresql://postgres:password@localhost:5432/development
 
 # Docker Compose #
 REDIS_CONTAINER_PORT=6379:6379
