@@ -2,6 +2,10 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
+- Create the initial `posts` entities.
+- Create a dummy `posts` table in the database (very simple first iteration, no relations to other entitites).
+- Setup subscriptions.
+- Try and test a `newPosts` subscription.
 - Remove dependency of a `.env.test` file by adding more variables to `.env` and configuring starting scripts for a testing environment.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
