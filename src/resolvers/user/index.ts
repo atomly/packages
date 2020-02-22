@@ -1,5 +1,5 @@
 // Libraries
-import { validate } from "class-validator";
+import { validate } from 'class-validator';
 import bcrypt from 'bcrypt';
 
 // Types
@@ -10,7 +10,7 @@ import { User } from '@entity/User';
 
 // Utils
 import { resolverFactory } from '@utils/index';
-import { parseValidationErrors } from "@root/utils/parseValidationError";
+import { addUserSession, parseValidationErrors, removeAllUserSessions } from '@root/utils';
 
 //
 // QUERIES
@@ -82,41 +82,65 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
   args,
   context,
 ) {
-  const user = await context.prisma.users.findOne({
-    where: {
-      email: args.input.email.toLowerCase(),
-    },
-  });
-
-  if (!user) {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      throw new Error(`[AUTHENTICATION ERROR]: user with email: [${args.input.email.toLowerCase()}] not found.`);
-    } else {
-      return null;
+  if (!context.session?.userId) {
+    const user = await context.prisma.users.findOne({
+      where: {
+        email: args.input.email.toLowerCase(),
+      },
+    });
+    if (!user) {
+      if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test'
+      ) {
+        throw new Error(`[AUTHENTICATION ERROR]: user with email: [${args.input.email.toLowerCase()}] not found.`);
+      } else {
+        return null;
+      }
     }
-  }
-
-  const isValid = await bcrypt.compare(args.input.password, user.password);
-
-  if (!isValid) {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      throw new Error('[AUTHENTICATION ERROR]: passwords do not match.');
-    } else {
-      return null;
+    const isValid = await bcrypt.compare(args.input.password, user.password);
+    if (!isValid) {
+      if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test'
+      ) {
+        throw new Error('[AUTHENTICATION ERROR]: passwords do not match.');
+      } else {
+        return null;
+      }
     }
+    // Save user's ID to the session and Redis.
+    context.request.session!.userId = user.id;
+    if (context.request.sessionID) {
+      await addUserSession(context.redis, user.id, context.request.sessionID);
+    }
+    return user;
   }
+  throw new Error('[AUTHENTICATION ERROR]: Already logged in.');
+}
 
-  // Save user's ID to the session.
-  // TODO: Possibly save more than just the user id to the session.
-  context.request.session!.userId = user.id;
-
-  return user;
+const logout: Beast.TMutationLogout = async function logout(_, __, context) {
+  const { session, redis, response } = context;
+  if (session?.userId) {
+    removeAllUserSessions(session.userId, redis);
+    session.destroy(err => {
+      // If error return false or report error if in development or test.
+      if (err) {
+        if (
+          process.env.NODE_ENV === 'development' ||
+          process.env.NODE_ENV === 'test'
+        ) {
+          throw new Error(`[LOGOUT ERROR]: something went wrong when logging the user out: ${err.message}`);
+        }
+        return false;
+      }
+      // Return true.
+      return true;
+    });
+    response.clearCookie("qid");
+    return true;
+  }
+  throw new Error('[LOGOUT ERROR]: Not logged in.');
 }
 
 export default resolverFactory(
@@ -128,5 +152,6 @@ export default resolverFactory(
   {
     newUser,
     authenticate,
+    logout,
   },
 );

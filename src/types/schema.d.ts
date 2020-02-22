@@ -47,6 +47,7 @@ interface IMutation {
 __typename: "Mutation";
 newUser: IUser | null;
 authenticate: IUser | null;
+logout: boolean;
 }
 
 interface INewUserOnMutationArguments {

@@ -6,6 +6,7 @@
 - Create a dummy `posts` table in the database (very simple first iteration, no relations to other entitites).
 - Setup subscriptions.
 - Try and test a `newPosts` subscription.
+- Add `throw new Error(...)` utility function on `development` and `test` environments, or default return values on `production` environments.
 - Remove dependency of a `.env.test` file by adding more variables to `.env` and configuring starting scripts for a testing environment.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).

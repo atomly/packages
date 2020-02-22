@@ -4,19 +4,26 @@ import { ContextParameters } from 'graphql-yoga/dist/types';
 import { IResolvers } from 'graphql-tools';
 import { GraphQLResolveInfo } from 'graphql';
 import { PrismaClient, users } from '@prisma/client';
+import { Redis } from "ioredis";
+
+export interface Session extends Express.Session {
+  userId?: string;
+}
 
 declare namespace Beast {
   // GraphQLServer.context
-  interface IPrismaContext extends ContextParameters {
+  interface IContext extends ContextParameters {
     prisma: Beast.Client
+    redis: Redis;
+    session: Session | undefined;
   }
 
   // GraphQLServer.context.prisma
   type Client = PrismaClient<{}, never>
 
   // Resolvers type
-  type GPrismaResolver<T, R, X> = (parent: T, args: R, context: IPrismaContext, info: GraphQLResolveInfo) => X;
-  type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IPrismaContext, info: GraphQLResolveInfo) => X>
+  type GPrismaResolver<T, R, X> = (parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X;
+  type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X>
 
   interface IResolver {
     Query?: {
@@ -55,4 +62,5 @@ declare namespace Beast {
   type TQueryMe = GPrismaResolver<null, null, Promise<users | null>>
   type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, Promise<users>>
   type TMutationAuthenticate = GPrismaResolver<null, GQL.IAuthenticateOnMutationArguments, Promise<users | null>>
+  type TMutationLogout = GPrismaResolver<null, null, Promise<boolean>>
 }

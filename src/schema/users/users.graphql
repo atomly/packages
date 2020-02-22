@@ -22,4 +22,5 @@ input AuthenticateInput {
 type Mutation {
   newUser(input: NewUserInput!): User
   authenticate(input: AuthenticateInput!): User
+  logout: Boolean!
 }

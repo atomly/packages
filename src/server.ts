@@ -8,6 +8,7 @@ import session from 'express-session';
 import connectRedisStore from 'connect-redis';
 
 // Dependencies
+import { redisSessionPrefix } from '@root/constants';
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
 import { redis } from '@redis/index';
@@ -28,10 +29,12 @@ export async function startServer(): Promise<void> {
   const server = new GraphQLServer({
     typeDefs,
     resolvers,
-    context(request): Beast.IPrismaContext {
+    context(context): Beast.IContext {
       return {
-        ...request,
+        ...context,
         prisma,
+        redis,
+        session: context.request.session,
       }
     },
   });
@@ -43,6 +46,7 @@ export async function startServer(): Promise<void> {
     session({
       store: new RedisStore({
         client: redis,
+        prefix: redisSessionPrefix,
       }),
       name: 'qid',
       secret: process.env.SESSION_SECRET_KEY as string,
