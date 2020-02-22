@@ -47,11 +47,12 @@ declare namespace Beast {
   }
   // Custom Query resolvers
   type TQueryHello = GPrismaResolver<null, GQL.IHelloOnQueryArguments, string>
+  type TQueryPing = GPrismaResolver<null, null, string>
 
   // User resolvers
   type TQueryUser = GPrismaResolver<null, GQL.IUserOnQueryArguments, Promise<users | null>>
   type TQueryUsers = GPrismaResolver<null, null, Promise<users[]>>
   type TQueryMe = GPrismaResolver<null, null, Promise<users | null>>
   type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, Promise<users>>
-  type TMutationAuthenticate = GPrismaResolver<null, GQL.IAuthenticateOnQueryArguments, Promise<users | null>>
+  type TMutationAuthenticate = GPrismaResolver<null, GQL.IAuthenticateOnMutationArguments, Promise<users | null>>
 }

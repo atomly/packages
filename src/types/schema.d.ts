@@ -25,8 +25,8 @@ __typename: "Query";
 hello: string;
 users: Array<IUser | null> | null;
 user: IUser | null;
-authenticate: IUser | null;
 me: IUser | null;
+ping: string;
 }
 
 interface IHelloOnQueryArguments {
@@ -37,31 +37,32 @@ interface IUserOnQueryArguments {
 id: string;
 }
 
-interface IAuthenticateOnQueryArguments {
-input: IAuthenticateInput;
-}
-
 interface IUser {
 __typename: "User";
 id: string;
 email: string;
 }
 
-interface IAuthenticateInput {
-email: string;
-password: string;
-}
-
 interface IMutation {
 __typename: "Mutation";
 newUser: IUser | null;
+authenticate: IUser | null;
 }
 
 interface INewUserOnMutationArguments {
 input: INewUserInput;
 }
 
+interface IAuthenticateOnMutationArguments {
+input: IAuthenticateInput;
+}
+
 interface INewUserInput {
+email: string;
+password: string;
+}
+
+interface IAuthenticateInput {
 email: string;
 password: string;
 }
