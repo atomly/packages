@@ -1,17 +1,18 @@
-// TypeORM
-import { createConnection, getConnectionOptions } from 'typeorm';
-
 // Libraries
+import { createConnection, getConnectionOptions } from 'typeorm';
 import { GraphQLServer } from 'graphql-yoga';
 import { PrismaClient } from '@prisma/client';// Libraries
 import session from 'express-session';
 import connectRedisStore from 'connect-redis';
+import { makeExecutableSchema } from 'graphql-tools';
+import { applyMiddleware } from 'graphql-middleware';
 
 // Dependencies
 import { redisSessionPrefix } from '@root/constants';
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
 import { redis } from '@redis/index';
+import { middleware } from '@root/middleware';
 
 // Types
 import { Beast } from '@typings/graphql';
@@ -26,9 +27,13 @@ import ormConfig from '../ormconfig';
 export async function startServer(): Promise<void> {
   // GraphQL server setup
   const prisma = new PrismaClient();
-  const server = new GraphQLServer({
+  const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
+  });
+  applyMiddleware(schema, middleware);
+  const server = new GraphQLServer({
+    schema,
     context(context): Beast.IContext {
       return {
         ...context,

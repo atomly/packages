@@ -1,9 +1,8 @@
 type Query {
-  hello(name: String!): String!
+  ping: String!
   users: [User]
   user(id: ID!): User
   me: User
-  ping: String!
 }
 
 type Subscription {

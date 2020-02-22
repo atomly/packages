@@ -25,7 +25,7 @@ export async function gqlCall(
   if (!cachedSchema) {
     // ALWAYS use makeExecutableSchema over buildSchema
     // More here: https://stackoverflow.com/a/53987189/10246377
-    cachedSchema = await makeExecutableSchema({
+    cachedSchema = makeExecutableSchema({
       typeDefs,
       resolvers,
     });
