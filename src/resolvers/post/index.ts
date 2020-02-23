@@ -18,13 +18,13 @@ const PUBSUB_NEW_POST = 'PUBSUB_NEW_POST';
 // QUERIES
 //
 
-const post: Beast.TQueryPost = async function user(_, { id }, context) {
-  const post = await context.prisma.posts.findOne({ where: { id: +id } });
+const post: Beast.TQueryPost = async function user(_, { id }, { prisma }) {
+  const post = await prisma.posts.findOne({ where: { id: +id } });
   return post;  
 }
 
-const posts: Beast.TQueryPosts = async function users(_, __, context) {
-  const posts = await context.prisma.posts.findMany();
+const posts: Beast.TQueryPosts = async function users(_, __, { prisma }) {
+  const posts = await prisma.posts.findMany();
   return posts;
 }
 
@@ -35,7 +35,7 @@ const posts: Beast.TQueryPosts = async function users(_, __, context) {
 const newPost: Beast.TMutationNewPost = async function newUser(
   _,
   args,
-  context,
+  { pubsub },
 ) {
   const post = Post.create({
     header: args.input.header,
@@ -46,7 +46,7 @@ const newPost: Beast.TMutationNewPost = async function newUser(
     throw new Error(parseValidationErrors(errors, 'post')); 
   } else {
     await post.save();
-    context.pubsub.publish(
+    pubsub.publish(
       PUBSUB_NEW_POST, // Socket channel.
       {
         newPostSubscription: post, // [key] MUST match the name of the subscription resolver.
@@ -63,9 +63,9 @@ const newPost: Beast.TMutationNewPost = async function newUser(
 const newPostSubscription: Beast.TSubscriptionNewPost = function newUser(
   _,
   __,
-  context,
+  { pubsub },
 ) {
-  return context.pubsub.asyncIterator<posts>(PUBSUB_NEW_POST);
+  return pubsub.asyncIterator<posts>(PUBSUB_NEW_POST);
 }
 
 export default resolverFactory(

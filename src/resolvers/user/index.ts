@@ -16,26 +16,26 @@ import { addUserSession, parseValidationErrors, removeAllUserSessions } from '@r
 // QUERIES
 //
 
-const user: Beast.TQueryUser = async function user(_, { id }, context) {
-  const user = await context.prisma.users.findOne({ where: { id: +id } });
+const user: Beast.TQueryUser = async function user(_, { id }, { prisma }) {
+  const user = await prisma.users.findOne({ where: { id: +id } });
   return user;  
 }
 
-const users: Beast.TQueryUsers = async function users(_, __, context) {
-  const users = await context.prisma.users.findMany();
+const users: Beast.TQueryUsers = async function users(_, __, { prisma }) {
+  const users = await prisma.users.findMany();
   return users;
 }
 
 const me: Beast.TQueryMe = async function authenticate(
   _,
   __,
-  context,
+  { request, prisma },
 ) {
   let user;
-  if (context.request.session?.userId) {
-    user = await context.prisma.users.findOne({
+  if (request.session?.userId) {
+    user = await prisma.users.findOne({
       where: {
-        id: context.request.session.userId,
+        id: request.session.userId,
       },
     });
   }
@@ -60,7 +60,7 @@ const me: Beast.TQueryMe = async function authenticate(
 const newUser: Beast.TMutationNewUser = async function newUser(
   _,
   args,
-  context,
+  { request, redis },
 ) {
   // Hashing the password before storing it in the database.
   const hashedPassword = await bcrypt.hash(args.input.password, 12);
@@ -74,13 +74,13 @@ const newUser: Beast.TMutationNewUser = async function newUser(
   } else {
     await user.save();
     // If there's a user logged in the existing session, delete it.
-    if (context.request.session?.userId) {
-      await removeAllUserSessions(context.request.session.userId, context.redis);
+    if (request.session?.userId) {
+      await removeAllUserSessions(request.session.userId, redis);
     }
     // Log the user in by saving his/her session.
-    context.request.session!.userId = user.id;
-    if (context.request.sessionID) {
-      await addUserSession(context.redis, user.id, context.request.sessionID);
+    request.session!.userId = user.id;
+    if (request.sessionID) {
+      await addUserSession(redis, user.id, request.sessionID);
     }
     return user;
   }
@@ -89,10 +89,10 @@ const newUser: Beast.TMutationNewUser = async function newUser(
 const authenticate: Beast.TMutationAuthenticate = async function authenticate(
   _,
   args,
-  context,
+  { request, prisma, redis },
 ) {
-  if (!context.request.session?.userId) {
-    const user = await context.prisma.users.findOne({
+  if (!request.session?.userId) {
+    const user = await prisma.users.findOne({
       where: {
         email: args.input.email.toLowerCase(),
       },
@@ -119,17 +119,16 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
       }
     }
     // Save user's ID to the session and Redis.
-    context.request.session!.userId = user.id;
-    if (context.request.sessionID) {
-      await addUserSession(context.redis, user.id, context.request.sessionID);
+    request.session!.userId = user.id;
+    if (request.sessionID) {
+      await addUserSession(redis, user.id, request.sessionID);
     }
     return user;
   }
   throw new Error('[AUTHENTICATION ERROR]: Already logged in.');
 }
 
-const logout: Beast.TMutationLogout = async function logout(_, __, context) {
-  const { redis, response, request } = context;
+const logout: Beast.TMutationLogout = async function logout(_, __, { redis, response, request }) {
   if (request.session?.userId) {
     await removeAllUserSessions(request.session.userId, redis);
     request.session.destroy(err => {
