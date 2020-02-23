@@ -8,7 +8,7 @@ export const isAuthenticated: IMiddleware = async function isAuthenticated(
   context,
   info,
 ) {
-  if (!context.session.userId) {
+  if (!context.request.session.userId) {
     // User is not logged in.
     throw new Error('[AUTHENTICATION MIDDLEWARE ERROR] Not authenticated from GraphQL middleware.');
   }

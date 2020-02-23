@@ -74,8 +74,8 @@ const newUser: Beast.TMutationNewUser = async function newUser(
   } else {
     await user.save();
     // If there's a user logged in the existing session, delete it.
-    if (context.session?.userId) {
-      await removeAllUserSessions(context.session.userId, context.redis);
+    if (context.request.session?.userId) {
+      await removeAllUserSessions(context.request.session.userId, context.redis);
     }
     // Log the user in by saving his/her session.
     context.request.session!.userId = user.id;
@@ -91,7 +91,7 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
   args,
   context,
 ) {
-  if (!context.session?.userId) {
+  if (!context.request.session?.userId) {
     const user = await context.prisma.users.findOne({
       where: {
         email: args.input.email.toLowerCase(),
@@ -129,10 +129,10 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
 }
 
 const logout: Beast.TMutationLogout = async function logout(_, __, context) {
-  const { session, redis, response } = context;
-  if (session?.userId) {
-    await removeAllUserSessions(session.userId, redis);
-    session.destroy(err => {
+  const { redis, response, request } = context;
+  if (request.session?.userId) {
+    await removeAllUserSessions(request.session.userId, redis);
+    request.session.destroy(err => {
       // If error return false or report error if in development or test.
       if (err) {
         if (

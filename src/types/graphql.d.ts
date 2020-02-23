@@ -7,17 +7,12 @@ import { GraphQLResolveInfo } from 'graphql';
 import { PrismaClient, users, posts } from '@prisma/client';
 import { Redis } from "ioredis";
 
-export interface Session extends Express.Session {
-  userId?: string;
-}
-
 declare namespace Beast {
   // GraphQLServer.context
   interface IContext extends ContextParameters {
     prisma: Beast.Client
     pubsub: PubSub
     redis: Redis
-    session: Session | undefined
   }
 
   // Resolvers

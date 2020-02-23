@@ -41,7 +41,6 @@ export async function startServer(): Promise<void> {
         prisma,
         pubsub,
         redis,
-        session: context.request?.session, // request does not exists on WebSockets.
       }
     },
   });
