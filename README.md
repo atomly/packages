@@ -3,6 +3,14 @@
 ## TODO (sorted by highest to lowest priorities)
 
 - Add `throw new Error(...)` utility function on `development` and `test` environments, or default return values on `production` environments.
+- `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
+- [Run Jest tests in parallel](https://www.youtube.com/watch?v=qMoDVC38BDk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=31).
+- [Account role authorization](https://www.youtube.com/watch?v=3t3tmfDwWB4&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=5).
+- [Add confirmation emails](https://www.youtube.com/watch?v=OP39UioapL8&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=6).
+- [Add forgot password](https://www.youtube.com/watch?v=Jksj60x1TsI&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=7).
+- [File uploading](https://www.youtube.com/watch?v=s35EmAn9Zl8&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=12).
+- [Add forgot password test](https://www.youtube.com/watch?v=pQfA_gRSvFk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=24).
+- [Lock user accounts feature](https://www.youtube.com/watch?v=YAmNScFKsKA&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=25).
 - Remove dependency of a `.env.test` file by adding more variables to `.env` and configuring starting scripts for a testing environment.
 - Mac OS shell scripts.
 - Mac OS global dependencies installation requirements (Prisma 2 only - might be a bug).
