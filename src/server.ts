@@ -1,6 +1,6 @@
 // Libraries
 import { createConnection, getConnectionOptions } from 'typeorm';
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer, PubSub } from 'graphql-yoga';
 import { PrismaClient } from '@prisma/client';// Libraries
 import session from 'express-session';
 import connectRedisStore from 'connect-redis';
@@ -26,7 +26,8 @@ import ormConfig from '../ormconfig';
  */
 export async function startServer(): Promise<void> {
   // GraphQL server setup
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient(); // Prisma DB layer.
+  const pubsub = new PubSub(); // Subscriptions.
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -38,8 +39,9 @@ export async function startServer(): Promise<void> {
       return {
         ...context,
         prisma,
+        pubsub,
         redis,
-        session: context.request.session,
+        session: context.request?.session, // request does not exists on WebSockets.
       }
     },
   });

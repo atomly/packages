@@ -3,6 +3,7 @@ import { validate } from 'class-validator';
 
 // Types
 import { Beast } from '@typings/graphql';
+import { posts } from '@prisma/client';
 
 // Entity
 import { Post } from '@entity/Post';
@@ -10,6 +11,8 @@ import { Post } from '@entity/Post';
 // Utils
 import { resolverFactory } from '@utils/index';
 import { parseValidationErrors } from '@root/utils';
+
+const PUBSUB_NEW_POST = 'PUBSUB_NEW_POST';
 
 //
 // QUERIES
@@ -32,6 +35,7 @@ const posts: Beast.TQueryPosts = async function users(_, __, context) {
 const newPost: Beast.TMutationNewPost = async function newUser(
   _,
   args,
+  context,
 ) {
   const post = Post.create({
     header: args.input.header,
@@ -42,9 +46,28 @@ const newPost: Beast.TMutationNewPost = async function newUser(
     throw new Error(parseValidationErrors(errors, 'post')); 
   } else {
     await post.save();
+    context.pubsub.publish(
+      PUBSUB_NEW_POST, // Socket channel.
+      {
+        newPostSubscription: post, // [key] MUST match the name of the subscription resolver.
+      }, // Payload.
+    );
     return post;
   }
 }
+
+//
+// SUBSCRIPTIONS
+//
+
+const newPostSubscription: Beast.TSubscriptionNewPost = function newUser(
+  _,
+  __,
+  context,
+) {
+  return context.pubsub.asyncIterator<posts>(PUBSUB_NEW_POST);
+}
+
 export default resolverFactory(
   {
     post,
@@ -52,5 +75,10 @@ export default resolverFactory(
   },
   {
     newPost,
+  },
+  {
+    newPostSubscription: {
+      subscribe: newPostSubscription,
+    },
   },
 );

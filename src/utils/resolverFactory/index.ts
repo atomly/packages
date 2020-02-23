@@ -2,14 +2,10 @@
 // Types
 import { Beast } from '@typings/graphql';
 
-interface IResolverObject {
-  [key: string]: Beast.GPrismaResolver<any, any, any>
-}
-
 export function resolverFactory(
-  queries?: IResolverObject,
-  mutation?: IResolverObject,
-  subscription?: IResolverObject,
+  queries?: Beast.IResolverObject,
+  mutation?: Beast.IResolverObject,
+  subscription?: Beast.ISubscriptionObject,
 ): Beast.IResolver {
   return {
     Query: queries,

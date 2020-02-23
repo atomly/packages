@@ -14,7 +14,10 @@ input NewPostInput {
   body: String!
 }
 
-
 type Mutation {
   newPost(input: NewPostInput!): Post
+}
+
+type Subscription {
+  newPostSubscription: Post!
 }

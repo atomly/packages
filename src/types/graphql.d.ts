@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Types
+import { PubSub } from 'graphql-yoga';
 import { ContextParameters } from 'graphql-yoga/dist/types';
 import { IResolvers } from 'graphql-tools';
 import { GraphQLResolveInfo } from 'graphql';
@@ -14,8 +15,20 @@ declare namespace Beast {
   // GraphQLServer.context
   interface IContext extends ContextParameters {
     prisma: Beast.Client
-    redis: Redis;
-    session: Session | undefined;
+    pubsub: PubSub
+    redis: Redis
+    session: Session | undefined
+  }
+
+  // Resolvers
+  interface IResolverObject {
+    [key: string]: Beast.GPrismaResolver<any, any, any>
+  }
+  
+  interface ISubscriptionObject {
+    [key: string]: {
+      subscribe: Beast.GPrismaResolver<any, any, any>
+    }
   }
 
   // GraphQLServer.context.prisma
@@ -26,15 +39,9 @@ declare namespace Beast {
   type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X>
 
   interface IResolver {
-    Query?: {
-      [key: string]: Beast.GPrismaResolver<any, any, any>
-    }
-    Mutation?: {
-      [key: string]: Beast.GPrismaResolver<any, any, any>
-    }
-    Subscription?: {
-      [key: string]: Beast.GPrismaResolver<any, any, any>
-    }
+    Query?: IResolverObject
+    Mutation?: IResolverObject
+    Subscription?: ISubscriptionObject
   }
 
   // GraphQLServer.resolvers
@@ -67,4 +74,5 @@ declare namespace Beast {
   type TQueryPost = GPrismaResolver<null, GQL.IPostOnQueryArguments, Promise<posts | null>>
   type TQueryPosts = GPrismaResolver<null, null, Promise<posts[]>>
   type TMutationNewPost= GPrismaResolver<null, GQL.INewPostOnMutationArguments, Promise<posts>>
+  type TSubscriptionNewPost = GPrismaResolver<null, GQL.INewPostOnMutationArguments, AsyncIterator<posts>>
 }

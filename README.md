@@ -2,8 +2,6 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Setup subscriptions.
-- Try and test a `newPosts` subscription.
 - Add `throw new Error(...)` utility function on `development` and `test` environments, or default return values on `production` environments.
 - Remove dependency of a `.env.test` file by adding more variables to `.env` and configuring starting scripts for a testing environment.
 - Mac OS shell scripts.
