@@ -8,12 +8,9 @@ import { PrismaClient, users, posts } from '@prisma/client';
 import { Redis } from "ioredis";
 
 declare namespace Beast {
-  // GraphQLServer.context.prisma
-  type Client = PrismaClient<{}, never>
-
   // GraphQLServer.context
   interface IContext extends ContextParameters {
-    prisma: Client
+    prisma: PrismaClient<{}, never>
     pubsub: PubSub
     redis: Redis
   }
