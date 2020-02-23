@@ -3,6 +3,8 @@ type Query {
   users: [User]
   user(id: ID!): User
   me: User
+  posts: [Post]
+  post(id: ID!): Post
 }
 
 type Subscription {
@@ -28,6 +30,18 @@ type Mutation {
   newUser(input: NewUserInput!): User
   authenticate(input: AuthenticateInput!): User
   logout: Boolean!
+  newPost(input: NewPostInput!): Post
+}
+
+type Post {
+  id: ID!
+  header: String
+  body: String
+}
+
+input NewPostInput {
+  header: String!
+  body: String!
 }
 
 schema {

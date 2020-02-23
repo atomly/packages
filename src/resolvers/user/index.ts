@@ -22,8 +22,8 @@ const user: Beast.TQueryUser = async function user(_, { id }, context) {
 }
 
 const users: Beast.TQueryUsers = async function users(_, __, context) {
-  const user = await context.prisma.users.findMany();
-  return user;
+  const users = await context.prisma.users.findMany();
+  return users;
 }
 
 const me: Beast.TQueryMe = async function authenticate(

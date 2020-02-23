@@ -22,18 +22,19 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-hello: string;
+ping: string;
 users: Array<IUser | null> | null;
 user: IUser | null;
 me: IUser | null;
-ping: string;
-}
-
-interface IHelloOnQueryArguments {
-name: string;
+posts: Array<IPost | null> | null;
+post: IPost | null;
 }
 
 interface IUserOnQueryArguments {
+id: string;
+}
+
+interface IPostOnQueryArguments {
 id: string;
 }
 
@@ -43,11 +44,19 @@ id: string;
 email: string;
 }
 
+interface IPost {
+__typename: "Post";
+id: string;
+header: string | null;
+body: string | null;
+}
+
 interface IMutation {
 __typename: "Mutation";
 newUser: IUser | null;
 authenticate: IUser | null;
 logout: boolean;
+newPost: IPost | null;
 }
 
 interface INewUserOnMutationArguments {
@@ -58,6 +67,10 @@ interface IAuthenticateOnMutationArguments {
 input: IAuthenticateInput;
 }
 
+interface INewPostOnMutationArguments {
+input: INewPostInput;
+}
+
 interface INewUserInput {
 email: string;
 password: string;
@@ -66,6 +79,11 @@ password: string;
 interface IAuthenticateInput {
 email: string;
 password: string;
+}
+
+interface INewPostInput {
+header: string;
+body: string;
 }
 
 interface ISubscription {

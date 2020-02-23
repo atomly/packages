@@ -3,7 +3,7 @@
 import { ContextParameters } from 'graphql-yoga/dist/types';
 import { IResolvers } from 'graphql-tools';
 import { GraphQLResolveInfo } from 'graphql';
-import { PrismaClient, users } from '@prisma/client';
+import { PrismaClient, users, posts } from '@prisma/client';
 import { Redis } from "ioredis";
 
 export interface Session extends Express.Session {
@@ -41,7 +41,6 @@ declare namespace Beast {
   interface IResolverMap extends IResolvers {
     // Queries
     Query: {
-      hello: TQueryHello
       user: TQueryUser
       users: TQueryUsers
       me: TQueryUser
@@ -52,8 +51,8 @@ declare namespace Beast {
       authenticate: TMutationAuthenticate
     }
   }
+
   // Custom Query resolvers
-  type TQueryHello = GPrismaResolver<null, GQL.IHelloOnQueryArguments, string>
   type TQueryPing = GPrismaResolver<null, null, string>
 
   // User resolvers
@@ -63,4 +62,9 @@ declare namespace Beast {
   type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, Promise<users>>
   type TMutationAuthenticate = GPrismaResolver<null, GQL.IAuthenticateOnMutationArguments, Promise<users | null>>
   type TMutationLogout = GPrismaResolver<null, null, Promise<boolean>>
+
+  // Post resolvers
+  type TQueryPost = GPrismaResolver<null, GQL.IPostOnQueryArguments, Promise<posts | null>>
+  type TQueryPosts = GPrismaResolver<null, null, Promise<posts[]>>
+  type TMutationNewPost= GPrismaResolver<null, GQL.INewPostOnMutationArguments, Promise<posts>>
 }

@@ -2,8 +2,6 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Create the initial `posts` entities.
-- Create a dummy `posts` table in the database (very simple first iteration, no relations to other entitites).
 - Setup subscriptions.
 - Try and test a `newPosts` subscription.
 - Add `throw new Error(...)` utility function on `development` and `test` environments, or default return values on `production` environments.
