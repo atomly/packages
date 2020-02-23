@@ -60,6 +60,7 @@ const me: Beast.TQueryMe = async function authenticate(
 const newUser: Beast.TMutationNewUser = async function newUser(
   _,
   args,
+  context,
 ) {
   // Hashing the password before storing it in the database.
   const hashedPassword = await bcrypt.hash(args.input.password, 12);
@@ -72,7 +73,15 @@ const newUser: Beast.TMutationNewUser = async function newUser(
     throw new Error(parseValidationErrors(errors, 'user')); 
   } else {
     await user.save();
-    // TODO: Set up session
+    // If there's a user logged in the existing session, delete it.
+    if (context.session?.userId) {
+      await removeAllUserSessions(context.session.userId, context.redis);
+    }
+    // Log the user in by saving his/her session.
+    context.request.session!.userId = user.id;
+    if (context.request.sessionID) {
+      await addUserSession(context.redis, user.id, context.request.sessionID);
+    }
     return user;
   }
 }
@@ -122,7 +131,7 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
 const logout: Beast.TMutationLogout = async function logout(_, __, context) {
   const { session, redis, response } = context;
   if (session?.userId) {
-    removeAllUserSessions(session.userId, redis);
+    await removeAllUserSessions(session.userId, redis);
     session.destroy(err => {
       // If error return false or report error if in development or test.
       if (err) {
@@ -132,10 +141,7 @@ const logout: Beast.TMutationLogout = async function logout(_, __, context) {
         ) {
           throw new Error(`[LOGOUT ERROR]: something went wrong when logging the user out: ${err.message}`);
         }
-        return false;
       }
-      // Return true.
-      return true;
     });
     response.clearCookie("qid");
     return true;
