@@ -7,6 +7,12 @@ datasource db {
   url      = env("POSTGRESQL_URL")
 }
 
+model posts {
+  body   String
+  header String
+  id     Int    @id
+}
+
 model users {
   email    String @unique
   id       Int    @id
