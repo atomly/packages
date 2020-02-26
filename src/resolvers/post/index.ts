@@ -1,6 +1,3 @@
-// Libraries
-import { validate } from 'class-validator';
-
 // Types
 import { Beast } from '@typings/graphql';
 import { posts } from '@prisma/client';
@@ -10,7 +7,7 @@ import { Post } from '@entity/Post';
 
 // Utils
 import { resolverFactory } from '@utils/index';
-import { parseValidationErrors } from '@root/utils';
+import { validateNewEntity } from '@root/utils';
 
 const PUBSUB_NEW_POST = 'PUBSUB_NEW_POST';
 
@@ -41,10 +38,7 @@ const newPost: Beast.TMutationNewPost = async function newUser(
     header: args.input.header,
     body: args.input.body,
   });
-  const errors = await validate(post);
-  if (errors.length > 0) {
-    throw new Error(parseValidationErrors(errors, 'post')); 
-  } else {
+  const result = await validateNewEntity(post, async () => {
     await post.save();
     pubsub.publish(
       PUBSUB_NEW_POST, // Socket channel.
@@ -53,7 +47,8 @@ const newPost: Beast.TMutationNewPost = async function newUser(
       }, // Payload.
     );
     return post;
-  }
+  });
+  return result;
 }
 
 //

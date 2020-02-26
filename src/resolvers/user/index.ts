@@ -1,5 +1,4 @@
 // Libraries
-import { validate } from 'class-validator';
 import bcrypt from 'bcrypt';
 
 // Types
@@ -10,7 +9,7 @@ import { User } from '@entity/User';
 
 // Utils
 import { resolverFactory } from '@utils/index';
-import { addUserSession, parseValidationErrors, removeAllUserSessions } from '@root/utils';
+import { addUserSession, removeAllUserSessions, validateNewEntity } from '@root/utils';
 
 //
 // QUERIES
@@ -68,10 +67,8 @@ const newUser: Beast.TMutationNewUser = async function newUser(
     email: args.input.email.toLowerCase(),
     password: hashedPassword,
   });
-  const errors = await validate(user);
-  if (errors.length > 0) {
-    throw new Error(parseValidationErrors(errors, 'user')); 
-  } else {
+  // Validate the user, then return the result.
+  const result = await validateNewEntity(user, async () => {
     await user.save();
     // If there's a user logged in the existing session, delete it.
     if (request.session?.userId) {
@@ -83,7 +80,8 @@ const newUser: Beast.TMutationNewUser = async function newUser(
       await addUserSession(redis, user.id, request.sessionID);
     }
     return user;
-  }
+  });
+  return result;
 }
 
 const authenticate: Beast.TMutationAuthenticate = async function authenticate(
