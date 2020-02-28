@@ -69,17 +69,21 @@ const newUser: Beast.TMutationNewUser = async function newUser(
   });
   // Validate the user, then return the result.
   const result = await validateNewEntity(user, async () => {
-    await user.save();
-    // If there's a user logged in the existing session, delete it.
-    if (request.session?.userId) {
-      await removeAllUserSessions(request.session.userId, redis);
+    try {
+      await user.save();
+      // If there's a user logged in the existing session, delete it.
+      if (request.session?.userId) {
+        await removeAllUserSessions(request.session.userId, redis);
+      }
+      // Log the user in by saving his/her session.
+      request.session!.userId = user.id;
+      if (request.sessionID) {
+        await addUserSession(redis, user.id, request.sessionID);
+      }
+      return user;
+    } catch (error) {
+      throw new Error(`[USER ERROR]: Error while creating a new user: ${error.message}`);
     }
-    // Log the user in by saving his/her session.
-    request.session!.userId = user.id;
-    if (request.sessionID) {
-      await addUserSession(redis, user.id, request.sessionID);
-    }
-    return user;
   });
   return result;
 }

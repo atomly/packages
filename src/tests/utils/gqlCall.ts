@@ -12,6 +12,7 @@ import { TSJest } from '@typings/tests';
 // Dependencies
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
+import { context } from './mockContext';
 
 // Schema "cache"
 let cachedSchema: GraphQLSchema;
@@ -34,5 +35,6 @@ export async function gqlCall(
     schema: cachedSchema,
     source,
     variableValues,
+    contextValue: context,
   });
 }

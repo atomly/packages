@@ -4,7 +4,7 @@ import faker from 'faker';
 
 // Dependencies
 import { User } from '@root/entity/User';
-import { gqlCall, testConnection } from '@tests/utils';
+import { gqlCall, testConnection, connect, disconnect } from '@tests/utils';
 
 const newUserMutation = `
   mutation NewUser($input: NewUserInput!) {
@@ -19,11 +19,14 @@ let connection: Connection;
 
 beforeAll(async done => {
   connection = await testConnection(true);
+  await connect();
   done();
 });
 
-afterAll(async () => {
+afterAll(async done => {
   await connection.close();
+  await disconnect();
+  done();
 });
 
 describe('register resolver', () => {
