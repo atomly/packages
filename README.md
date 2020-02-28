@@ -2,7 +2,7 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Fix `register` test after refactoring error handling.
+- Refactor error handling.
 - `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
 - [Run Jest tests in parallel](https://www.youtube.com/watch?v=qMoDVC38BDk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=31).
 - [Account role authorization](https://www.youtube.com/watch?v=3t3tmfDwWB4&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=5).
