@@ -11,14 +11,14 @@ import { applyMiddleware } from 'graphql-middleware';
 import { redisSessionPrefix } from '@root/constants';
 import { resolvers } from '@root/resolvers';
 import typeDefs from '@root/schema';
-import { redis } from '@redis/index';
 import { middleware } from '@root/middleware';
 
 // Types
 import { Beast } from '@typings/graphql';
 
-// TypeORM configuration
-import ormConfig from '../ormconfig';
+// Redis & TypeORM configuration
+import { redis } from './redis';
+import ormConfig from './ormconfig';
 
 /**
  * Starts the GraphQL server.

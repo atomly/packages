@@ -10,7 +10,7 @@ import { setupConfig } from '@root/config';
 setupConfig(setupConfig.ENodeEnvConfig.DEVELOPMENT);
 
 // TypeORM configuration
-import ormConfig from '../ormconfig';
+import ormConfig from './ormconfig';
 
 if (process.env.NODE_ENV !== 'development') {
   console.error('WARNING!');

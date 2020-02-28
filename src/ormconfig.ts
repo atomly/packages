@@ -10,17 +10,17 @@ export default {
   ),
   logging: false,
   entities: [
-    `${__dirname}/src/entity/**/*.ts`,
+    `${__dirname}/entity/**/*.ts`,
   ],
   migrations: [
-    `${__dirname}/src/migration/**/*.ts`,
+    `${__dirname}/migration/**/*.ts`,
   ],
   subscribers: [
-    `${__dirname}/src/subscriber/**/*.ts`,
+    `${__dirname}/subscriber/**/*.ts`,
   ],
   cli: {
-    entitiesDir: `${__dirname}/src/entity`,
-    migrationsDir: `${__dirname}/src/migration`,
-    subscribersDir: `${__dirname}/src/subscriber`,
+    entitiesDir: `${__dirname}/entity`,
+    migrationsDir: `${__dirname}/migration`,
+    subscribersDir: `${__dirname}/subscriber`,
   },
 }
