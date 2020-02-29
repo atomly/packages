@@ -1,7 +1,6 @@
 // Libraries
 import Redis from "ioredis";
 
-// TODO: Add redis settings to the ENV variables file.
 // Connect to 127.0.0.1:6379, db "redis", using password "authpassword":
 // Ex: "redis://:authpassword@127.0.0.1:6379/redis"
 // NOTE: For this to work, make sure the request credentials setting is

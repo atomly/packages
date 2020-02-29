@@ -11,6 +11,7 @@ const typesArray = fileLoader(`${__dirname}/**/*.graphql`);
 const schema: string = mergeTypes(typesArray, { all: true });
 
 // Generate schema file
+writeFileSync(`${__dirname}/schema.graphql`, '', { flag : 'w' }); // Deletes first.
 writeFileSync(`${__dirname}/schema.graphql`, schema, { flag : 'w' });
 
 // Schema string

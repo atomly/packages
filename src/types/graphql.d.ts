@@ -17,18 +17,18 @@ declare namespace Beast {
 
   // Resolvers
   interface IResolverObject {
-    [key: string]: Beast.GPrismaResolver<any, any, any>
+    [key: string]: Beast.GResolver<any, any, any>
   }
   
   interface ISubscriptionObject {
     [key: string]: {
-      subscribe: Beast.GPrismaResolver<any, any, any>
+      subscribe: Beast.GResolver<any, any, any>
     }
   }
 
-  // Resolvers type
-  type GPrismaResolver<T, R, X> = (parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X;
-  type PrismaResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X>
+  // Resolvers types
+  type GResolver<T, R, X> = (parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X;
+  type ResolverParameters<T, R, X> = Parameters<(parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X>
 
   interface IResolver {
     Query?: IResolverObject
@@ -40,31 +40,39 @@ declare namespace Beast {
   interface IResolverMap extends IResolvers {
     // Queries
     Query: {
+      test: TQueryTest
+      ping: TQueryPing
       user: TQueryUser
       users: TQueryUsers
-      me: TQueryUser
+      me: TQueryMe
+      post: TQueryPost
+      posts: TQueryPosts
     }
     // Mutations
     Mutation: {
       newUser: TMutationNewUser
       authenticate: TMutationAuthenticate
+      logout: TMutationLogout
+      newPost: TMutationNewPost
+      subscriptionPost: TSubscriptionNewPost
     }
   }
 
   // Custom Query resolvers
-  type TQueryPing = GPrismaResolver<null, null, string>
+  type TQueryTest = GResolver<null, null, string | Errors.IThrowError>
+  type TQueryPing = GResolver<null, null, string>
 
   // User resolvers
-  type TQueryUser = GPrismaResolver<null, GQL.IUserOnQueryArguments, Promise<users | null>>
-  type TQueryUsers = GPrismaResolver<null, null, Promise<users[]>>
-  type TQueryMe = GPrismaResolver<null, null, Promise<users | null>>
-  type TMutationNewUser= GPrismaResolver<null, GQL.INewUserOnMutationArguments, Promise<users>>
-  type TMutationAuthenticate = GPrismaResolver<null, GQL.IAuthenticateOnMutationArguments, Promise<users | null>>
-  type TMutationLogout = GPrismaResolver<null, null, Promise<boolean>>
+  type TQueryUser = GResolver<null, GQL.IUserOnQueryArguments, Promise<users | null>>
+  type TQueryUsers = GResolver<null, null, Promise<users[]>>
+  type TQueryMe = GResolver<null, null, Promise<users | null>>
+  type TMutationNewUser= GResolver<null, GQL.INewUserOnMutationArguments, Promise<users | Errors.IThrowError>>
+  type TMutationAuthenticate = GResolver<null, GQL.IAuthenticateOnMutationArguments, Promise<users | null | Errors.IThrowError>>
+  type TMutationLogout = GResolver<null, null, Promise<boolean | Errors.IThrowError>>
 
   // Post resolvers
-  type TQueryPost = GPrismaResolver<null, GQL.IPostOnQueryArguments, Promise<posts | null>>
-  type TQueryPosts = GPrismaResolver<null, null, Promise<posts[]>>
-  type TMutationNewPost= GPrismaResolver<null, GQL.INewPostOnMutationArguments, Promise<posts>>
-  type TSubscriptionNewPost = GPrismaResolver<null, GQL.INewPostOnMutationArguments, AsyncIterator<posts>>
+  type TQueryPost = GResolver<null, GQL.IPostOnQueryArguments, Promise<posts | null>>
+  type TQueryPosts = GResolver<null, null, Promise<posts[]>>
+  type TMutationNewPost= GResolver<null, GQL.INewPostOnMutationArguments, Promise<posts | Errors.IThrowError>>
+  type TSubscriptionNewPost = GResolver<null, GQL.INewPostOnMutationArguments, AsyncIterator<posts>>
 }

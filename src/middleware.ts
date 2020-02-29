@@ -13,11 +13,10 @@ export const isAuthenticated: IMiddleware = async function isAuthenticated(
 ) {
   if (!context.request.session.userId) {
     // User is not logged in.
-    throwError({
-      errorType: throwError.EErrors.AUTHENTICATION_MIDDLEWARE,
-      error: new Error('Not authenticated from GraphQL middleware.'),
+    return throwError({
+      status: throwError.Errors.EStatuses.NETWORK_AUTHENTICATION_REQUIRED,
+      message: 'User not found in the session',
     });
-    throw new Error('[AUTHENTICATION MIDDLEWARE ERROR] Not authenticated from GraphQL middleware.');
   }
   return resolve(parent, args, context, info);
 }

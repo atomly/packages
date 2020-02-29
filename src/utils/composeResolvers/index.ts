@@ -1,6 +1,7 @@
 // Types
 import { Beast } from '@typings/graphql';
 
+// TODO: Add support for custom type resolvers.
 export function composeResolvers<T>(...resolvers: Beast.IResolver[]): T {
   const globalResolver = resolvers.reduce((resolvers, resolver) => {
     return {

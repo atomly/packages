@@ -2,9 +2,9 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Refactor error handling.
-- `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
 - Add `lerna`, `commitzen`.
+- `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
+- Place entities and utils in their respective packages (with `lerna` bootstrap).
 - [Run Jest tests in parallel](https://www.youtube.com/watch?v=qMoDVC38BDk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=31).
 - [Account role authorization](https://www.youtube.com/watch?v=3t3tmfDwWB4&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=5).
 - [Add confirmation emails](https://www.youtube.com/watch?v=OP39UioapL8&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=6).
@@ -228,7 +228,6 @@ Our unit tests found in the `tests` directory are structured in a way to match o
 [Source 2](https://levelup.gitconnected.com/complete-guide-to-using-typeorm-and-typescript-for-data-persistence-in-node-js-module-bfce169959d9 "Complete guide to using TypeORM and TypeScript for data persistence in Node.js module")
 [Source 3](https://github.com/typestack/class-validator "Validation made easy using TypeScript decorators.")
 
-
 We use a combination of `typeorm` and `class-validators` to design the architecture our database, while simultaneously validating the tables and columns by taking advantage of TypeScript decorators.
 
 In TypeScript, a decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. Decorators use the form `@expression` syntax, where `expression` must evaluate to a function that will be called at runtime with information about the decorated declaration.
@@ -260,7 +259,7 @@ export class User extends BaseEntity {
   id: number;
 
   @IsEmail()
-  @IsEmailAlreadyTaken({ message: 'email already taken '})
+  @IsEmailAlreadyTaken({ description: 'email already taken '})
   @Column('varchar', { length: 255, unique: true })
   email: string;
 

@@ -8,7 +8,7 @@ import { Beast } from '@typings/graphql';
 import { User } from '@entity/User';
 
 // Utils
-import { resolverFactory } from '@utils/index';
+import { resolverFactory, throwError } from '@utils/index';
 import { addUserSession, removeAllUserSessions, validateNewEntity } from '@root/utils';
 
 //
@@ -40,16 +40,8 @@ const me: Beast.TQueryMe = async function authenticate(
   }
   if (user) {
     return user;
-  } else {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      throw new Error(`[QUERY ERROR]: user not found or not saved in session.`);
-    } else {
-      return null;
-    }
   }
+  return null;
 }
 
 //
@@ -82,7 +74,10 @@ const newUser: Beast.TMutationNewUser = async function newUser(
       }
       return user;
     } catch (error) {
-      throw new Error(`[USER ERROR]: Error while creating a new user: ${error.message}`);
+      return throwError({
+        status: throwError.Errors.EStatuses.AUTHENTICATION,
+        message: `Error while creating a new user: ${error.message}`,
+      });
     }
   });
   return result;
@@ -93,32 +88,30 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
   args,
   { request, prisma, redis },
 ) {
+  // Check if there is no user logged in.
   if (!request.session?.userId) {
     const user = await prisma.users.findOne({
       where: {
         email: args.input.email.toLowerCase(),
       },
     });
+    // If there is no user found, return error response.
     if (!user) {
-      if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test'
-      ) {
-        throw new Error(`[AUTHENTICATION ERROR]: user with email: [${args.input.email.toLowerCase()}] not found.`);
-      } else {
-        return null;
-      }
+      return throwError({
+        status: throwError.Errors.EStatuses.AUTHENTICATION,
+        message: `User with email: [${args.input.email.toLowerCase()}] not found.`,
+        shouldDisplayMessageInProduction: false,
+      });
     }
+    // Try to decrypt password.
     const isValid = await bcrypt.compare(args.input.password, user.password);
+    // If the password is not valid, return error response.
     if (!isValid) {
-      if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test'
-      ) {
-        throw new Error('[AUTHENTICATION ERROR]: passwords do not match.');
-      } else {
-        return null;
-      }
+      return throwError({
+        status: throwError.Errors.EStatuses.AUTHENTICATION,
+        message: 'Passwords do not match.',
+        shouldDisplayMessageInProduction: false,
+      });
     }
     // Save user's ID to the session and Redis.
     request.session!.userId = user.id;
@@ -127,27 +120,34 @@ const authenticate: Beast.TMutationAuthenticate = async function authenticate(
     }
     return user;
   }
-  throw new Error('[AUTHENTICATION ERROR]: Already logged in.');
+  //If there's an authenticated user in this session, return error response.
+  return throwError({
+    status: throwError.Errors.EStatuses.AUTHENTICATION,
+    message: 'User already logged in.',
+  });
 }
 
 const logout: Beast.TMutationLogout = async function logout(_, __, { redis, response, request }) {
+  // Check if there is a user saved in the session.
   if (request.session?.userId) {
     await removeAllUserSessions(request.session.userId, redis);
     request.session.destroy(err => {
-      // If error return false or report error if in development or test.
+      // If error, return throw error response.
       if (err) {
-        if (
-          process.env.NODE_ENV === 'development' ||
-          process.env.NODE_ENV === 'test'
-        ) {
-          throw new Error(`[LOGOUT ERROR]: something went wrong when logging the user out: ${err.message}`);
-        }
+        throwError({
+          status: throwError.Errors.EStatuses.INTERNAL_SERVER_ERROR,
+          message: `Something went wrong when logging the user out: ${err.message}`,
+          details: 'Logout resolver. Error originated from the Redis store.',
+        });
       }
     });
-    response.clearCookie("qid");
+    response.clearCookie('qid');
     return true;
   }
-  throw new Error('[LOGOUT ERROR]: Not logged in.');
+  return throwError({
+    status: throwError.Errors.EStatuses.INTERNAL_SERVER_ERROR,
+    message: 'Not logged in. No user found in session.',
+  });
 }
 
 export default resolverFactory(
