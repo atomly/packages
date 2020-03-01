@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.settings.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "typeRoots": [
+      "./src/types"
+    ],
+    "paths" : {
+      "@root/*": ["./src/*"],
+      "@entity/*": ["./src/entity/*"],
+      "@typings/*": ["./src/types/*"],
+      "@resolvers/*": ["./src/resolvers/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@tests/*": ["./src/tests/*"]
+    }
+  }
+}

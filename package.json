@@ -1,70 +1,48 @@
 {
-  "name": "beast-backend",
-  "version": "0.0.1",
-  "description": "Awesome project developed with TypeORM.",
-  "type": "commonjs",
-  "scripts": {
-    "build": "npm -s run generate && tsc",
-    "generate:prisma": "npx prisma2 generate",
-    "generate:schema": "ts-node ./src/schema/generateSchema.ts",
-    "generate:types": "npx gql2ts ./src/schema/schema.graphql -o ./src/types/schema.d.ts",
-    "introspect:prisma": "npx prisma2 introspect",
-    "start": "ts-node-dev --respawn ./src/index.ts",
-    "start:prod": "ts-node --files ./src/prod.ts",
-    "synchronize:typeorm": "ts-node --files ./src/synchronize_typeorm.ts",
-    "test": "npx jest --watch"
+  "name": "beast-api",
+  "version": "1.0.0",
+  "description": "Beast monorepo.",
+  "homepage": "https://github.com/beast-app/beast-backend#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beast-app/beast-backend.git"
   },
-  "dependencies": {
-    "@prisma/client": "^2.0.0-preview021",
-    "bcrypt": "^3.0.8",
-    "class-validator": "^0.11.0",
-    "connect-redis": "^4.0.4",
-    "dotenv": "^8.2.0",
-    "express-session": "^1.17.0",
-    "graphql-tools": "^4.0.6",
-    "graphql-yoga": "^1.18.3",
-    "ioredis": "^4.14.1",
-    "merge-graphql-schemas": "^1.7.6",
-    "pg": "^7.17.1",
-    "redis": "^2.8.0",
-    "reflect-metadata": "^0.1.13",
-    "ts-node": "8.6.2",
-    "typeorm": "^0.2.22"
+  "license": "ISC",
+  "author": "Robert Molina <rmolinamir@gmail.com>",
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap --hoist --ignore-scripts --force-local",
+    "build": "lerna run build",
+    "clean": "npm run clean-dist && npm run clean-output && npm run clean-logs",
+    "clean-deps": "rm -fr node_modules && rm -fr packages/*/node_modules && rm -f package-lock.json && rm -fr */**/package-lock.json && rm -f package-lock.json && rm -fr */**/package-lock.json",
+    "clean-dist": "rm -fr packages/*/*.tsbuildinfo && rm -fr packages/*/dist",
+    "clean-incl-deps": "npm run clean && npm run clean-deps",
+    "clean-logs": "rm -f *.log && rm -fr */**/*.log",
+    "clean-output": "rm -fr output && rm -fr */**/output",
+    "commit": "npx git-cz",
+    "test": "lerna run test"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "devDependencies": {
-    "@types/bcrypt": "^3.0.0",
-    "@types/connect-redis": "0.0.13",
-    "@types/faker": "^4.1.9",
-    "@types/ioredis": "^4.14.7",
-    "@types/jest": "^25.1.1",
-    "@types/jest-dev-server": "^4.2.0",
-    "@types/node": "^13.5.0",
-    "@typescript-eslint/eslint-plugin": "^2.17.0",
-    "@typescript-eslint/parser": "^2.17.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.9.0",
-    "eslint-plugin-jest": "^23.6.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "faker": "^4.1.0",
-    "jest": "^25.1.0",
-    "module-alias": "^2.2.2",
-    "prettier": "^1.19.1",
-    "prisma2": "^2.0.0-preview021",
-    "ts-jest": "^25.2.0",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.7.5"
+    "cz-conventional-changelog": "^3.1.0",
+    "husky": "^4.2.3",
+    "lerna": "^3.20.2"
   },
-  "engines": {
-    "node": ">=8.10.0"
+  "huskys": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
   },
-  "_moduleAliases": {
-    "@root": "src/",
-    "@redis": "redis/",
-    "@entity": "src/entity",
-    "@typings": "src/types",
-    "@generatedPrisma": "./prisma",
-    "@resolvers": "src/resolvers",
-    "@utils": "src/utils",
-    "@tests": "src/tests"
+  "bugs": {
+    "url": "https://github.com/beast-app/beast-api/issues"
   }
 }
