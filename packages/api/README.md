@@ -2,7 +2,6 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
-- Add `lerna`, `commitzen`.
 - `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
 - Place entities and utils in their respective packages (with `lerna` bootstrap).
 - [Run Jest tests in parallel](https://www.youtube.com/watch?v=qMoDVC38BDk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=31).
