@@ -24,7 +24,7 @@
     "clean-incl-deps": "npm run clean && npm run clean-deps",
     "clean-logs": "rm -f *.log && rm -fr */**/*.log",
     "clean-output": "rm -fr output && rm -fr */**/output",
-    "commit": "npx git-cz",
+    "commit": "sh commit.sh",
     "test": "lerna run test"
   },
   "config": {
