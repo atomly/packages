@@ -4,6 +4,7 @@
 
 - `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
 - Place entities and utils in their respective packages (with `lerna` bootstrap).
+- [Lerna setup, possible fix to symlinks (?)](https://www.youtube.com/watch?v=LN1VD_oppEQ&list=PLN3n1USn4xlnfJIQBa6bBjjiECnk6zL6s&index=15&t=0s).
 - [Run Jest tests in parallel](https://www.youtube.com/watch?v=qMoDVC38BDk&list=PLN3n1USn4xlky9uj6wOhfsPez7KZOqm2V&index=31).
 - [Account role authorization](https://www.youtube.com/watch?v=3t3tmfDwWB4&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=5).
 - [Add confirmation emails](https://www.youtube.com/watch?v=OP39UioapL8&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs&index=6).
