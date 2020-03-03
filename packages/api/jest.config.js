@@ -14,4 +14,8 @@ module.exports = {
     '^@utils(.*)$': '<rootDir>/src/utils$1',
     '^@tests(.*)$': '<rootDir>/src/tests$1',
   },
+  // Only run TypeScript tests.
+  "testMatch": [
+    "<rootDir>/src/tests/**/*.test.ts"
+  ]
 };
