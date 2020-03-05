@@ -5,6 +5,7 @@ import {
   GraphQLSchema,
 } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
+import { print } from 'graphql/language/printer';
 
 // Typings
 import { TSJest } from '@typings/tests';
@@ -31,9 +32,10 @@ export async function gqlCall(
       resolvers,
     });
   }
+  const sanitizedSource = typeof source === 'string' ? source : print(source);
   return graphql({
     schema: cachedSchema,
-    source,
+    source: sanitizedSource,
     variableValues,
     contextValue: context,
   });

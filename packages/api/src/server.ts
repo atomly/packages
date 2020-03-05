@@ -1,5 +1,4 @@
 // Libraries
-import { createConnection, getConnectionOptions } from 'typeorm';
 import { GraphQLServer, PubSub } from 'graphql-yoga';
 import session from 'express-session';
 import connectRedisStore from 'connect-redis';
@@ -17,7 +16,6 @@ import { Beast } from '@typings/graphql';
 
 // Redis, TypeORM DB Manager & DataLoaders
 import { redis } from '@root/redis';
-import ormConfig from '@root/ormconfig';
 import { Database } from "@root/database";
 import { loaders } from '@root/loaders';
 

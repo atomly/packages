@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "composite": true,
-    "target": "es2019",
+    "target": "ES2019",
     "module": "commonjs",
     "lib": [
       "es5",
@@ -14,10 +14,10 @@
       ]
     },
     "typeRoots": [
-      "../node_modules/@types",
-      "../@types"
+      "./node_modules/@types"
     ],
     "sourceMap": true,
+    "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -34,8 +34,6 @@
   },
   "exclude": [
     "node_modules",
-    "dist",
-    "**/*.d.ts",
-    "**/tests/*"
+    "dist"
   ]
 }

@@ -1,12 +1,13 @@
 // Libraries
 import { Connection } from 'typeorm';
 import faker from 'faker';
+import gql from 'graphql-tag';
 
 // Dependencies
 import { User } from '@root/entity/User';
 import { gqlCall, testConnection, connect, disconnect } from '@tests/utils';
 
-const newUserMutation = `
+const newUserMutation = gql`
   mutation NewUser($input: NewUserInput!) {
     newUser(input: $input) {
       id
