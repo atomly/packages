@@ -1,0 +1,56 @@
+[
+  {
+    "name": "<connection_name_1>",
+    "type": "postgres",
+    "host": "<host_1>",
+    "port": 5432,
+    "username": "<username>",
+    "password": "<password>",
+    "database": "<database>",
+    "schema": "public",
+    "synchronize": false,
+    "logging": false,
+    "entities": ["./src/entities/*.ts", "./src/entities/**/index.ts"],
+    "migrations": ["./src/migration/*.ts"],
+    "cli": {
+      "entitiesDir": "./src/entities",
+      "migrationsDir": "./src/migration"
+    }
+  },
+  {
+    "name": "beast_dev",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "password",
+    "database": "development",
+    "schema": "public",
+    "synchronize": false,
+    "logging": false,
+    "entities": ["./src/entities/*.ts", "./src/entities/**/index.ts"],
+    "migrations": ["./src/dev_migration/*.ts"],
+    "cli": {
+      "entitiesDir": "./src/entities",
+      "migrationsDir": "./src/dev_migration"
+    }
+  },
+  {
+    "name": "beast_test",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "password",
+    "database": "test",
+    "schema": "public",
+    "synchronize": false,
+    "logging": false,
+    "entities": ["./src/entities/*.ts", "./src/entities/**/index.ts"],
+    "migrations": ["./src/sandbox_migration/*.ts"],
+    "cli": {
+      "entitiesDir": "./src/entities",
+      "migrationsDir": "./src/sandbox_migration"
+    }
+  }
+]

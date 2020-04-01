@@ -2,10 +2,10 @@
   "name": "beast-api",
   "version": "1.0.0",
   "description": "Beast monorepo.",
-  "homepage": "https://github.com/beast-app/beast-backend#readme",
+  "homepage": "https://github.com/beast-app/beast-api/tree/master",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beast-app/beast-backend.git"
+    "url": "git+https://github.com/beast-app/beast-api.git"
   },
   "license": "ISC",
   "author": "Robert Molina <rmolinamir@gmail.com>",
@@ -25,7 +25,9 @@
     "clean-logs": "rm -f *.log && rm -fr */**/*.log",
     "clean-output": "rm -fr output && rm -fr */**/output",
     "commit": "npx git-cz",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "readme": "ts-node ./utils/table-of-contents/index.ts",
+    "watch": "lerna run watch --parallel"
   },
   "config": {
     "commitizen": {
@@ -33,9 +35,12 @@
     }
   },
   "devDependencies": {
+		"@types/shelljs": "^0.8.7",
     "cz-conventional-changelog": "^3.1.0",
+    "doctoc": "^1.4.0",
     "husky": "^4.2.3",
-    "lerna": "^3.20.2"
+    "lerna": "^3.20.2",
+		"shelljs": "^0.8.3"
   },
   "huskys": {
     "hooks": {

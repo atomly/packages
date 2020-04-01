@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Types
-import { Beast } from '@typings/graphql';
+import { Beast } from '@root/types/index';
 
 export function resolverFactory(
-  queries?: Beast.IResolverObject,
-  mutation?: Beast.IResolverObject,
-  subscription?: Beast.ISubscriptionObject,
+  queries?: Beast.IResolvers,
+  mutation?: Beast.IResolvers,
+  subscription?: Beast.ISubscriptionResolvers,
 ): Beast.IResolver {
   return {
     Query: queries,

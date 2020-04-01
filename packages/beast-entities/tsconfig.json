@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.settings.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./"
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/migration",
+    "src/sandbox_migration",
+    "tmp"
+  ]
+}

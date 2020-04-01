@@ -2,9 +2,6 @@
 // Libraries
 import { createConnection, getConnectionOptions, Connection } from 'typeorm';
 
-// Dependenies
-import ormConfig from '../../../ormconfig';
-
 /**
  * Sometimes when we perform a test we want to drop the schema and
  * synchronize the DB tables to clean up the database.
@@ -14,7 +11,6 @@ export async function testConnection(drop: boolean): Promise<Connection> {
   const connectionOptions = await getConnectionOptions();
   const connection = await createConnection({
     ...connectionOptions,
-    ...ormConfig,
     synchronize: drop,
     dropSchema: drop,
   });

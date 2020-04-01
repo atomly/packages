@@ -4,23 +4,33 @@ import session from 'express-session';
 import connectRedisStore from 'connect-redis';
 import { makeExecutableSchema } from 'graphql-tools';
 import { applyMiddleware } from 'graphql-middleware';
+import { Database } from '@beast/beast-entities';
 
 // Dependencies
 import { redisSessionPrefix } from '@root/constants';
 import { resolvers } from '@root/resolvers';
-import typeDefs from '@root/schema';
+import { typeDefs } from '@root/schema';
 import { middleware } from '@root/middleware';
 
 // Types
-import { Beast } from '@typings/graphql';
+import { Beast } from '@root/types/index';
 
-// Redis, TypeORM DB Manager & DataLoaders
+// Redis, DataLoaders
 import { redis } from '@root/redis';
-import { Database } from "@root/database";
 import { loaders } from '@root/loaders';
 
-// DB Layers.
-const database = new Database(); // TypeORM
+// TypeORM DB Layer
+const database = new Database({
+  type: process.env.TYPEORM_CONNECTION! as 'postgres',
+  host: process.env.TYPEORM_HOST!,
+  port: Number(process.env.TYPEORM_PORT!),
+  username: process.env.TYPEORM_USERNAME!,
+  password: process.env.TYPEORM_PASSWORD!,
+  database: process.env.TYPEORM_DATABASE!,
+});
+
+// Publish & Subscribe
+const pubsub = new PubSub();
 
 /**
  * Starts the GraphQL server.
@@ -28,10 +38,9 @@ const database = new Database(); // TypeORM
  */
 export async function startServer(): Promise<void> {
   // GraphQL server setup
-  const pubsub = new PubSub(); // Subscriptions.
   const schema = makeExecutableSchema({
     typeDefs,
-    resolvers,
+    resolvers: { ...resolvers },
   });
   applyMiddleware(schema, middleware);
 

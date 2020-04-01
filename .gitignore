@@ -111,3 +111,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# TypeORM
+migrationsconfig.json
+
+# Temporal Directory
+tmp
+**/tmp

@@ -12,7 +12,7 @@ import { TSJest } from '@typings/tests';
 
 // Dependencies
 import { resolvers } from '@root/resolvers';
-import typeDefs from '@root/schema';
+import { typeDefs } from '@root/schema';
 import { context } from './mockContext';
 
 // Schema "cache"
@@ -29,7 +29,7 @@ export async function gqlCall(
     // More here: https://stackoverflow.com/a/53987189/10246377
     cachedSchema = makeExecutableSchema({
       typeDefs,
-      resolvers,
+      resolvers: { ...resolvers },
     });
   }
   const sanitizedSource = typeof source === 'string' ? source : print(source);

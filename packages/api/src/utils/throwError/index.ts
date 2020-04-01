@@ -95,12 +95,6 @@ export function throwError({
       downtime_end_date: downtimeEndDate,
     },
   };
-  if (
-    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-  ) {
-    // eslint-disable-next-line no-console
-    console.error('errorPayload: ', errorPayload);
-  }
   throw new Error(JSON.stringify(
     errorPayload,
     null,

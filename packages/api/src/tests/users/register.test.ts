@@ -2,9 +2,9 @@
 import { Connection } from 'typeorm';
 import faker from 'faker';
 import gql from 'graphql-tag';
+import { Users } from '@beast/beast-entities';
 
 // Dependencies
-import { User } from '@root/entity/User';
 import { gqlCall, testConnection, connect, disconnect } from '@tests/utils';
 
 const newUserMutation = gql`
@@ -53,7 +53,7 @@ it('creates user correctly', async () => {
     });
 
     // Expect user to exist in database.
-    const dbUser = await User.findOne({
+    const dbUser = await Users.findOne({
       where: {
         email: user.email.toLowerCase(),
       },

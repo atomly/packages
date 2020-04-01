@@ -1,11 +1,21 @@
 // Libraries
 import { PubSub } from 'graphql-yoga';
-import { PrismaClient } from '@prisma/client';// Libraries
 
 // Dependencies
-import { redis } from '@redis/index';
+import { redis } from '@root/redis';
+import { Beast } from '@root/types';
 
-const prisma = new PrismaClient(); // Prisma DB layer.
+// TODO: Create typescript-utils package with these helpful types.
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+// Or, to omit multiple properties:
+type Context = Omit<Beast.IContext, 'request'|'response'|'database'|'loaders'|'connection'|'fragmentReplacements'>; // Equivalent to: {c: boolean}
+
+interface IContext extends Context {
+  request: typeof mockRequest
+  response: typeof mockResponse
+}
+
 const pubsub = new PubSub(); // Subscriptions.
 
 const mockRequest = {
@@ -33,26 +43,38 @@ const mockResponse = {
   },
 }
 
-interface IContext {
-  request: typeof mockRequest
-  response: typeof mockResponse
-  prisma: typeof prisma
-  pubsub: typeof pubsub
-  redis: typeof redis
-}
-
 const mockedContext: IContext = {
   request: mockRequest,
   response: mockResponse,
-  prisma,
   pubsub,
   redis,
-} 
+}
 
-class MockedContext {
-  private static instance: MockedContext; // MockedContext instance.
+interface ISingletonMockedContext {
+  context: IContext
+  connect(): Promise<boolean>
+  disconnect(): Promise<boolean>
+}
+
+class SingletonMockedContext implements ISingletonMockedContext {
+  private static instance: SingletonMockedContext; // SingletonMockedContext instance.
+
+  /**
+   * If get instance has not been initialized then it will construct a new SingletonMockedContext class object,
+   * then store it into the instance property. If it has already been created then it will simply
+   * return the instance property.
+   * This assures that there will only ever be one instance.
+   */
+  static getInstance(): SingletonMockedContext {
+    if (!SingletonMockedContext.instance) {
+      SingletonMockedContext.instance = new SingletonMockedContext(mockedContext);
+    }
+    return SingletonMockedContext.instance;
+  }
+
   private isConnected: boolean; // isConnected bool.
-  public context: IContext; // Member variable that will store the MockedContext instance.
+
+  public context: IContext; // Member variable that will store the SingletonMockedContext instance.
 
   /**
    * Read only property that can not be modified nor accessed outside of the class.
@@ -68,8 +90,7 @@ class MockedContext {
     if (!this.isConnected) {
       this.isConnected = !this.isConnected;
       await Promise.all([
-        MockedContext.instance.context.redis.connect(),
-        MockedContext.instance.context.prisma.connect(),
+        SingletonMockedContext.instance.context.redis.connect(),
       ]);
     }
     return this.isConnected;
@@ -79,25 +100,11 @@ class MockedContext {
     if (this.isConnected) {
       this.isConnected = !this.isConnected;
       await Promise.all([
-        MockedContext.instance.context.redis.disconnect(),
-        MockedContext.instance.context.prisma.disconnect(),
+        SingletonMockedContext.instance.context.redis.disconnect(),
       ]);
     }
     return this.isConnected;
   }
-
-  /**
-   * If get instance has not been initialized then it will construct a new MockedContext class object,
-   * then store it into the instance property. If it has already been created then it will simply
-   * return the instance property.
-   * This assures that there will only ever be one instance.
-   */
-  static getInstance(): MockedContext {
-    if (!MockedContext.instance) {
-      MockedContext.instance = new MockedContext(mockedContext);
-    }
-    return MockedContext.instance;
-  }
 }
 
-export const { context, connect, disconnect } = MockedContext.getInstance();
+export const { context, connect, disconnect } = SingletonMockedContext.getInstance();

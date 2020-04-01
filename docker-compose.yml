@@ -1,6 +1,7 @@
 version: '3'
 services:
   redis:
+    container_name: beast_docker_redis
     image: redis
     ports:
       - "${REDIS_CONTAINER_PORT}"
@@ -9,6 +10,7 @@ services:
     networks:
       - webnet
   db:
+    container_name: beast_docker_db
     image: postgres:alpine
     ports:
       - "${DB_CONTAINER_PORT}"

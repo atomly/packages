@@ -1,0 +1,45 @@
+{
+  "name": "@beast/beast-entities",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Robert Molina <rmolinamir@gmail.com>",
+  "homepage": "https://github.com/beast-app/beast-entities#readme",
+  "license": "ISC",
+	"main": "dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://rmolinamir@bitbucket.org/beast/beast-entities.git"
+  },
+  "scripts": {
+		"cli": "ts-node cli/index.ts",
+		"build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+	"dependencies": {
+		"class-validator": "^0.11.0",
+		"pg": "^7.17.1",
+		"reflect-metadata": "^0.1.13",
+		"typeorm": "0.2.22",
+		"uuid": "^7.0.1"
+	},
+	"devDependencies": {
+		"@types/commander": "^2.12.2",
+		"@types/faker": "^4.1.9",
+		"@types/jest": "^25.1.1",
+		"@types/jest-dev-server": "^4.2.0",
+    "@types/uuid": "^7.0.0",
+		"@typescript-eslint/eslint-plugin": "^2.17.0",
+		"@typescript-eslint/parser": "^2.17.0",
+		"commander": "^5.0.0",
+		"dotenv": "^8.2.0",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.9.0",
+		"eslint-plugin-jest": "^23.6.0",
+		"eslint-plugin-prettier": "^3.1.2",
+		"faker": "^4.1.0",
+		"jest": "^25.1.0",
+		"ts-jest": "^25.2.0",
+		"tsconfig-paths": "^3.9.0",
+		"typescript": "^3.7.5"
+	}
+}

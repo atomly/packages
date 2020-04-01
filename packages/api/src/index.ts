@@ -10,9 +10,6 @@ moduleAlias.addAliases({
   '@tests': `${__dirname}/tests/`,
 });
 
-// TypeORM
-import 'reflect-metadata';
-
 // Setting up our configuration
 import { setupConfig } from '@root/config';
 

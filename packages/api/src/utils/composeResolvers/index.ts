@@ -1,5 +1,5 @@
 // Types
-import { Beast } from '@typings/graphql';
+import { Beast } from '@root/types/index';
 
 // TODO: Add support for custom type resolvers.
 export function composeResolvers<T>(...resolvers: Beast.IResolver[]): T {

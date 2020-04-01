@@ -15,12 +15,12 @@ enum ENodeEnv {
 function serveEnvDir(nodeEnv: ENodeEnv): string {
   switch (nodeEnv) {
     case ENodeEnv.PRODUCTION:
-      return path.resolve(__dirname, '../../.env.production');
+      return path.resolve(__dirname, '..', '..', '..', '..', '.env.production');
     case ENodeEnv.TEST:
-      return path.resolve(__dirname, '../../.env.test');
+      return path.resolve(__dirname, '..', '..', '..', '..', '.env.test');
     case ENodeEnv.DEVELOPMENT:
     default:
-      return path.resolve(__dirname, '../../.env');
+      return path.resolve(__dirname, '..', '..', '..', '..', '.env');
   }
 }
 

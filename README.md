@@ -3,10 +3,35 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Packages](#packages)
+- [Installation](#installation)
+- [Commiting code changes](#commiting-code-changes)
+- [Versioning a package](#versioning-a-package)
+- [Creating a new package](#creating-a-new-package)
+- [Add a dependency](#add-a-dependency)
+- [Building](#building)
+- [AWS Alternatives](#aws-alternatives)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Packages
+
+<!-- START custom generated Lerna Packages please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN `npm run doc` TO UPDATE -->
+
+- [beast@api](https://github.com/beast-app/beast-api/tree/master/packages/api "api package homepage")
+- [beast@beast-entities](https://github.com/beast-app/beast-api/tree/master/packages/beast-entities "beast-entities package homepage")
+
+<!-- END custom generated Lerna Packages please keep comment here to allow auto update -->
+
 ## Installation
 
 ```cli
-npm install -g lerna commitizen
+npm install -g lerna commitizen typeorm-model-generator
 git clone git@github.com:beast-app/beast-api.git
 npm install
 npm run bootstrap
@@ -42,3 +67,10 @@ See [@lerna/add](https://github.com/lerna/lerna/tree/master/commands/add) for mo
 To build all the packages `lerna run build`. To build an specify package `lerna run build --scope=@beast/<package-name>`.
 
 See [`@lerna/run`](https://github.com/lerna/lerna/tree/master/commands/run) for more options.
+
+## AWS Alternatives
+
+- [Redis](https://aws.amazon.com/redis/)
+- [GraphQL w/ Lambdas](https://aws.amazon.com/lambda/)
+- [GraphQL w/ AppSync](https://aws.amazon.com/appsync/)
+- [Infrastructure/CloudFormation](https://aws.amazon.com/cdk/)
