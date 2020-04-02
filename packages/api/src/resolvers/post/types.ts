@@ -9,7 +9,7 @@ type TQueryPosts = Beast.Resolver<null, null, Promise<Posts[]>>
 type TMutationNewPost= Beast.Resolver<null, GQL.MutationNewPostArgs, Promise<Posts | IThrowError>>
 type TSubscriptionNewPost = Beast.Resolver<null, GQL.MutationNewPostArgs, AsyncIterator<Posts>>
 
-export interface IPostResolverMap extends Beast.Implements<Beast.IResolver, IPostResolverMap> {
+export interface IPostResolverMap extends Beast.IResolvers {
   Query: {
     post: TQueryPost
     posts: TQueryPosts

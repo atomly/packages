@@ -1,7 +1,7 @@
-import { PostsLoader } from './PostsLoader';
-import { UsersLoader } from './UsersLoader';
+import { Posts } from './Posts';
+import { Users } from './Users';
 
 export const loaders = {
-  postLoader: PostsLoader(),
-  userLoader: UsersLoader(),
+  Posts,
+  Users,
 };

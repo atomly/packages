@@ -20,8 +20,8 @@
   },
   "scripts": {
     "build": "npm -s run generate && tsc",
-    "generate:schema": "ts-node ./src/schema/generateSchema.ts",
-    "generate:types": "graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "schema": "ts-node ./src/schema/generateSchema.ts",
     "start": "ts-node-dev --respawn ./src/index.ts",
     "start:prod": "ts-node --files ./src/prod.ts",
     "start:dist": "nodemon --exec 'tsc --build && node dist/index.js'",
@@ -46,6 +46,10 @@
     "redis": "^2.8.0"
   },
   "devDependencies": {
+		"@graphql-codegen/cli": "1.12.2",
+		"@graphql-codegen/introspection": "1.12.2",
+		"@graphql-codegen/typescript": "1.12.2",
+		"@graphql-codegen/typescript-resolvers": "1.12.2",
     "@types/bcrypt": "^3.0.0",
     "@types/connect-redis": "0.0.13",
     "@types/faker": "^4.1.9",

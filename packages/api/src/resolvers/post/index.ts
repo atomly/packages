@@ -29,20 +29,21 @@ const resolver: IPostResolverMap = {
   Mutation: {
     async newPost(
       _,
-      args,
+      { input },
       { pubsub, database },
     ): Promise<Posts | IThrowError> {
       const post = database.connection.getRepository(Posts).create({
-        header: args.input.header,
-        body: args.input.body,
+        header: input.header,
+        body: input.body,
+        userId: +input.userId,
       });
       const result = await validateNewEntity(post, async () => {
         await post.save();
         pubsub.publish(
-          PUBSUB_NEW_POST, // Socket channel.
-          {
-            newPostSubscription: post, // [key] MUST match the name of the subscription resolver.
-          }, // Payload.
+          // Socket channel.
+          PUBSUB_NEW_POST,
+          // { [key]: [payload] } - `key` MUST match the name of the subscription resolver.
+          { newPostSubscription: post },
         );
         return post;
       });

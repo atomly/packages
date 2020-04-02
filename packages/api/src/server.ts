@@ -2,7 +2,7 @@
 import { GraphQLServer, PubSub } from 'graphql-yoga';
 import session from 'express-session';
 import connectRedisStore from 'connect-redis';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema, IResolvers } from 'graphql-tools';
 import { applyMiddleware } from 'graphql-middleware';
 import { Database } from '@beast/beast-entities';
 
@@ -40,7 +40,7 @@ export async function startServer(): Promise<void> {
   // GraphQL server setup
   const schema = makeExecutableSchema({
     typeDefs,
-    resolvers: { ...resolvers },
+    resolvers: resolvers as IResolvers,
   });
   applyMiddleware(schema, middleware);
 

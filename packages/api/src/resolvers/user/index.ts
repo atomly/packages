@@ -1,6 +1,6 @@
 // Libraries
 import bcrypt from 'bcrypt';
-import { Users } from '@beast/beast-entities';
+import { Users, Posts } from '@beast/beast-entities';
 
 // Types
 import { IUsersResolverMap } from './types';
@@ -10,11 +10,14 @@ import { IThrowError } from '@root/utils/throwError/errors';
 import { throwError } from '@utils/index';
 import { addUserSession, removeAllUserSessions, validateNewEntity } from '@root/utils';
 
-//
-// MUTATIONS
-//
-
 const resolvers: IUsersResolverMap = {
+  User: {
+    async posts(parent, { input }, { loaders }): Promise<Posts[]> {
+      console.log('input: ', input);
+      const posts = await loaders.Posts.manyLoaderByUserIds.load(String(parent.id));
+      return posts;
+    },
+  },
   Query: {
     async user(_, { id }, { database }): Promise<Users | undefined> {
       const user = await database.connection.getRepository(Users).findOne({ where: { id: +id } });

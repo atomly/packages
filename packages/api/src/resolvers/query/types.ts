@@ -6,7 +6,7 @@ import { IThrowError } from '@utils/throwError/errors'
 type TQueryTest = Beast.Resolver<null, null, string | IThrowError>
 type TQueryPing = Beast.Resolver<null, null, string>
 
-export interface IQueryResolverMap extends Beast.Implements<Beast.IResolver, IQueryResolverMap> {
+export interface IQueryResolverMap extends Beast.IResolvers {
   Query: {
     test: TQueryTest
     ping: TQueryPing

@@ -17,4 +17,4 @@ export const resolvers: ResolverMap = composeResolvers<ResolverMap>(
   queryResolvers,
   userResolvers,
   postResolvers,
-)
+);

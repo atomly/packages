@@ -19,3 +19,8 @@ export { BaseEntity } from 'typeorm';
 // Exporting TypeORM DB Connection Class
 //
 export * from './database';
+
+//
+// Exporting TypeORM Filters
+//
+export * from './filters';

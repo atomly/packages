@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export default gql`
 type Post {
   id: ID!
+  userId: ID!
   header: String
   body: String
 }
@@ -13,6 +14,7 @@ type Query {
 }
 
 input NewPostInput {
+  userId: ID!
   header: String!
   body: String!
 }

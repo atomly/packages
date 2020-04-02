@@ -18,8 +18,11 @@ export namespace Beast {
     loaders: typeof loaders
   }
 
+  // Resolvers types
+  type Resolver<T, R, X> = (parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X;
+
   // Resolver Maps
-  interface IResolvers {
+  interface IBasicResolvers {
     [key: string]: Resolver<any, any, any>
   }
   
@@ -29,16 +32,9 @@ export namespace Beast {
     }
   }
 
-  interface IResolver {
-    Query?: IResolvers
-    Mutation?: IResolvers
+  interface IResolvers extends Record<string, IBasicResolvers | ISubscriptionResolvers | undefined> {
+    Query?: IBasicResolvers
+    Mutation?: IBasicResolvers
     Subscription?: ISubscriptionResolvers
   }
-
-  // Resolvers types
-  type Resolver<T, R, X> = (parent: T, args: R, context: IContext, info: GraphQLResolveInfo) => X;
-
-  // Type helper to implement interfaces to other interfaces.
-  // Helpful to implement resolvers and maintain the IResolver structure.
-  type Implements<T, U extends T> = {}
 }

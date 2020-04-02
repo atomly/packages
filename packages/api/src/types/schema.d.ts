@@ -17,6 +17,11 @@ export type AuthenticateInput = {
 };
 
 
+export type FindUserPostsInput = {
+  limit: Scalars['Int'],
+  offset: Scalars['Int'],
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   newPost?: Maybe<Post>,
@@ -41,6 +46,7 @@ export type MutationAuthenticateArgs = {
 };
 
 export type NewPostInput = {
+  userId: Scalars['ID'],
   header: Scalars['String'],
   body: Scalars['String'],
 };
@@ -53,6 +59,7 @@ export type NewUserInput = {
 export type Post = {
    __typename?: 'Post',
   id: Scalars['ID'],
+  userId: Scalars['ID'],
   header?: Maybe<Scalars['String']>,
   body?: Maybe<Scalars['String']>,
 };
@@ -93,6 +100,12 @@ export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
   email: Scalars['ID'],
+  posts?: Maybe<Array<Maybe<Post>>>,
+};
+
+
+export type UserPostsArgs = {
+  input?: Maybe<FindUserPostsInput>
 };
 
 
@@ -173,6 +186,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   User: ResolverTypeWrapper<User>,
+  FindUserPostsInput: FindUserPostsInput,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   Mutation: ResolverTypeWrapper<{}>,
   NewPostInput: NewPostInput,
   NewUserInput: NewUserInput,
@@ -189,6 +204,8 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   String: Scalars['String'],
   User: User,
+  FindUserPostsInput: FindUserPostsInput,
+  Int: Scalars['Int'],
   Mutation: {},
   NewPostInput: NewPostInput,
   NewUserInput: NewUserInput,
@@ -211,6 +228,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   header?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -234,6 +252,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType, UserPostsArgs>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

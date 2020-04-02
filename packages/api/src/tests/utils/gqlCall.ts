@@ -4,7 +4,7 @@ import {
   ExecutionResult,
   GraphQLSchema,
 } from 'graphql';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema, IResolvers } from 'graphql-tools';
 import { print } from 'graphql/language/printer';
 
 // Typings
@@ -29,7 +29,7 @@ export async function gqlCall(
     // More here: https://stackoverflow.com/a/53987189/10246377
     cachedSchema = makeExecutableSchema({
       typeDefs,
-      resolvers: { ...resolvers },
+      resolvers: resolvers as IResolvers,
     });
   }
   const sanitizedSource = typeof source === 'string' ? source : print(source);
