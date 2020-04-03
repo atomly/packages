@@ -13,7 +13,7 @@ export const entitiesArray = Object.values(entities);
 
 export * from './entities';
 
-export { BaseEntity } from 'typeorm';
+export { BaseEntity, FindManyOptions } from 'typeorm';
 
 //
 // Exporting TypeORM DB Connection Class

@@ -10,6 +10,8 @@ import {
   IFactoryTypeConfig,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Entity,
+  IBatchMany,
+  IBatchOne,
 } from './types';
 
 function typeGuard<I>(object: unknown, member: string): object is I {
@@ -29,21 +31,19 @@ function typeGuard<I>(object: unknown, member: string): object is I {
 async function batchOneToOne<T>(
   ids : readonly string[],
   Entity: Entity,
-  idsKey?: string,
+  { idsKey = 'id', config = {} }: IBatchOne<Entity> = {},
 ): Promise<T[]> {
   // Fetching entities, if the custom idsKey exists we will use that one.
-  const entities = idsKey ?
-    await Entity.find({
-      where: { [idsKey]: In(ids as string[]) },
-      order: { createdAt: 'ASC' },
-    }) :
-    await Entity.findByIds(ids as string[], { order : { createdAt: 'ASC' }});
+  const entities = await Entity.find({
+    where: { [idsKey]: In(ids as string[]) },
+    order: { createdAt: 'ASC' },
+    ...config,
+  });
   // Entities map init that will be filled with the fetched entities.
   // Each parent ID will be assigned its respective entity.
   const entitiesMap: { [key: string]: T } = {};
-  const key = (
-    idsKey as keyof typeof entities[number] ?? 'id'
-  );
+  // Key identifier of the entity.
+  const key = idsKey as keyof typeof entities[number] ?? 'id';
   // Assigning its respective entitie(s).
   entities.forEach(entity => {
     entitiesMap[entity[key] as unknown as string] = entity as unknown as T;
@@ -61,28 +61,27 @@ async function batchOneToOne<T>(
 async function batchManyToOne<T>(
   ids : readonly string[],
   Entity: Entity,
-  idsKey?: string,
+  { idsKey = 'id', config = {} }: IBatchMany<Entity> = {},
 ): Promise<T[]> {
+  const { take, ...rest } = config;
   // Fetching entities, if the custom idsKey exists we will use that one.
-  const entities = idsKey ?
-    await Entity.find({
-      where: { [idsKey!]: In(ids as string[]) },
-      order: { createdAt: 'ASC' },
-    }) :
-    await Entity.findByIds(ids as string[], { order : { createdAt: 'ASC' }});
+  const entities = await Entity.find({
+    where: { [idsKey!]: In(ids as string[]) },
+    order: { createdAt: 'ASC' },
+    take: (take ? take(ids) : undefined),
+    ...rest,
+  });
   // Entities map init that will be filled with the fetched entities.
   // Each parent ID will be assigned its respective entitie(s).
-  const entitiesMap: { [key: string]: T } = {};
-  const key = (
-    idsKey as keyof typeof entities[number] ?? 'id'
-  );
+  const entitiesMap = ids.reduce((map: Record<string, T>, id) => {
+    map[id] = [] as unknown as T;
+    return map;
+  }, {});
+  // Key identifier of the entity.
+  const key = idsKey as keyof typeof entities[number] ?? 'id';
   // Assigning its respective entitie(s).
   entities.forEach(entity => {
-    if (Array.isArray(entitiesMap[entity[key] as unknown as string])) {
-      (entitiesMap[entity[key] as unknown as string] as unknown as Array<unknown>).push(entity);
-    } else {
-      entitiesMap[entity[key] as unknown as string] = [entity] as unknown as T;
-    }
+    (entitiesMap[entity[key] as unknown as string] as unknown as Array<unknown>).push(entity);
   });
   return ids.map(id => entitiesMap[id]);
 }
@@ -90,8 +89,8 @@ async function batchManyToOne<T>(
 export function Factory<T>(
   Entity: Entity,
   config?: IFactoryBatchFunctionConfig<T> | IFactoryTypeConfig,
-  idsKey?: string,
-): DataLoader<string, T, unknown> {
+  batchConfig?: IBatchMany<Entity> | IBatchOne<Entity>,
+  ): DataLoader<string, T, unknown> {
   if (config) {
     if (typeGuard<IFactoryBatchFunctionConfig<T>>(config, 'batchFunction')) {
       return new DataLoader<string, T, unknown>(config.batchFunction);
@@ -99,16 +98,16 @@ export function Factory<T>(
       switch (config.type) {
         case 'ONE_TO_ONE':
           return new DataLoader<string, T, unknown>(
-            ids => batchOneToOne<T>(ids, Entity, idsKey),
+            ids => batchOneToOne<T>(ids, Entity, batchConfig as IBatchOne<Entity>),
           );
         case 'MANY_TO_ONE':
           return new DataLoader<string, T, unknown>(
-            ids => batchManyToOne<T>(ids, Entity, idsKey),
+            ids => batchManyToOne<T>(ids, Entity, batchConfig as IBatchMany<Entity>),
           );
       }
     }
   }
   return new DataLoader<string, T, unknown>(
-    ids => batchOneToOne<T>(ids, Entity, idsKey),
+    ids => batchOneToOne<T>(ids, Entity, batchConfig as IBatchOne<Entity>),
   );
 }

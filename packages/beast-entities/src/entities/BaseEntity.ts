@@ -12,13 +12,12 @@ import {
 } from 'class-validator';
 
 export abstract class BaseEntity extends Base {
-  @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'integer' })
   id: number;
 
   @IsOptional()
   @IsDate()
   @Column('timestamp with time zone', {
-    name: 'created_at',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
@@ -26,7 +25,6 @@ export abstract class BaseEntity extends Base {
   @IsOptional()
   @IsDate()
   @Column('timestamp with time zone', {
-    name: 'updated_at',
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;

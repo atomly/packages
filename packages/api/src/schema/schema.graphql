@@ -35,15 +35,10 @@ type Subscription {
 
 scalar Date
 
-input FindUserPostsInput {
-  limit: Int!
-  offset: Int!
-}
-
 type User {
   id: ID!
   email: ID!
-  posts(input: FindUserPostsInput): [Post]
+  posts: [Post]
 }
 
 input NewUserInput {
@@ -98,15 +93,10 @@ type Subscription {
 
 scalar Date
 
-input FindUserPostsInput {
-  limit: Int!
-  offset: Int!
-}
-
 type User {
   id: ID!
   email: ID!
-  posts(input: FindUserPostsInput): [Post]
+  posts: [Post]
 }
 
 input NewUserInput {

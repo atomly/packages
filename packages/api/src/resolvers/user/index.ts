@@ -12,8 +12,7 @@ import { addUserSession, removeAllUserSessions, validateNewEntity } from '@root/
 
 const resolvers: IUsersResolverMap = {
   User: {
-    async posts(parent, { input }, { loaders }): Promise<Posts[]> {
-      console.log('input: ', input);
+    async posts(parent, _, { loaders }): Promise<Posts[]> {
       const posts = await loaders.Posts.manyLoaderByUserIds.load(String(parent.id));
       return posts;
     },

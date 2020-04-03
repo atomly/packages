@@ -14,21 +14,18 @@ import {
   Teams,
   Posts,
   Profiles,
-  Players,
-  Recruiters,
 } from '.'
 
 @Index('users_uq', ['email'], { unique: true })
 @Entity('users', { schema: 'public' })
 export class Users extends BaseEntity {
-  @Column('character varying', { name: 'email', unique: true, length: 255 })
+  @Column('character varying', { unique: true, length: 255 })
   email: string;
 
   @Column('text', { name: 'password' })
   password: string;
 
   @Column('character varying', {
-    name: 'first_name',
     nullable: true,
     length: 255,
   })
@@ -38,23 +35,15 @@ export class Users extends BaseEntity {
   // ONE TO MANY RELATIONS
   //
 
-  @OneToMany(() => Teams, teams => teams.user)
+  @OneToMany(() => Teams, teams => teams.id)
   teams: Teams[];
 
-  @OneToMany(() => Posts, posts => posts.user)
+  @OneToMany(() => Posts, posts => posts.id)
   posts: Posts[];
 
   //
   // ONE TO ONE RELATIONS
   //
-
-  @OneToOne(() => Players)
-  @JoinColumn()
-  player: Players
-
-  @OneToOne(() => Recruiters)
-  @JoinColumn()
-  recruiter: Recruiters
 
   @OneToOne(() => Profiles)
   @JoinColumn()

@@ -2,16 +2,13 @@
 import {
   Entity,
   Index,
-  OneToOne,
+  // OneToOne,
 } from 'typeorm';
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import { Users } from '.'
+// import { Users } from '.'
 
 @Index('profiles_pk', ['id'], { unique: true })
 @Entity('profiles', { schema: 'public' })
-export class Profiles extends BaseEntity {
-  @OneToOne(() => Users, user => user.player)
-  user: Users;
-}
+export class Profiles extends BaseEntity {}

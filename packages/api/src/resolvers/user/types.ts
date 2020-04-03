@@ -4,7 +4,7 @@ import { Users, Posts } from '@beast/beast-entities';
 import { IThrowError } from '@utils/throwError/errors'
 
 // User resolvers
-type TResolverUserPosts = Beast.Resolver<Users, GQL.UserPostsArgs, Promise<Posts[]>>
+type TResolverUserPosts = Beast.Resolver<Users, null, Promise<Posts[]>>
 
 type TQueryUser = Beast.Resolver<null, GQL.QueryUserArgs, Promise<Users | undefined>>
 type TQueryUsers = Beast.Resolver<null, null, Promise<Users[]>>

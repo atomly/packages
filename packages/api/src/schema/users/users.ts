@@ -1,16 +1,11 @@
 import gql from 'graphql-tag';
 
 export default gql`
-input FindUserPostsInput {
-  limit: Int!
-  offset: Int!
-}
-
 type User {
   id: ID!
   email: ID!
   # Custom Resolvers:
-  posts(input: FindUserPostsInput): [Post]
+  posts: [Post]
 }
 
 type Query {
