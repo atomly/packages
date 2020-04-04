@@ -1,31 +1,18 @@
-type Member {
-  id: ID!
-  posts: [Post]
-}
-
-input FindMemberInput {
-  id: ID!
-}
-
-type Query {
-  members: [Member]
-  member(input: FindMemberInput!): Member
-  posts: [Post]
-  post(id: ID!): Post
-  test: String!
-  ping: String!
-  teams: [Team]
-  team(input: FindTeamInput!): Team
-  users: [User]
-  user(input: FindUserInput!): User
-  me: User
-}
-
 type Post {
   id: ID!
   memberId: ID!
   header: String
   body: String
+}
+
+type Query {
+  posts: [Post]
+  post(id: ID!): Post
+  test: String!
+  ping: String!
+  users: [User]
+  user(id: ID!): User
+  me: User
 }
 
 input NewPostInput {
@@ -36,8 +23,6 @@ input NewPostInput {
 
 type Mutation {
   newPost(input: NewPostInput!): Post
-  newTeam(input: NewTeamInput!): Team
-  updateTeam(input: UpdateTeamInput!): Team
   newUser(input: NewUserInput!): User
   authenticate(input: AuthenticateInput!): User
   logout: Boolean!
@@ -48,33 +33,10 @@ type Subscription {
   hello(name: String!): String!
 }
 
-type Team {
-  id: ID!
-  members: [Member]
-}
-
-input FindTeamInput {
-  id: ID!
-}
-
-input NewTeamInput {
-  createdBy: ID!
-}
-
-input UpdateTeamInput {
-  id: ID!
-  newMember: ID!
-}
-
 type User {
   id: ID!
   email: ID!
-  memberId: ID!
-  member: Member
-}
-
-input FindUserInput {
-  id: ID!
+  posts: [Post]
 }
 
 input NewUserInput {
@@ -92,34 +54,21 @@ schema {
   mutation: Mutation
   subscription: Subscription
 }
-,[object Object],type Member {
-  id: ID!
-  posts: [Post]
-}
-
-input FindMemberInput {
-  id: ID!
-}
-
-type Query {
-  members: [Member]
-  member(input: FindMemberInput!): Member
-  posts: [Post]
-  post(id: ID!): Post
-  test: String!
-  ping: String!
-  teams: [Team]
-  team(input: FindTeamInput!): Team
-  users: [User]
-  user(input: FindUserInput!): User
-  me: User
-}
-
-type Post {
+,[object Object],type Post {
   id: ID!
   memberId: ID!
   header: String
   body: String
+}
+
+type Query {
+  posts: [Post]
+  post(id: ID!): Post
+  test: String!
+  ping: String!
+  users: [User]
+  user(id: ID!): User
+  me: User
 }
 
 input NewPostInput {
@@ -130,8 +79,6 @@ input NewPostInput {
 
 type Mutation {
   newPost(input: NewPostInput!): Post
-  newTeam(input: NewTeamInput!): Team
-  updateTeam(input: UpdateTeamInput!): Team
   newUser(input: NewUserInput!): User
   authenticate(input: AuthenticateInput!): User
   logout: Boolean!
@@ -142,33 +89,10 @@ type Subscription {
   hello(name: String!): String!
 }
 
-type Team {
-  id: ID!
-  members: [Member]
-}
-
-input FindTeamInput {
-  id: ID!
-}
-
-input NewTeamInput {
-  createdBy: ID!
-}
-
-input UpdateTeamInput {
-  id: ID!
-  newMember: ID!
-}
-
 type User {
   id: ID!
   email: ID!
-  memberId: ID!
-  member: Member
-}
-
-input FindUserInput {
-  id: ID!
+  posts: [Post]
 }
 
 input NewUserInput {

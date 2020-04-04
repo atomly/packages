@@ -16,7 +16,8 @@
     ]
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist --ignore-scripts --force-local",
+    "bootstrap": "lerna bootstrap --ignore-scripts --force-local",
+    "bootstrap:hoist": "npm run bootstrap -- --hoist",
     "build": "lerna run build",
     "clean": "npm run clean-dist && npm run clean-output && npm run clean-logs",
     "clean-deps": "rm -fr node_modules && rm -fr packages/*/node_modules && rm -f package-lock.json && rm -fr */**/package-lock.json && rm -f package-lock.json && rm -fr */**/package-lock.json",

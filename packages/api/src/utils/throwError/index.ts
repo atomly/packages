@@ -56,14 +56,14 @@ const errorsByStatus: Errors.ErrorMap = {
   },
   513: {
     name: 'Authentication Error',
-    description: 'User not found',
+    description: 'User not found or error during user creation.',
   },
   514: {
     name: 'Logout Error',
     description: 'User not logged in.',
   },
   515: {
-    name: 'Logout Error',
+    name: 'Redis Logout Error',
     description: 'Something went wrong when deleting the user\'s session out from the Redis store.',
   },
   516: {

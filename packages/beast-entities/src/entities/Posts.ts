@@ -5,11 +5,12 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  RelationId,
 } from 'typeorm';
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import { Users } from '.';
+import { Members } from '.';
 
 @Index('post_pk', ['id'], { unique: true })
 @Entity('posts', { schema: 'public' })
@@ -21,13 +22,14 @@ export class Posts extends BaseEntity {
   body: string;
 
   //
-  // User FK
+  // Members FK
   //
 
-  @ManyToOne(() => Users, undefined, { onDelete: 'CASCADE', nullable: false })
+  @ManyToOne(() => Members, undefined, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ referencedColumnName: 'id' })
-  user: number;
+  member: Members;
 
   @Column({ nullable: false })
-  userId: number;
+  @RelationId((posts: Posts) => posts.member)
+  postedBy: number;
 }

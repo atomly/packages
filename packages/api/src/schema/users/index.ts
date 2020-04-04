@@ -1,29 +1,32 @@
 // Libraries
 import bcrypt from 'bcrypt';
-import { Users, Posts } from '@beast/beast-entities';
+import { Users, Members, Profiles } from '@beast/beast-entities';
 
 // Types
 import { IUsersResolverMap } from './types';
 import { IThrowError } from '@root/utils/throwError/errors';
 
 // Utils
-import { throwError } from '@utils/index';
-import { addUserSession, removeAllUserSessions, validateNewEntity } from '@root/utils';
+import {
+  addUserSession,
+  removeAllUserSessions,
+  throwError,
+  validateNewEntities,
+} from '@root/utils';
 
 const resolvers: IUsersResolverMap = {
-  User: {
-    async posts(parent, _, { loaders }): Promise<Posts[]> {
-      const posts = await loaders.Posts.manyLoaderByUserIds.load(String(parent.id));
-      return posts;
-    },
-  },
   Query: {
-    async user(_, { id }, { database }): Promise<Users | undefined> {
-      const user = await database.connection.getRepository(Users).findOne({ where: { id: +id } });
+    async user(_, { input }, { database }): Promise<Users | undefined> {
+      const user = await database.connection.getRepository(Users).findOne({
+        where: { id: +input.id },
+        relations: ['member'],
+      });
       return user;  
     },
     async users(_, __, { database }): Promise<Users[]> {
-      const users = await database.connection.getRepository(Users).find();
+      const users = await database.connection.getRepository(Users).find({
+        relations: ['member'],
+      });
       return users;
     },
     async me(
@@ -34,9 +37,8 @@ const resolvers: IUsersResolverMap = {
       let user;
       if (request.session?.userId) {
         user = await database.connection.getRepository(Users).findOne({
-          where: {
-            id: request.session.userId,
-          },
+          where: { id: request.session.userId },
+          relations: ['member'],
         });
       }
       if (user) {
@@ -53,31 +55,55 @@ const resolvers: IUsersResolverMap = {
     ): Promise<Users | IThrowError> {
       // Hashing the password before storing it in the database.
       const hashedPassword = await bcrypt.hash(args.input.password, 12);
-      const user = database.connection.getRepository(Users).create({
-        email: args.input.email.toLowerCase(),
-        password: hashedPassword,
-      });
-      // Validate the user, then return the result.
-      const result = await validateNewEntity(user, async () => {
-        try {
-          await user.save();
-          // If there's a user logged in the existing session, delete it.
-          if (request.session?.userId) {
-            await removeAllUserSessions(request.session.userId, redis);
-          }
-          // Log the user in by saving his/her session.
-          request.session!.userId = user.id;
-          if (request.sessionID) {
-            await addUserSession(redis, user.id, request.sessionID);
-          }
-          return user;
-        } catch (error) {
-          return throwError({
-            status: throwError.Errors.EStatuses.AUTHENTICATION,
-            message: `Error while creating a new user: ${error.message}`,
-          });
+      const queryRunner = database.connection.createQueryRunner();
+      let result: Users | IThrowError;
+      // Try to execute transaction. If for any reason it fails, the transaction
+      // is rolled back. Then the errors are returned.
+      // Otherwise, the transaction is committed, and the user is returned.
+      try {
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        let member = database.connection.getRepository(Members).create();
+        let profile = database.connection.getRepository(Profiles).create();
+        let user = database.connection.getRepository(Users).create({
+          email: args.input.email.toLowerCase(),
+          password: hashedPassword,
+        });
+        // Validate the user and member, if ther are errors, throw.
+        const errors = await validateNewEntities(member, user, profile);
+        if (errors.length) {
+          throw new Error(JSON.stringify(errors));
         }
-      });
+        profile = await queryRunner.manager.getRepository(Profiles).save(profile);
+        member = await queryRunner.manager.getRepository(Members).save({
+          ...member,
+          profileId: profile.id,
+        });
+        user = await queryRunner.manager.getRepository(Users).save({
+          ...user,
+          memberId: member.id,
+        });
+        // If there's a user logged in the existing session, delete it.
+        if (request.session?.userId) {
+          await removeAllUserSessions(request.session.userId, redis);
+        }
+        // Log the user in by saving his/her session.
+        request.session!.userId = user.id;
+        if (request.sessionID) {
+          await addUserSession(redis, user.id, request.sessionID);
+        }
+        // Commit transaction now:
+        await queryRunner.commitTransaction();
+        result = user;
+      } catch (error) {
+        await queryRunner.rollbackTransaction();
+        return throwError({
+          status: throwError.Errors.EStatuses.AUTHENTICATION,
+          message: `Error while creating a new user: ${error.message}`,
+        });
+      } finally {
+        await queryRunner.release();
+      }
       return result;
     },
     async authenticate(
@@ -88,9 +114,8 @@ const resolvers: IUsersResolverMap = {
       // Check if there is no user logged in.
       if (!request.session?.userId) {
         const user = await database.connection.getRepository(Users).findOne({
-          where: {
-            email: args.input.email.toLowerCase(),
-          },
+          where: { email: args.input.email.toLowerCase() },
+          relations: ['member'],
         });
         // If there is no user found, return error response.
         if (!user) {

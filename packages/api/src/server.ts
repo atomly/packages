@@ -8,8 +8,7 @@ import { Database } from '@beast/beast-entities';
 
 // Dependencies
 import { redisSessionPrefix } from '@root/constants';
-import { resolvers } from '@root/resolvers';
-import { typeDefs } from '@root/schema';
+import { resolvers, typeDefs } from '@root/schema';
 import { middleware } from '@root/middleware';
 
 // Types
@@ -79,7 +78,7 @@ export async function startServer(): Promise<void> {
         maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
       },
     }),
-  )
+  );
 
   try {
     server.start(

@@ -3,18 +3,13 @@ import {
   Column,
   Entity,
   Index,
-  OneToMany,
   OneToOne,
   JoinColumn,
 } from 'typeorm';
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import {
-  Teams,
-  Posts,
-  Profiles,
-} from '.'
+import { Members } from '.'
 
 @Index('users_uq', ['email'], { unique: true })
 @Entity('users', { schema: 'public' })
@@ -32,20 +27,13 @@ export class Users extends BaseEntity {
   firstName: string | null;
 
   //
-  // ONE TO MANY RELATIONS
-  //
-
-  @OneToMany(() => Teams, teams => teams.id)
-  teams: Teams[];
-
-  @OneToMany(() => Posts, posts => posts.id)
-  posts: Posts[];
-
-  //
   // ONE TO ONE RELATIONS
   //
 
-  @OneToOne(() => Profiles)
+  @OneToOne(() => Members)
   @JoinColumn()
-  profile: Profiles
+  member: Members;
+
+  @Column({ nullable: false })
+  memberId: number;
 }

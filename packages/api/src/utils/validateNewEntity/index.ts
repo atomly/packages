@@ -3,15 +3,14 @@ import { BaseEntity } from 'typeorm';
 import { validate } from 'class-validator';
 
 // Dependencies
-import { parseValidationErrors } from '@utils/parseValidationErrors';
-import { throwError } from '@utils/throwError';
+import { parseValidationErrors } from '../parseValidationErrors';
+import { throwError } from '../throwError';
+import { generateAsyncIterator } from '../generateAsyncIterator';
 
 // Types
-import { IThrowError } from '@utils/throwError/errors';
+import { IThrowError } from '../throwError/errors';
 
-type Callback<T> = () => T;
-
-export async function validateNewEntity<K>(entity: BaseEntity, callback: Callback<K>): Promise<K | IThrowError> {
+export async function validateNewEntity(entity: BaseEntity): Promise<IThrowError | null> {
   const errors = await validate(entity);
   if (errors.length > 0) {
     return throwError({
@@ -19,7 +18,18 @@ export async function validateNewEntity<K>(entity: BaseEntity, callback: Callbac
       message: parseValidationErrors(errors, entity.constructor.name),
       details: entity.constructor.name,
     }); 
-  } else {
-    return callback();
   }
+  return null;
+}
+
+export async function validateNewEntities(...entities: BaseEntity[]): Promise<IThrowError[]> {
+  const errorsArray: IThrowError[] = [];
+  for await (const entity of generateAsyncIterator(entities)) {
+    try {
+      await validateNewEntity(entity);
+    } catch (errors) {
+      errorsArray.push(errors);
+    }
+  }
+  return errorsArray;
 }

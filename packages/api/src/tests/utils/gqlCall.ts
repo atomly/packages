@@ -11,8 +11,7 @@ import { print } from 'graphql/language/printer';
 import { TSJest } from '@typings/tests';
 
 // Dependencies
-import { resolvers } from '@root/resolvers';
-import { typeDefs } from '@root/schema';
+import { typeDefs, resolvers } from '@root/schema';
 import { context } from './mockContext';
 
 // Schema "cache"

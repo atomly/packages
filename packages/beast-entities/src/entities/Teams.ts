@@ -2,26 +2,30 @@
 import {
   Entity,
   Index,
-  ManyToOne,
-  JoinColumn,
-  Column,
+  ManyToMany,
+  RelationId,
+  JoinTable,
 } from 'typeorm';
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import { Users } from '.';
+import { Members } from '.';
 
 @Index('teams_pk', ['id'], { unique: true })
 @Entity('teams', { schema: 'public' })
 export class Teams extends BaseEntity {
   //
-  // User FK
+  // Member FK
   //
 
-  @ManyToOne(() => Users, undefined, { onDelete: 'CASCADE', nullable: false })
-  @JoinColumn({ referencedColumnName: 'id' })
-  user: number;
+  @ManyToMany(() => Members, undefined, { cascade: true, nullable: false })
+  /**
+   * @JoinTable might cause errors.
+   * Read: https://stackoverflow.com/a/59352784/10246377
+   */
+  @JoinTable()
+  members: Members[];
 
-  @Column({ nullable: false })
-  userId: number;
+  @RelationId((teams: Teams) => teams.members)
+  membersIds: number[];
 }

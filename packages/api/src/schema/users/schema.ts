@@ -4,13 +4,17 @@ export default gql`
 type User {
   id: ID!
   email: ID!
-  # Custom Resolvers:
-  posts: [Post]
+  memberId: ID!
+  member: Member
+}
+
+input FindUserInput {
+  id: ID!
 }
 
 type Query {
   users: [User]
-  user(id: ID!): User
+  user(input: FindUserInput!): User
   me: User
 }
 

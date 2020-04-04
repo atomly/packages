@@ -30,24 +30,24 @@ const resolver: IPostResolverMap = {
     async newPost(
       _,
       { input },
-      { pubsub, database },
+      { pubsub, database, loaders },
     ): Promise<Posts | IThrowError> {
       const post = database.connection.getRepository(Posts).create({
         header: input.header,
         body: input.body,
-        userId: +input.userId,
+        memberId: +input.memberId,
       });
-      const result = await validateNewEntity(post, async () => {
-        await post.save();
-        pubsub.publish(
-          // Socket channel.
-          PUBSUB_NEW_POST,
-          // { [key]: [payload] } - `key` MUST match the name of the subscription resolver.
-          { newPostSubscription: post },
-        );
-        return post;
-      });
-      return result;
+      await validateNewEntity(post);
+      await post.save();
+      pubsub.publish(
+        // Socket channel.
+        PUBSUB_NEW_POST,
+        // { [key]: [payload] } - `key` MUST match the name of the subscription resolver.
+        { newPostSubscription: post },
+      );
+      // Clearing the batch cache of the user.
+      loaders.Posts.manyLoaderByMemberIds.clear(input.memberId);
+      return post;
     },
   },
   Subscription: {
