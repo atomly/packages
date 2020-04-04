@@ -13,10 +13,10 @@ const PUBSUB_NEW_POST = 'PUBSUB_NEW_POST';
 
 const resolver: IPostResolverMap = {
   Query: {
-    async post(_, { id }, { database }): Promise<Posts | undefined> {
+    async post(_, { input }, { database }): Promise<Posts | undefined> {
       const post = await database.connection
         .getRepository(Posts)
-        .findOne({ where: { id: +id } });
+        .findOne({ where: { id: +input.id } });
       return post;  
     },
     async posts(_, __, { database }): Promise<Posts[]> {
@@ -46,7 +46,7 @@ const resolver: IPostResolverMap = {
         { newPostSubscription: post },
       );
       // Clearing the batch cache of the user.
-      loaders.Posts.manyLoaderByMemberIds.clear(input.memberId);
+      loaders.Posts.limittedManyLoader.clear(input.memberId);
       return post;
     },
   },

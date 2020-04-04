@@ -8,9 +8,13 @@ type Post {
   body: String
 }
 
+input FindPostInput {
+  id: ID!
+}
+
 type Query {
   posts: [Post]
-  post(id: ID!): Post
+  post(input: FindPostInput!): Post
 }
 
 input NewPostInput {

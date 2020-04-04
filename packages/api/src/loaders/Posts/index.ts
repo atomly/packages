@@ -10,14 +10,14 @@ import { Factory } from '../factory';
 import { efficientBatchManyToOne } from '../batch/efficientBatchManyToOne';
 
 export function ManyPostsLoader(): DataLoader<string, PostsEntity[], unknown> {
-  return Factory<PostsEntity[]>(PostsEntity , { type: 'MANY_TO_ONE'});
+  return Factory<PostsEntity[]>(PostsEntity, { type: 'MANY_TO_ONE' });
 }
 
 export function OnePostsLoader(): DataLoader<string, PostsEntity, unknown> {
-  return Factory<PostsEntity>(PostsEntity , { type: 'ONE_TO_ONE'});
+  return Factory<PostsEntity>(PostsEntity, { type: 'ONE_TO_ONE' });
 }
 
-export function ManyPostsByMemberIdsLoader(): DataLoader<string, PostsEntity[], unknown> {
+export function LimittedManyPostsLoader(): DataLoader<string, PostsEntity[], unknown> {
   return Factory<PostsEntity[]>(
     PostsEntity ,
     {
@@ -36,5 +36,5 @@ export function ManyPostsByMemberIdsLoader(): DataLoader<string, PostsEntity[], 
 export const Posts: IPostsLoaders = {
   manyLoader: ManyPostsLoader(),
   oneLoader: OnePostsLoader(),
-  manyLoaderByMemberIds: ManyPostsByMemberIdsLoader(),
+  limittedManyLoader: LimittedManyPostsLoader(),
 }

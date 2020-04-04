@@ -11,11 +11,12 @@ import { validateNewEntity } from '@root/utils';
 const resolvers: ITeamsResolverMap = {
   Team: {
     async members(parent, _, { loaders }): Promise<Members[]> {
-      const members = await loaders.Members.manyLoaderByIds.loadMany(
+      const members = await loaders.Members.limittedManyLoader.loadMany(
         parent.membersIds.map(id => String(id)),
       );
-      // TODO: FIX - NOT MAPPING CORRECTLY
-      const teamMembers: Members[] = members.reduce((acc: Members[], val) => acc.concat(val as Members[]), []);
+      const teamMembers: Members[] = members.reduce((acc: Members[], val) =>
+        acc.concat(val as Members[]), [],
+      );
       return teamMembers;
     },
   },
@@ -45,7 +46,7 @@ const resolvers: ITeamsResolverMap = {
       await validateNewEntity(team);
       await team.save();
       // Clearing the batch cache of the user.
-      loaders.Members.manyLoaderByIds.clear(input.createdBy);
+      loaders.Members.limittedManyLoader.clear(input.createdBy);
       return team;
     },
     async updateTeam(
@@ -63,7 +64,7 @@ const resolvers: ITeamsResolverMap = {
       team!.members.push(member);
       await database.connection.getRepository(Teams).save(team!);
       // Clearing the batch cache of the user.
-      loaders.Members.manyLoaderByIds.clear(input.newMember);
+      loaders.Members.limittedManyLoader.clear(input.newMember);
       return team!;
     },
   },

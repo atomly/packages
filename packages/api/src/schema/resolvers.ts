@@ -5,6 +5,7 @@ import { composeResolvers } from '@utils/index';
 import { IQueryResolverMap } from './query/types';
 import { IUsersResolverMap } from './users/types';
 import { IPostResolverMap } from './posts/types';
+import { IProfilesResolverMap } from './profiles/types';
 import { ITeamsResolverMap } from './teams/types';
 import { IMembersResolverMap } from './members/types';
 
@@ -12,19 +13,21 @@ import { IMembersResolverMap } from './members/types';
 import queryResolvers from './query';
 import userResolvers from './users';
 import postResolvers from './posts';
+import profileResolvers from './profiles';
 import teamResolvers from './teams';
 import memberResolvers from './members';
 
 type ResolverMap = (
   IQueryResolverMap & IUsersResolverMap &
-  IPostResolverMap & ITeamsResolverMap &
-  IMembersResolverMap
+  IPostResolverMap & IProfilesResolverMap &
+  ITeamsResolverMap & IMembersResolverMap
 );
 
 export const resolvers: ResolverMap = composeResolvers<ResolverMap>(
   queryResolvers,
   userResolvers,
   postResolvers,
+  profileResolvers,
   teamResolvers,
   memberResolvers,
 );

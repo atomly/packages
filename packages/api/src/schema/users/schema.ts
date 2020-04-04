@@ -5,7 +5,7 @@ type User {
   id: ID!
   email: ID!
   memberId: ID!
-  member: Member
+  member: Member!
 }
 
 input FindUserInput {

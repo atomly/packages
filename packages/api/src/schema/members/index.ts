@@ -1,5 +1,5 @@
 // Libraries
-import { Members, Posts } from '@beast/beast-entities';
+import { Members, Posts, Profiles } from '@beast/beast-entities';
 
 // Types
 import { IMembersResolverMap } from './types';
@@ -7,8 +7,13 @@ import { IMembersResolverMap } from './types';
 const resolvers: IMembersResolverMap = {
   Member: {
     async posts(parent, _, { loaders }): Promise<Posts[]> {
-      const posts = await loaders.Posts.manyLoaderByMemberIds.load(String(parent.id));
+      const posts = await loaders.Posts.limittedManyLoader.load(String(parent.id));
       return posts;
+    },
+    async profile(parent, _, { loaders }): Promise<Profiles> {
+      const profile = await loaders.Profiles.oneLoader.load(String(parent.profileId));
+      loaders.Profiles.oneLoader.clearAll();
+      return profile;
     },
   },
   Query: {

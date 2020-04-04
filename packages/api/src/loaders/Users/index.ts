@@ -9,11 +9,11 @@ import { ILoaders } from '../types';
 import { Factory } from '../factory';
 
 export function ManyUsersLoader(): DataLoader<string, UsersEntity[], unknown> {
-  return Factory<UsersEntity[]>(UsersEntity , { type: 'MANY_TO_ONE'});
+  return Factory<UsersEntity[]>(UsersEntity, { type: 'MANY_TO_ONE' });
 }
 
 export function OneUsersLoader(): DataLoader<string, UsersEntity, unknown> {
-  return Factory<UsersEntity>(UsersEntity , { type: 'ONE_TO_ONE'});
+  return Factory<UsersEntity>(UsersEntity, { type: 'ONE_TO_ONE' });
 }
 
 export const Users: ILoaders<UsersEntity> = {

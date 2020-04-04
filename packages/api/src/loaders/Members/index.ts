@@ -10,14 +10,23 @@ import { Factory } from '../factory';
 import { efficientBatchManyToOne } from '../batch/efficientBatchManyToOne';
 
 export function ManyMembersLoader(): DataLoader<string, MembersEntity[], unknown> {
-  return Factory<MembersEntity[]>(MembersEntity , { type: 'MANY_TO_ONE'});
+  return Factory<MembersEntity[]>(MembersEntity, { type: 'MANY_TO_ONE' });
 }
 
 export function OneMembersLoader(): DataLoader<string, MembersEntity, unknown> {
-  return Factory<MembersEntity>(MembersEntity , { type: 'ONE_TO_ONE'});
+  return Factory<MembersEntity>(MembersEntity, { type: 'ONE_TO_ONE' });
 }
 
-export function ManyMembersByIdsLoader(): DataLoader<string, MembersEntity[], unknown> {
+export function OneMembersByProfileIdLoader(): DataLoader<string, MembersEntity, unknown> {
+  return Factory<MembersEntity>(
+    MembersEntity
+    ,
+    { type: 'ONE_TO_ONE' },
+    { idsKey: 'profileId' },
+  );
+}
+
+export function LimittedManyMembersLoader(): DataLoader<string, MembersEntity[], unknown> {
   return Factory<MembersEntity[]>(
     MembersEntity ,
     {
@@ -36,5 +45,6 @@ export function ManyMembersByIdsLoader(): DataLoader<string, MembersEntity[], un
 export const Members: IMembersLoaders = {
   manyLoader: ManyMembersLoader(),
   oneLoader: OneMembersLoader(),
-  manyLoaderByIds: ManyMembersByIdsLoader(),
+  limittedManyLoader: LimittedManyMembersLoader(),
+  oneLoaderByProfileId: OneMembersByProfileIdLoader(),
 }

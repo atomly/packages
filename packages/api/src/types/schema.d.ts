@@ -19,6 +19,14 @@ export type FindMemberInput = {
   id: Scalars['ID'];
 };
 
+export type FindPostInput = {
+  id: Scalars['ID'];
+};
+
+export type FindProfileInput = {
+  id: Scalars['ID'];
+};
+
 export type FindTeamInput = {
   id: Scalars['ID'];
 };
@@ -31,6 +39,7 @@ export type Member = {
    __typename?: 'Member';
   id: Scalars['ID'];
   posts?: Maybe<Array<Maybe<Post>>>;
+  profile: Profile;
 };
 
 export type Mutation = {
@@ -91,12 +100,19 @@ export type Post = {
   body?: Maybe<Scalars['String']>;
 };
 
+export type Profile = {
+   __typename?: 'Profile';
+  id: Scalars['ID'];
+  member: Member;
+};
+
 export type Query = {
    __typename?: 'Query';
   members?: Maybe<Array<Maybe<Member>>>;
   member?: Maybe<Member>;
   posts?: Maybe<Array<Maybe<Post>>>;
   post?: Maybe<Post>;
+  profile?: Maybe<Profile>;
   test: Scalars['String'];
   ping: Scalars['String'];
   teams?: Maybe<Array<Maybe<Team>>>;
@@ -113,7 +129,12 @@ export type QueryMemberArgs = {
 
 
 export type QueryPostArgs = {
-  id: Scalars['ID'];
+  input: FindPostInput;
+};
+
+
+export type QueryProfileArgs = {
+  input: FindProfileInput;
 };
 
 
@@ -153,7 +174,7 @@ export type User = {
   id: Scalars['ID'];
   email: Scalars['ID'];
   memberId: Scalars['ID'];
-  member?: Maybe<Member>;
+  member: Member;
 };
 
 
@@ -234,7 +255,10 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Post: ResolverTypeWrapper<Post>,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Profile: ResolverTypeWrapper<Profile>,
   FindMemberInput: FindMemberInput,
+  FindPostInput: FindPostInput,
+  FindProfileInput: FindProfileInput,
   Team: ResolverTypeWrapper<Team>,
   FindTeamInput: FindTeamInput,
   User: ResolverTypeWrapper<User>,
@@ -256,7 +280,10 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   Post: Post,
   String: Scalars['String'],
+  Profile: Profile,
   FindMemberInput: FindMemberInput,
+  FindPostInput: FindPostInput,
+  FindProfileInput: FindProfileInput,
   Team: Team,
   FindTeamInput: FindTeamInput,
   User: User,
@@ -274,6 +301,7 @@ export type ResolversParentTypes = {
 export type MemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['Member'] = ResolversParentTypes['Member']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
+  profile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -294,11 +322,18 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  member?: Resolver<ResolversTypes['Member'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   members?: Resolver<Maybe<Array<Maybe<ResolversTypes['Member']>>>, ParentType, ContextType>,
   member?: Resolver<Maybe<ResolversTypes['Member']>, ParentType, ContextType, RequireFields<QueryMemberArgs, 'input'>>,
   posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
-  post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>,
+  post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'input'>>,
+  profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<QueryProfileArgs, 'input'>>,
   test?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   teams?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType>,
@@ -323,7 +358,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   memberId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  member?: Resolver<Maybe<ResolversTypes['Member']>, ParentType, ContextType>,
+  member?: Resolver<ResolversTypes['Member'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -331,6 +366,7 @@ export type Resolvers<ContextType = any> = {
   Member?: MemberResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,
+  Profile?: ProfileResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   Team?: TeamResolvers<ContextType>,

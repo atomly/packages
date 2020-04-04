@@ -5,6 +5,7 @@ type Member {
   id: ID!
   # Custom Resolvers:
   posts: [Post]
+  profile: Profile!
 }
 
 input FindMemberInput {

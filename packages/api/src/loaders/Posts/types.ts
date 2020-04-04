@@ -7,5 +7,5 @@ import { Posts } from '@beast/beast-entities';
 import { ILoaders } from '../types';
 
 export interface IPostsLoaders extends ILoaders<Posts> {
-  manyLoaderByMemberIds: DataLoader<string, Posts[], unknown>
+  limittedManyLoader: DataLoader<string, Posts[], unknown>
 }
