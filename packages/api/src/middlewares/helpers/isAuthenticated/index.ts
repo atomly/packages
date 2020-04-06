@@ -4,7 +4,7 @@ import { IMiddleware } from 'graphql-middleware';
 // Utils
 import { throwError } from '@utils/index'
 
-export const isAuthenticated: IMiddleware = async function isAuthenticated(
+export const isAuthenticated: IMiddleware = async function (
   resolve,
   parent,
   args,
@@ -20,18 +20,3 @@ export const isAuthenticated: IMiddleware = async function isAuthenticated(
   }
   return resolve(parent, args, context, info);
 }
-
-/**
- * Add resolver middlewares here.
- * Example: 
- * 
- *    Mutation: {
- *        createListing: isAuthenticated,
- *        deleteListing: isAuthenticated,
- *    }
- */
-export const middleware = {
-  Query: {},
-  Mutation: {},
-  Subscription: {},
-};

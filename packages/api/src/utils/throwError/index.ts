@@ -70,6 +70,10 @@ const errorsByStatus: Errors.ErrorMap = {
     name: 'Entity Validation Error',
     description: 'Validation went wrong creating a new entity. Data is either missing or of the wrong type.',
   },
+  517: {
+    name: 'GraphQL Depth Limit Error',
+    description: 'GraphQL queries suffer from a possible DOS vulnerability. For this reason, there is a limit set to the depth of the queries.',
+  },
 }
 
 export function throwError({

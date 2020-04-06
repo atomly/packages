@@ -7,7 +7,6 @@ import {
   Column,
   JoinColumn,
   RelationId,
-  JoinTable,
 } from 'typeorm';
 
 // Dependencies
@@ -42,12 +41,11 @@ export class Members extends BaseEntity {
   // MANY TO MANY RELATIONS
   //
 
-  @ManyToMany(() => Members, undefined, { cascade: true, nullable: false })
+  @ManyToMany(() => Teams, teams => teams.members, { nullable: false })
   /**
    * @JoinTable might cause errors.
    * Read: https://stackoverflow.com/a/59352784/10246377
    */
-  @JoinTable()
   teams: Teams[];
 
   @RelationId((members: Members) => members.teams)

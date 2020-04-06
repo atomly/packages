@@ -17,13 +17,13 @@ import profileResolvers from './profiles';
 import teamResolvers from './teams';
 import memberResolvers from './members';
 
-type ResolverMap = (
+export type IResolverMap = (
   IQueryResolverMap & IUsersResolverMap &
   IPostResolverMap & IProfilesResolverMap &
   ITeamsResolverMap & IMembersResolverMap
 );
 
-export const resolvers: ResolverMap = composeResolvers<ResolverMap>(
+export const resolvers: IResolverMap = composeResolvers<IResolverMap>(
   queryResolvers,
   userResolvers,
   postResolvers,

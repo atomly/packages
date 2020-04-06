@@ -18,7 +18,7 @@ export class Teams extends BaseEntity {
   // Member FK
   //
 
-  @ManyToMany(() => Members, undefined, { cascade: true, nullable: false })
+  @ManyToMany(() => Members, members => members.teams, { cascade: true, nullable: false })
   /**
    * @JoinTable might cause errors.
    * Read: https://stackoverflow.com/a/59352784/10246377

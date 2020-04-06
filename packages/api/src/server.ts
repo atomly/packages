@@ -3,20 +3,18 @@ import { GraphQLServer, PubSub } from 'graphql-yoga';
 import session from 'express-session';
 import connectRedisStore from 'connect-redis';
 import { makeExecutableSchema, IResolvers } from 'graphql-tools';
-import { applyMiddleware } from 'graphql-middleware';
+// import { applyMiddleware } from 'graphql-middleware';
 import { Database } from '@beast/beast-entities';
-
-// Dependencies
-import { redisSessionPrefix } from '@root/constants';
-import { resolvers, typeDefs } from '@root/schema';
-import { middleware } from '@root/middleware';
 
 // Types
 import { Beast } from '@root/types/index';
 
-// Redis, DataLoaders
+// Dependencies
+import { redisSessionPrefix } from '@root/constants';
+import { resolvers, typeDefs } from '@root/schema';
 import { redis } from '@root/redis';
 import { loaders } from '@root/loaders';
+import { middlewares } from '@root/middlewares';
 
 // TypeORM DB Layer
 const database = new Database({
@@ -26,6 +24,7 @@ const database = new Database({
   username: process.env.TYPEORM_USERNAME!,
   password: process.env.TYPEORM_PASSWORD!,
   database: process.env.TYPEORM_DATABASE!,
+  logging: process.env.NODE_ENV !== 'production',
 });
 
 // Publish & Subscribe
@@ -41,13 +40,15 @@ export async function startServer(): Promise<void> {
     typeDefs,
     resolvers: resolvers as IResolvers,
   });
-  applyMiddleware(schema, middleware);
+
+  // applyMiddleware(schema, ...middlewares);
 
   // Connecting Database
   await database.getConnection();
 
   const server = new GraphQLServer({
     schema,
+    middlewares,
     context(context): Beast.IContext {
       return {
         ...context,
@@ -74,7 +75,7 @@ export async function startServer(): Promise<void> {
       saveUninitialized: true,
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
       },
     }),
@@ -92,14 +93,14 @@ export async function startServer(): Promise<void> {
         },
       },
       () => {
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV !== 'production') {
           // eslint-disable-next-line no-console
           console.log('🚀🚀 Server ready at: http://localhost:4000  \n');
         }
       },
     );
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
       console.log('Something went wrong: ', error);
     }

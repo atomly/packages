@@ -24,6 +24,7 @@ export enum EStatuses {
   LOGOUT = 514,
   REDIS_LOGOUT = 515,
   ENTITY_VALIDATION = 516,
+  GRAPHQL_MAX_QUERY_DEPTH_REACHED = 517,
 }
 
 export type ErrorMap = {

@@ -2,6 +2,7 @@
   id: ID!
   posts: [Post]
   profile: Profile!
+  teams: [Team]
 }
 
 input FindMemberInput {

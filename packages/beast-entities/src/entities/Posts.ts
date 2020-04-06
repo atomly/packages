@@ -29,7 +29,7 @@ export class Posts extends BaseEntity {
   @JoinColumn({ referencedColumnName: 'id' })
   member: Members;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'memberId' })
   @RelationId((posts: Posts) => posts.member)
-  postedBy: number;
+  memberId: number;
 }

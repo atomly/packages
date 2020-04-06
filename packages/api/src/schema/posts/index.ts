@@ -46,7 +46,7 @@ const resolver: IPostResolverMap = {
         { newPostSubscription: post },
       );
       // Clearing the batch cache of the user.
-      loaders.Posts.limittedManyLoader.clear(input.memberId);
+      loaders.Posts.limittedManyLoaderByMemberIds.clear(input.memberId);
       return post;
     },
   },

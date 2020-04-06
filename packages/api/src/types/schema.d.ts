@@ -40,6 +40,7 @@ export type Member = {
   id: Scalars['ID'];
   posts?: Maybe<Array<Maybe<Post>>>;
   profile: Profile;
+  teams?: Maybe<Array<Maybe<Team>>>;
 };
 
 export type Mutation = {
@@ -256,10 +257,10 @@ export type ResolversTypes = {
   Post: ResolverTypeWrapper<Post>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Profile: ResolverTypeWrapper<Profile>,
+  Team: ResolverTypeWrapper<Team>,
   FindMemberInput: FindMemberInput,
   FindPostInput: FindPostInput,
   FindProfileInput: FindProfileInput,
-  Team: ResolverTypeWrapper<Team>,
   FindTeamInput: FindTeamInput,
   User: ResolverTypeWrapper<User>,
   FindUserInput: FindUserInput,
@@ -281,10 +282,10 @@ export type ResolversParentTypes = {
   Post: Post,
   String: Scalars['String'],
   Profile: Profile,
+  Team: Team,
   FindMemberInput: FindMemberInput,
   FindPostInput: FindPostInput,
   FindProfileInput: FindProfileInput,
-  Team: Team,
   FindTeamInput: FindTeamInput,
   User: User,
   FindUserInput: FindUserInput,
@@ -302,6 +303,7 @@ export type MemberResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
   profile?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
+  teams?: Resolver<Maybe<Array<Maybe<ResolversTypes['Team']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

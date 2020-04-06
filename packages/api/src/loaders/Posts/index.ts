@@ -17,7 +17,7 @@ export function OnePostsLoader(): DataLoader<string, PostsEntity, unknown> {
   return Factory<PostsEntity>(PostsEntity, { type: 'ONE_TO_ONE' });
 }
 
-export function LimittedManyPostsLoader(): DataLoader<string, PostsEntity[], unknown> {
+export function LimittedManyPostsByMemberIdsLoader(): DataLoader<string, PostsEntity[], unknown> {
   return Factory<PostsEntity[]>(
     PostsEntity ,
     {
@@ -36,5 +36,5 @@ export function LimittedManyPostsLoader(): DataLoader<string, PostsEntity[], unk
 export const Posts: IPostsLoaders = {
   manyLoader: ManyPostsLoader(),
   oneLoader: OnePostsLoader(),
-  limittedManyLoader: LimittedManyPostsLoader(),
+  limittedManyLoaderByMemberIds: LimittedManyPostsByMemberIdsLoader(),
 }
