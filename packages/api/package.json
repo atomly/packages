@@ -19,7 +19,7 @@
     "url": "git+https://github.com/beast-app/beast-api.git"
   },
   "scripts": {
-    "build": "npm -s run generate && tsc",
+    "build": "tsc -b",
     "codegen": "graphql-codegen --config codegen.yml",
     "schema": "ts-node ./src/schema/generateSchema.ts",
     "start": "ts-node-dev --respawn ./src/index.ts",

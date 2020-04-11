@@ -5,6 +5,9 @@ import {
   ManyToMany,
   RelationId,
   JoinTable,
+  OneToOne,
+  JoinColumn,
+  Column,
 } from 'typeorm';
 
 // Dependencies
@@ -15,7 +18,7 @@ import { Members } from '.';
 @Entity('teams', { schema: 'public' })
 export class Teams extends BaseEntity {
   //
-  // Member FK
+  // Members FK
   //
 
   @ManyToMany(() => Members, members => members.teams, { cascade: true, nullable: false })
@@ -28,4 +31,15 @@ export class Teams extends BaseEntity {
 
   @RelationId((teams: Teams) => teams.members)
   membersIds: number[];
+
+  //
+  // Owner
+  //
+
+  @OneToOne(() => Members, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  owner: Members;
+
+  @Column({ nullable: false })
+  ownerId: number;
 }

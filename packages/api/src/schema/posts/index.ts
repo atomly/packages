@@ -45,8 +45,9 @@ const resolver: IPostResolverMap = {
         // { [key]: [payload] } - `key` MUST match the name of the subscription resolver.
         { newPostSubscription: post },
       );
-      // Clearing the batch cache of the user.
-      loaders.Posts.limittedManyLoaderByMemberIds.clear(input.memberId);
+      // Clearing the batch cache of the member:
+      loaders.Members.Basic.oneLoader.clear(input.memberId);
+      loaders.Members.Basic.manyLoader.clear(input.memberId);
       return post;
     },
   },

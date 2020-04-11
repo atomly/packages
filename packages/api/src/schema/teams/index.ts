@@ -11,7 +11,7 @@ import { validateNewEntity } from '@root/utils';
 const resolvers: ITeamsResolverMap = {
   Team: {
     async members(parent, _, { loaders }): Promise<Members[]> {
-      const response = await loaders.Members.limittedManyLoader.loadMany(
+      const response = await loaders.Members.Basic.limittedManyLoader.loadMany(
         parent.membersIds.map(id => String(id)),
       );
       const members: Members[] = response.reduce((acc: Members[], val) =>
@@ -46,7 +46,7 @@ const resolvers: ITeamsResolverMap = {
       await validateNewEntity(team);
       await team.save();
       // Clearing the batch cache of the member.
-      loaders.Members.limittedManyLoader.clear(input.createdBy);
+      loaders.Members.Basic.limittedManyLoader.clear(input.createdBy);
       return team;
     },
     async updateTeam(
@@ -64,7 +64,9 @@ const resolvers: ITeamsResolverMap = {
       team!.members.push(member);
       await database.connection.getRepository(Teams).save(team!);
       // Clearing the batch cache of the member.
-      loaders.Members.limittedManyLoader.clear(input.newMember);
+      loaders.Members.Basic.oneLoader.clear(input.newMember);
+      loaders.Members.Basic.manyLoader.clear(input.newMember);
+      loaders.Members.Basic.limittedManyLoader.clear(input.newMember);
       return team!;
     },
   },

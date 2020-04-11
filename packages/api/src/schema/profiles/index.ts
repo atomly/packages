@@ -7,7 +7,7 @@ import { IProfilesResolverMap } from './types';
 const resolvers: IProfilesResolverMap = {
   Profile: {
     async member(parent, _, { loaders }): Promise<Members> {
-      const member = await loaders.Members.oneLoaderByProfileId.load(String(parent.id));
+      const member = await loaders.Members.By.ProfileId.oneLoader.load(String(parent.id));
       return member;
     },
   },

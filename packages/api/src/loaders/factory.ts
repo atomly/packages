@@ -3,12 +3,14 @@ import DataLoader from 'dataloader';
 
 // Types
 import {
-  IFactoryBatchFunctionConfig,
-  IFactoryTypeConfig,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Entity,
-  IBatchOne,
+  TBatchConfig,
+  IFactoryConfig,
+  IBatchFunctionConfig,
+  IBatchTypeConfig,
   IBatchMany,
+  IBatchOne,
 } from './types';
 
 // Dependencies
@@ -26,26 +28,29 @@ function typeGuard<I>(object: unknown, member: string): object is I {
 
 export function Factory<T>(
   Entity: Entity,
-  config?: IFactoryBatchFunctionConfig<T> | IFactoryTypeConfig,
-  batchConfig?: IBatchMany<Entity> | IBatchOne<Entity>,
+  batchConfig?: TBatchConfig<T>,
+  factoryConfig?: IFactoryConfig<T>,
   ): DataLoader<string, T, unknown> {
-  if (config) {
-    if (typeGuard<IFactoryBatchFunctionConfig<T>>(config, 'batchFunction')) {
-      return new DataLoader<string, T, unknown>(config.batchFunction);
-    } else if (typeGuard<IFactoryTypeConfig>(config, 'type')) {
-      switch (config.type) {
+  if (batchConfig) {
+    if (typeGuard<IBatchFunctionConfig<T>>(batchConfig, 'batchFunction')) {
+      return new DataLoader<string, T, unknown>(batchConfig.batchFunction);
+    } else if (typeGuard<IBatchTypeConfig>(batchConfig, 'type')) {
+      switch (batchConfig.type) {
         case 'ONE_TO_ONE':
           return new DataLoader<string, T, unknown>(
-            ids => batchOneToOne<T>(ids, Entity, batchConfig as IBatchOne<Entity>),
+            ids => batchOneToOne<T>(ids, Entity, factoryConfig?.typeOrmOptions as IBatchOne<T>),
+            factoryConfig?.dataLoaderOptions,
           );
         case 'MANY_TO_ONE':
           return new DataLoader<string, T, unknown>(
-            ids => batchManyToOne<T>(ids, Entity, batchConfig as IBatchMany<Entity>),
+            ids => batchManyToOne<T>(ids, Entity, factoryConfig?.typeOrmOptions as IBatchMany<T>),
+            factoryConfig?.dataLoaderOptions,
           );
       }
     }
   }
   return new DataLoader<string, T, unknown>(
-    ids => batchOneToOne<T>(ids, Entity, batchConfig as IBatchOne<Entity>),
-  );
+    ids => batchOneToOne<T>(ids, Entity, factoryConfig?.typeOrmOptions as IBatchOne<T>),
+    factoryConfig?.dataLoaderOptions,
+    );
 }

@@ -10,16 +10,15 @@ import { isQueryingResolver } from '@root/utils';
 const resolvers: IMembersResolverMap = {
   Member: {
     async posts(parent, _, { loaders }): Promise<Posts[]> {
-      const posts = await loaders.Posts.limittedManyLoaderByMemberIds.load(String(parent.id));
+      const posts = await loaders.Posts.By.MemberId.limittedManyLoader.load(String(parent.id));
       return posts;
     },
     async profile(parent, _, { loaders }): Promise<Profiles> {
-      const profile = await loaders.Profiles.oneLoader.load(String(parent.profileId));
-      loaders.Profiles.oneLoader.clearAll();
+      const profile = await loaders.Profiles.Basic.oneLoader.load(String(parent.profileId));
       return profile;
     },
     async teams(parent, _, { loaders }): Promise<Teams[]> {
-      const response = await loaders.Teams.limittedManyLoader.loadMany(
+      const response = await loaders.Teams.Basic.limittedManyLoader.loadMany(
         parent.teamsIds.map(id => String(id)),
       );
       const teams: Teams[] = response.reduce((acc: Teams[], val) =>
