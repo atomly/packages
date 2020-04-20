@@ -18,7 +18,7 @@ export interface ILoaders<T> {
   Basic: IBasicLoaders<T>
   By?: Record<string, IBasicLoaders<T>>
   // TODO: Add clearAll
-  // clearAll(): void
+  clearAll(): void
 }
 
 //

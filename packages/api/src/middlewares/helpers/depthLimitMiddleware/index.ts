@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Types  
+
+// Types
 import {
   FieldNode,
   SelectionNode,
@@ -12,28 +13,11 @@ import { Beast } from '@root/types';
 // Utils
 import { throwError } from '@utils/index'
 
-interface IHashConfig {
-  asString: boolean
-  maxStrLength: number
-  seed?: number
-}
-
-interface IDepthLimitConfig {
-  maxDepth: number
-  hashConfig: IHashConfig
-}
-
-interface IDepthLimitMiddleware {
-  config: IDepthLimitConfig
-  depthCache: Map<string, number>
-  depthLimit: (
-    resolve: GraphQLFieldResolver<any, Beast.IContext>,
-    parent: any,
-    args: any,
-    context: Beast.IContext,
-    info: GraphQLResolveInfo,
-  ) => ReturnType<GraphQLFieldResolver<any, Beast.IContext>> | ReturnType<typeof throwError>
-}
+// Types
+import {
+  IDepthLimitConfig,
+  IDepthLimitMiddleware,
+} from './types';
 
 export class DepthLimitMiddleware implements IDepthLimitMiddleware {
   /**
