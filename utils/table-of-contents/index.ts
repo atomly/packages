@@ -16,7 +16,12 @@ import {
 import config from '../../package.json';
 import { knuthMorrisPratt } from './knuthMorrisPratt';
 
-const name = 'beast';
+interface IPackageJson {
+  version: string;
+  name: string;
+  description: string;
+}
+
 const homepage = config.homepage;
 const tocPattern = {
   start: '<!-- START custom generated Lerna Packages please keep comment here to allow auto update -->',
@@ -33,7 +38,7 @@ const { readdir } = promises;
  * is not a node module or a git folder.
  * @param {string} dir - Directory.
  */
-async function* getPackages(dir: string = resolve(__dirname, '..', '..', 'packages')): AsyncGenerator<Dirent> {
+async function* getPackages(dir: string = resolve(__dirname, '..', '..', 'packages')): AsyncGenerator<[Dirent, string]> {
   // A representation of a directory entry, as
   // returned by reading from an fs.Dir.
   const dirents = await readdir(dir, { withFileTypes: true });
@@ -47,10 +52,19 @@ async function* getPackages(dir: string = resolve(__dirname, '..', '..', 'packag
     );
     // If it's a directory, return it.
     if (dirent.isDirectory() && !shouldNotGetFiles) {
-      yield dirent; // Return the directory.
+      yield [dirent, res]; // Return the directory.
     } else {
       continue;
     }
+  }
+}
+
+function getPackageName(pacakgeDirent: Dirent, path: string): string {
+  try {
+    const packageJson: IPackageJson = JSON.parse(readFileSync(`${path}/package.json`).toString('utf-8'));
+    return packageJson.name;
+  } catch {
+    return pacakgeDirent.name;
   }
 }
 
@@ -75,9 +89,11 @@ async function generateToC(): Promise<void> {
    * Creating the packages table of contents.
    */
   const packageLinks: Array<string> = [];
-  for await (const packageDirent of getPackages()) {
+  for await (const [packageDirent, path] of getPackages()) {
+    const name = getPackageName(packageDirent, path);
     // [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-    const packageMarkdown = `- [${name}@${packageDirent.name}](${homepage}/packages/${packageDirent.name} "${packageDirent.name} package homepage")`;
+    const packageMarkdown = `- [${name}](${homepage}/packages/${name} "${name} package homepage")`;
+    // TODO: Sort package links.
     packageLinks.push(packageMarkdown);
   }
   const packagesMarkdown: string = packageLinks.join('\n');
