@@ -1,0 +1,38 @@
+# Parameters:
+#   DBInstanceID:
+#     Default: epg_db_instance_${{self:custom.stage}}
+#     Description: My database instance
+#     Type: String
+#     MinLength: '1'
+#     MaxLength: '63'
+#     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+#     ConstraintDescription: >-
+#       Must begin with a letter and must not end with a hyphen or contain two
+#       consecutive hyphens.
+#   DBInstanceClass:
+#     Default: db.t2.micro
+#     Description: DB instance class
+#     Type: String
+#     ConstraintDescription: Must select a valid DB instance type.
+#   DBAllocatedStorage:
+#     Default: '40'
+#     Description: The size of the database (GiB)
+#     Type: Number
+#     MinValue: '5'
+#     MaxValue: '1024'
+#     ConstraintDescription: must be between 20 and 65536 GiB.
+Resources:
+  # EpgPostgresDB:
+  #   Type: AWS::RDS::DBInstance
+  #   Properties:
+  #     # DBSecurityGroups:
+  #     #   - Ref: MySecurityGroup
+  #     DBInstanceIdentifier: !Ref DBInstanceID
+  #     DBInstanceClass: !Ref DBInstanceClass
+  #     AllocatedStorage: !Ref DBAllocatedStorage
+  #     DBName: ${{self:provider.environment.DB_DATABASE}}
+  #     Engine: Postgres
+  #     EngineVersion: 12.0
+  #     MasterUsername: ${{self:provider.environment.DB_USERNAME}}
+  #     MasterUserPassword: ${{self:provider.environment.DB_PASSWORD}}
+  #     MonitoringInterval: '60'

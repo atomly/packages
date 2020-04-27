@@ -18,12 +18,12 @@ import { middlewares } from '@root/middlewares';
 
 // TypeORM DB Layer
 const database = new Database({
-  type: process.env.TYPEORM_CONNECTION! as 'postgres',
-  host: process.env.TYPEORM_HOST!,
-  port: Number(process.env.TYPEORM_PORT!),
-  username: process.env.TYPEORM_USERNAME!,
-  password: process.env.TYPEORM_PASSWORD!,
-  database: process.env.TYPEORM_DATABASE!,
+  type: process.env.DB_CONNECTION! as 'postgres',
+  host: process.env.DB_HOST!,
+  port: Number(process.env.DB_PORT!),
+  username: process.env.DB_USERNAME!,
+  password: process.env.DB_PASSWORD!,
+  database: process.env.DB_DATABASE!,
   logging: process.env.NODE_ENV !== 'production',
 });
 

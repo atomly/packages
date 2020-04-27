@@ -1,0 +1,151 @@
+service: beast-newsletter
+
+plugins:
+  - serverless-stage-manager
+  - serverless-jetpack
+  - serverless-plugin-scripts
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${{self:custom.stage}}
+  region: ${{self:custom.region}}
+  apiKeys:
+    - api_${{self:custom.stage}}
+  profile: ${{self:custom.profile.${{self:custom.stage}}}}
+  timeout: 60 # Limit of 1 minute.
+  memorySize: 512
+  deploymentBucket: ${{self:custom.deploymentBucket.${{self:custom.stage}}}}
+  versionFunctions: false # Optional function versioning
+  variableSyntax: "\\${{([ ~:a-zA-Z0-9._\\’\",\\-\\/\\(\\)]+?)}}"
+  stackTags: ${{self:custom.slsTags}}
+  vpc: ${{self:custom.vpc.${{self:custom.stage}}}}
+  # Environment variables for Lambdas:
+  environment:
+    AWS_PROFILE: ${{self:provider.profile}}
+    STAGE: ${{self:custom.stage}}
+    DB_CONNECTION: ${{self:custom.typeORM.DB_CONNECTION}}
+    DB_HOST: ${{self:custom.typeORM.DB_HOST}}
+    DB_PORT: ${{self:custom.typeORM.DB_PORT}}
+    DB_USERNAME: ${{self:custom.typeORM.DB_USERNAME}}
+    DB_PASSWORD: ${{self:custom.typeORM.DB_PASSWORD}}
+    DB_DATABASE: ${{self:custom.typeORM.DB_DATABASE}}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: arn:aws:logs:${{self:provider.region}}:*:*
+
+custom:
+  stages:
+    - prod
+    - dev
+    - sandbox
+    - local
+  jetpack:
+    base: "../.." # Search for hoisted dependencies to one parent above normal.
+  scripts:
+    hooks:
+      'before:package:createDeploymentArtifacts': npm run build
+  projectName: BeastNewsletter # Project name under the services will be defined in, name should not contain uppercase characters to avoid deployment errors.
+  stage: ${{opt:stage, "dev"}}
+  region: ${{opt:region, "us-east-1"}}
+  profile:
+    prod: beast_prod
+    dev: beast_dev
+    sandbox: beast_sandbox
+    local: beast_dev
+  deploymentBucket:
+    prod: prod-beast-sls-deployment-bucket
+    dev: dev-beast-sls-deployment-bucket
+    sandbox: sandbox-beast-sls-deployment-bucket
+    local: local-beast-sls-deployment-bucket
+  slsTags:
+    CreatedBy: "rmolinamir@gmail.com"
+    Project: ${{self:custom.projectName}}
+    ProjectEnvironment: ${{self:custom.stage}}
+  # Database params for TypeORM.
+  typeORM: ${{file(./serverless.typeorm.env.js):params}}
+  # Principal Resource parameters:
+  # TODO: Replace with IAM ARN
+  principal:
+    prod: "*"
+    dev: "*"
+    sandbox: "*"
+    local: "*"
+  # VPC configuration per stage.
+  vpc: # Make sure your SSM parameters match the region.
+    # prod:
+    #   securityGroupIds:
+    #     - sg-<number> # <ip> | <name>
+    #   subnetIds:
+    #     - subnet-<number> # <ip> | us-east-1c, <name>
+    #     - subnet-<number> # <ip> | us-east-1a, <name>
+    #     - subnet-<number> # <ip> | us-east-1b, <name>
+    # dev:
+    #   securityGroupIds:
+    #     - sg-<number>
+    #   subnetIds:
+    #     - subnet-<number>
+    #     - subnet-<number>
+    # sandbox:
+    #   securityGroupIds:
+    #     - sg-<number>
+    #   subnetIds:
+    #     - subnet-<number>
+    #     - subnet-<number>
+    local:
+  # Resource Names
+  resources:
+    # TODO: Add RDS
+
+resources:  ${{file(./serverless/resources.yml)}}
+
+package:
+  # Pack each function individually
+  individually: true
+  # At first serverless will apply the globs defined in exclude. After that it'll add all the globs from include.
+  exclude:
+    - ./**
+    - '!package.json'
+    - '!dist/**'
+    - '!node_modules/**'
+  # You can always re-include previously excluded files and directories.  
+  include:
+    # General
+    - "!{{../../,}}{{**/,}}.DS_Store"
+    - "!{{../,}}{{**/,}}.vscode/**"
+    # Dependencies
+    - "!{{../../,}}{{**/,}node_modules/aws-sdk/**"
+    - "!{{../../,}}{{**/,}node_modules/{{@*/*,*}}/CHANGELOG.md"
+    - "!{{../../,}}{{**/,}node_modules/{{@*/*,*}}/README.md"
+
+functions:
+  api:
+    name: ${{self:custom.projectName}}-API-${{self:custom.stage}} # Deployed Lambda name
+    description: Email Service API # Description to publish to AWS
+    handler: dist/index.handler
+    events:
+      - http:
+          method: post
+          path: /
+          cors: true
+          private: true
+      - http:
+          method: post
+          path: "{proxy+}"
+          cors: true
+          private: true
+      - http:
+          method: delete
+          path: /
+          cors: true
+          private: true
+      - http:
+          method: delete
+          path: "{proxy+}"
+          cors: true
+          private: true

@@ -83,8 +83,8 @@ services:
     networks:
       - webnet
     environment:
-      POSTGRES_USER: ${TYPEORM_USERNAME}
-      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_MULTIPLE_DATABASES: ${DB_DATABASES}
 networks:
   webnet:
@@ -294,12 +294,12 @@ NODE_ENV=development
 TS_NODE_FILES=true
 
 # TypeORM #
-TYPEORM_CONNECTION=postgres
-TYPEORM_HOST=localhost
-TYPEORM_PORT=5432
-TYPEORM_USERNAME=postgres
-TYPEORM_PASSWORD=password
-TYPEORM_DATABASE=development
+DB_CONNECTION=postgres
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_DATABASE=development
 
 # Redis #
 REDIS_PORT=6379

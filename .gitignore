@@ -118,3 +118,6 @@ migrationsconfig.json
 # Temporal Directory
 tmp
 **/tmp
+
+# AWS SSM Parameter Store Configuration
+aws.ssm.config.template.json
