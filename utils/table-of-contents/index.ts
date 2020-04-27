@@ -92,7 +92,7 @@ async function generateToC(): Promise<void> {
   for await (const [packageDirent, path] of getPackages()) {
     const name = getPackageName(packageDirent, path);
     // [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-    const packageMarkdown = `- [${name}](${homepage}/packages/${name} "${name} package homepage")`;
+    const packageMarkdown = `- [${name}](${homepage}/packages/${packageDirent.name} "${name} package homepage")`;
     // TODO: Sort package links.
     packageLinks.push(packageMarkdown);
   }

@@ -23,9 +23,9 @@
 <!-- START custom generated Lerna Packages please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN `npm run doc` TO UPDATE -->
 
-- [@beast/beast-entities](https://github.com/beast-app/beast-api/tree/master/packages/@beast/beast-entities "@beast/beast-entities package homepage")
-- [@beast/api](https://github.com/beast-app/beast-api/tree/master/packages/@beast/api "@beast/api package homepage")
-- [@beast/newsletter](https://github.com/beast-app/beast-api/tree/master/packages/@beast/newsletter "@beast/newsletter package homepage")
+- [@beast/beast-entities](https://github.com/beast-app/beast-api/tree/master/packages/beast-entities "@beast/beast-entities package homepage")
+- [@beast/api](https://github.com/beast-app/beast-api/tree/master/packages/_api "@beast/api package homepage")
+- [@beast/newsletter](https://github.com/beast-app/beast-api/tree/master/packages/_newsletter "@beast/newsletter package homepage")
 
 <!-- END custom generated Lerna Packages please keep comment here to allow auto update -->
 
