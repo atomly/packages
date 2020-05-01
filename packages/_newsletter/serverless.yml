@@ -22,15 +22,7 @@ provider:
   stackTags: ${{self:custom.slsTags}}
   vpc: ${{self:custom.vpc.${{self:custom.stage}}}}
   # Environment variables for Lambdas:
-  environment:
-    AWS_PROFILE: ${{self:provider.profile}}
-    STAGE: ${{self:custom.stage}}
-    DB_CONNECTION: ${{self:custom.typeORM.DB_CONNECTION}}
-    DB_HOST: ${{self:custom.typeORM.DB_HOST}}
-    DB_PORT: ${{self:custom.typeORM.DB_PORT}}
-    DB_USERNAME: ${{self:custom.typeORM.DB_USERNAME}}
-    DB_PASSWORD: ${{self:custom.typeORM.DB_PASSWORD}}
-    DB_DATABASE: ${{self:custom.typeORM.DB_DATABASE}}
+  environment: ${{file(./serverless.env.js):params}}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -67,8 +59,6 @@ custom:
     CreatedBy: "rmolinamir@gmail.com"
     Project: ${{self:custom.projectName}}
     ProjectEnvironment: ${{self:custom.stage}}
-  # Database params for TypeORM.
-  typeORM: ${{file(./serverless.typeorm.env.js):params}}
   # Principal Resource parameters:
   # TODO: Replace with IAM ARN
   principal:
@@ -129,6 +119,26 @@ functions:
     description: Email Service API # Description to publish to AWS
     handler: dist/index.handler
     events:
+      - http:
+          method: get
+          path: /
+          cors: true
+          private: true
+      - http:
+          method: get
+          path: "{proxy+}"
+          cors: true
+          private: true
+      - http:
+          method: patch
+          path: /
+          cors: true
+          private: true
+      - http:
+          method: patch
+          path: "{proxy+}"
+          cors: true
+          private: true
       - http:
           method: post
           path: /

@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Config files
+**.config.**
+
 # Vagrant stuff
 acceptance_config.yml
 boxes/*
@@ -77,10 +80,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-.env.test
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -120,4 +119,4 @@ tmp
 **/tmp
 
 # AWS SSM Parameter Store Configuration
-aws.ssm.config.template.json
+aws.ssm.config.json

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-export const subscribeEmail = {
+export const getSubscribedEmail = {
   type: 'object',
   required: ['email'],
   properties: {

@@ -79,6 +79,7 @@ module.exports = {
       'error',
       { allow: ['arrowFunctions'] },
     ],
+    '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     //
     // eslint base
@@ -97,11 +98,7 @@ module.exports = {
     // all test files
     {
       files: [
-        'packages/eslint-plugin-internal/tests/**/*.test.ts',
-        'packages/eslint-plugin-tslint/tests/**/*.ts',
-        'packages/eslint-plugin/tests/**/*.test.ts',
-        'packages/parser/tests/**/*.ts',
-        'packages/typescript-estree/tests/**/*.ts',
+        '**/*.test.ts',
       ],
       env: {
         'jest/globals': true,
@@ -120,30 +117,6 @@ module.exports = {
         'jest/prefer-to-have-length': 'warn',
         'jest/prefer-spy-on': 'error',
         'jest/valid-expect': 'error',
-      },
-    },
-    // plugin source files
-    {
-      files: [
-        'packages/eslint-plugin-internal/**/*.ts',
-        'packages/eslint-plugin-tslint/**/*.ts',
-        'packages/eslint-plugin/**/*.ts',
-      ],
-      rules: {
-        '@typescript-eslint/internal/no-typescript-estree-import': 'error',
-      },
-    },
-    // rule source files
-    {
-      files: [
-        'packages/eslint-plugin-internal/src/rules/**/*.ts',
-        'packages/eslint-plugin-tslint/src/rules/**/*.ts',
-        'packages/eslint-plugin/src/configs/**/*.ts',
-        'packages/eslint-plugin/src/rules/**/*.ts',
-      ],
-      rules: {
-        // specifically for rules - default exports makes the tooling easier
-        'import/no-default-export': 'off',
       },
     },
     // tools and tests

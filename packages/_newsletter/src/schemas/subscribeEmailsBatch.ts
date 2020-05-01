@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 export const subscribeEmailsBatch = {
   type: 'object',
   required: ['emails'],
@@ -8,6 +9,10 @@ export const subscribeEmailsBatch = {
       items: {
         '$ref': '#/definitions/email',
       },
+    },
+    list_id: {
+      type: 'string',
+      length: 10,
     },
   },
   definitions: {

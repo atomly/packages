@@ -1,2 +1,2 @@
-export * from './types';
-export * from './mailchimp';
+export * from './EmailClient';
+export * from './MailchimpClient';

@@ -1,45 +1,58 @@
 
 // Libraries
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { Validator, ValidationError, ValidateFunction } from 'express-json-validator-middleware';
 
 // Dependencies
 import * as schemas from './schemas/index';
-import emailController from './controllers/email';
+import { EmailController } from './controllers';
 
-// Initialize a Validator instance first
-const validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
-const  { validate } = validator;
+export function app(emailController: EmailController): Express {
+  // Initialize a Validator instance first
+  const validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
+  const  { validate } = validator;
 
-export const app = express();
+  const app = express();
 
-//
-// Middlewares
-//
+  //
+  // Middlewares
+  //
+  
+  app.use(bodyParser.json({ strict: false, limit: '10mb' }));
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  app.use((err: ValidationError | Error, _: Request, res: Response, __: NextFunction) => {
+    if (err instanceof ValidationError && typeof res.status === 'function') {
+      res.status(400).json({
+        errorType: 'invalidInput',
+        message: err.validationErrors.body?.data.map((e: Error) => e.message).toString(),
+      });
+    } else {
+      res.status(500).json({
+        errorType: 'internalError',
+        message: err.message,
+      });
+    }
+  });
+  
+  //
+  // Routes
+  //
+  
+  app.get('/lists', emailController.getLists);
+  app.get('/list/:id', validate({ params: schemas.getList as ValidateFunction }), emailController.getList);
+  app.post('/list', validate({ body: schemas.createList as ValidateFunction }), emailController.createList);
+  app.patch('/list/:id', validate({ params: schemas.getList as ValidateFunction, body: schemas.updateList as ValidateFunction }), emailController.updateList);
+  // app.delete('/list/:id', validate({ params: schemas.getList as ValidateFunction }), emailController.deleteList);
 
-app.use(bodyParser.json({ strict: false, limit: '10mb' }));
+  app.get('/list/:id/emails', validate({ params: schemas.getListSubscribedEmails as ValidateFunction }), emailController.getListSubscribedEmails);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: ValidationError | Error, _: Request, res: Response, __: NextFunction) => {
-  if (err instanceof ValidationError && typeof res.status === 'function') {
-    // eslint-disable-next-line no-console
-    console.error('err: ', err);
-    res.status(400).json({
-      errorType: 'invalidInput',
-      message: err.validationErrors.body?.data.map((e: Error) => e.message).toString(),
-    });
-  } else {
-    res.status(500).json({
-      errorType: 'internalError',
-      message: err.message,
-    });
-  }
-});
+  app.get('/email/:email', validate({ params: schemas.getSubscribedEmail as ValidateFunction }), emailController.getSubscribedEmail);
+  app.post('/email/subscribe', validate({ body: schemas.subscribeEmail as ValidateFunction }), emailController.subscribeEmail);
+  app.post('/email/unsubscribe', validate({ body: schemas.subscribeEmail as ValidateFunction }), emailController.unsubscribeEmail);
+  // app.post('/emails/subscribe', validate({ body: schemas.subscribeEmailsBatch as ValidateFunction }), emailController.subscribeEmailsBatch);
+  // app.post('/emails/unsubscribe', validate({ body: schemas.subscribeEmailsBatch as ValidateFunction }), emailController.subscribeEmailsBatch);
 
-//
-// Routes
-//
-
-app.post('/email/subscribe', validate({ body: schemas.subscribeEmail as ValidateFunction }), emailController.subscribeEmail);
-app.post('/email/subscribe_batch', validate({ body: schemas.subscribeEmailsBatch as ValidateFunction }), emailController.subscribeEmailsBatch);
+  return app;
+}

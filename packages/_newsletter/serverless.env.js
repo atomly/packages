@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-const { config } = require('dotenv');
-const { existsSync } = require('fs');
+const { parse } = require('dotenv');
+const { existsSync, readFileSync } = require('fs');
 const { resolve } = require('path');
 const { SSM, Config, SharedIniFileCredentials } = require('aws-sdk');
 
@@ -10,16 +10,11 @@ const { SSM, Config, SharedIniFileCredentials } = require('aws-sdk');
  * Parameter names.
  */
 const paramNames = [
-  'connection',
-  'host',
-  'port',
-  'username',
-  'password',
-  'database',
+  'mailchimpListId',
 ];
 
 function awsSsmParamName(stage, name) {
-  return `/beast/newsletter/${stage}/database/${name}`;
+  return `/beast/newsletter/${stage}/variables/${name}`;
 }
 
 async function slsParams(stage, provider) {
@@ -33,11 +28,6 @@ async function slsParams(stage, provider) {
   try {
     const [
       connection,
-      host,
-      port,
-      username,
-      password,
-      database,
     ] = await Promise.all(paramNames.map(name => {
       const Name = awsSsmParamName(stage, name);
       return ssm.getParameter({
@@ -46,12 +36,7 @@ async function slsParams(stage, provider) {
       }).promise();
     }));
     return {
-      TYPEORM_CONNECTION: connection.Parameter.Value,
-      TYPEORM_HOST: host.Parameter.Value,
-      TYPEORM_PORT: port.Parameter.Value,
-      TYPEORM_USERNAME: username.Parameter.Value,
-      TYPEORM_PASSWORD: password.Parameter.Value,
-      TYPEORM_DATABASE: database.Parameter.Value,
+      MAILCHIMP_LIST_ID: connection.Parameter.Value,
     };
   } catch (error) {
     console.error('error: ', error);
@@ -65,20 +50,13 @@ async function localParams() {
   //  ↑
   //  api
   //    ↑
-  const envPath = resolve(__dirname, '..', '..', '.env');
+  const envPath = resolve(__dirname, 'newsletter.config.env');
   if (existsSync(envPath)) {
-    config({ path: envPath });
-  } else {
-    throw new Error(`Path [${envPath}] is invalid, .env file not found.`);
+    const file = readFileSync(envPath).toString('utf-8');
+    const env = parse(file);
+    return env;
   }
-  return {
-    TYPEORM_CONNECTION: process.env.DB_CONNECTION,
-    TYPEORM_HOST: process.env.DB_HOST,
-    TYPEORM_PORT: process.env.DB_PORT,
-    TYPEORM_USERNAME: process.env.DB_USERNAME,
-    TYPEORM_PASSWORD: process.env.DB_PASSWORD,
-    TYPEORM_DATABASE: process.env.DB_DATABASE,
-  };
+  throw new Error(`Path [${envPath}] is invalid, .env file not found.`);
 }
 
 // serverless.env.js
@@ -90,9 +68,9 @@ module.exports.params = async args => {
     case 'prod':
     case 'dev':
     case 'sandbox': {
-      const params = await localParams();
+      const params = await slsParams(stage, provider);
       console.info(`Stage: [${stage}] params: `, params);
-      return await slsParams(stage, provider);
+      return params;
     }
     case 'local': {
       const params = await localParams();
