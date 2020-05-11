@@ -10,16 +10,7 @@ import { ICreateList, IUpdateList, IUpdateSubscription } from '../../schemas';
 // Dependencies
 import md5 from 'md5';
 
-export class MailchimpClient implements EmailClient {
-  static errorHandler(header: string, mailchimpError: unknown): unknown {
-    // Logging errors
-    console.error(
-      `ERROR >>> ${header}`,
-      JSON.stringify(mailchimpError, null, 2),
-    );
-    return mailchimpError;
-  }
-
+export class MailchimpClient extends EmailClient {
   private mailchimp: Mailchimp;
   public listId?: string;
 
@@ -27,8 +18,8 @@ export class MailchimpClient implements EmailClient {
     apiKey: string,
     listId?: string,
   }) {
+    super(args);
     this.mailchimp = new Mailchimp(args.apiKey);
-    this.listId = args.listId;
   }
 
   /**

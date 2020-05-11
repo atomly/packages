@@ -1,7 +1,6 @@
 // Types
 import { Beast } from '@root/types/index';
 
-// TODO: Add support for custom type resolvers.
 export function composeResolvers<T extends Beast.IResolvers>(...resolversArray: Beast.IResolvers[]): T {
   const globalResolver = resolversArray.reduce((resolvers, resolver) => {
     const {
