@@ -3,12 +3,31 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { Validator, ValidationError, ValidateFunction } from 'express-json-validator-middleware';
+import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware';
+import { DBContext } from '@beast/beast-collections';
 
 // Dependencies
 import * as schemas from './schemas/index';
-import { EmailController } from './controllers';
+import { DefaultEmailController } from './controllers';
 
-export function app(emailController: EmailController): Express {
+export async function app(args: {
+  emailController: DefaultEmailController,
+  dbConnectionString: string,
+}): Promise<Express> {
+  //
+  // Setup
+  //
+
+  const {
+    emailController,
+    dbConnectionString,
+  } = args;
+
+  const dbContext = new DBContext({ dbConnectionString });
+
+  await dbContext.setup();
+  await emailController.setup({ dbContext });
+
   // Initialize a Validator instance first
   const validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
   const  { validate } = validator;
@@ -19,6 +38,7 @@ export function app(emailController: EmailController): Express {
   // Middlewares
   //
   
+  app.use(awsServerlessExpressMiddleware.eventContext());
   app.use(bodyParser.json({ strict: false, limit: '10mb' }));
   
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -28,18 +28,21 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@beast/beast-entities": "^1.0.0",
+    "@beast/beast-collections": "^1.0.0",
 		"aws-sdk": "^2.627.0",
+    "aws-serverless-express": "^3.3.8",
+    "aws-lambda": "^1.0.6",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-json-validator-middleware": "^2.1.0",
     "serverless": "^1.68.0",
-    "serverless-http": "^2.3.2",
     "mailchimp-api-v3": "^1.13.1",
     "md5": "^2.2.1",
     "uuid": "^7.0.3"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.47",
+    "@types/aws-serverless-express": "^3.3.3",
     "@types/faker": "^4.1.9",
     "@types/jest": "^25.1.1",
     "@types/jest-dev-server": "^4.2.0",

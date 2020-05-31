@@ -4,6 +4,7 @@ import {
   Response,
   NextFunction,
 } from 'express';
+import { DBContext } from '@beast/beast-collections';
 import {
   ISubscribeEmail,
   // ISubscribeEmailsBatch,
@@ -32,6 +33,16 @@ export class DefaultEmailController implements EmailController {
     this.unsubscribeEmail = this.unsubscribeEmail.bind(this);
     // this.subscribeEmailsBatch = this.subscribeEmailsBatch.bind(this);
     // this.unsubscribeEmailsBatch = this.unsubscribeEmailsBatch.bind(this);
+  }
+
+  private dbContext: DBContext;
+
+  /**
+   * Sets up a DB Context private member.
+   * @param args - Setup parameters.
+   */
+  public async setup(args: { dbContext: DBContext }): Promise<void> {
+    this.dbContext = args.dbContext;
   }
 
   public async getLists(_: Request, res: Response, next: NextFunction): Promise<void> {
@@ -120,19 +131,25 @@ export class DefaultEmailController implements EmailController {
     try {
       const {
         email,
+        full_name: fullName,
+        reference,
         list_id: listId,
       } = req.body as ISubscribeEmail;
       let result: unknown;
       // First, check if the user is subscribed. If the user is not subscribed,
       // create a new subscription. Otherwise, update the existing one.
-      result = await this.emailClient.getSubscription(email, listId);
-      if (
-        (result as Record<string, string>).id
-        && (result as Record<string, string>).status === 'unsubscribed'
-      ) {
+      const entity = await this.dbContext.models.Subscriber.findOne({
+        email: {
+          $eq: email,
+        }
+      });
+      if (entity) {
         result = await this.emailClient.updateSubscription(email, { status: 'subscribed'}, listId);
-      } else if ((result as Record<string, string>).title === 'Resource Not Found') {
-        result = await this.emailClient.postSubscription(email, listId);
+      } else {
+        [result] = await Promise.all([
+          this.emailClient.postSubscription(email, listId),
+          this.dbContext.models.Subscriber.create({ email, fullName, reference }),
+        ]);
       }
       res.json(result);
     } catch (err) {

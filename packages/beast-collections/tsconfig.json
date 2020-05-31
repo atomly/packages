@@ -3,14 +3,11 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./",
-    "skipLibCheck": true
+    "baseUrl": "./"
   },
-  "references": [
-    { "path": "../beast-collections" }
-  ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "tmp"
   ]
 }
