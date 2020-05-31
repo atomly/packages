@@ -23,15 +23,6 @@ export class MailchimpClient extends EmailClient {
   }
 
   /**
-   * Updates the subscription list ID of the MailchimpClient.
-   * @param listId - New subscription list ID.
-   */
-  public setListId(listId: string): MailchimpClient {
-    this.listId = listId;
-    return this;
-  }
-
-  /**
    * Creates a subscription list.
    * @param listId - Subscription list ID.
    */
