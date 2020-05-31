@@ -22,6 +22,7 @@ export async function handler(event: APIGatewayEvent, context: Context): Promise
   const expressApp = await app({
     emailController,
     dbConnectionString: process.env.DB_CONNECTION_STRING!,
+    dbName: process.env.DB_NAME!,
   })
 
   const server = awsServerlessExpress.createServer(expressApp)

@@ -12,6 +12,7 @@ const { SSM, Config, SharedIniFileCredentials } = require('aws-sdk');
 const paramNames = [
   'mailchimpListId',
   'dbConnectionString',
+  'dbName',
 ];
 
 function awsSsmParamName(stage, name) {
@@ -30,6 +31,7 @@ async function slsParams(stage, provider) {
     const [
       mailchimpListId,
       dbConnectionString,
+      dbName,
     ] = await Promise.all(paramNames.map(name => {
       const Name = awsSsmParamName(stage, name);
       return ssm.getParameter({
@@ -40,6 +42,7 @@ async function slsParams(stage, provider) {
     return {
       MAILCHIMP_LIST_ID: mailchimpListId.Parameter.Value,
       DB_CONNECTION_STRING: dbConnectionString.Parameter.Value,
+      DB_NAME: dbName.Parameter.Value,
     };
   } catch (error) {
     console.error('error: ', error);
@@ -66,7 +69,6 @@ async function localParams() {
 module.exports.params = async args => {
   const stage = args.processedInput.options.stage;
   const { provider } = args.service;
-  // Async code that fetches the rate config...
   switch (stage) {
     case 'prod':
     case 'dev':

@@ -13,6 +13,7 @@ import { DefaultEmailController } from './controllers';
 export async function app(args: {
   emailController: DefaultEmailController,
   dbConnectionString: string,
+  dbName: string,
 }): Promise<Express> {
   //
   // Setup
@@ -21,11 +22,12 @@ export async function app(args: {
   const {
     emailController,
     dbConnectionString,
+    dbName,
   } = args;
 
   const dbContext = new DBContext({ dbConnectionString });
 
-  await dbContext.setup();
+  await dbContext.setup({ dbName });
   await emailController.setup({ dbContext });
 
   // Initialize a Validator instance first
