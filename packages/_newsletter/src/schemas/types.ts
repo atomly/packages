@@ -29,6 +29,8 @@ export interface IGetSubscribeEmail {
 
 export interface ISubscribeEmail {
   email: string
+  full_name: string
+  reference: string
   list_id?: string
 }
 
