@@ -4,31 +4,19 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { Validator, ValidationError, ValidateFunction } from 'express-json-validator-middleware';
 import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware';
-import { DBContext } from '@beast/beast-collections';
 
 // Dependencies
 import * as schemas from './schemas/index';
 import { DefaultEmailController } from './controllers';
 
-export async function app(args: {
-  emailController: DefaultEmailController,
-  dbConnectionString: string,
-  dbName: string,
-}): Promise<Express> {
+export function app(args: { emailController: DefaultEmailController }): Express {
   //
   // Setup
   //
 
   const {
     emailController,
-    dbConnectionString,
-    dbName,
   } = args;
-
-  const dbContext = new DBContext({ dbConnectionString });
-
-  await dbContext.setup({ dbName });
-  await emailController.setup({ dbContext });
 
   // Initialize a Validator instance first
   const validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance

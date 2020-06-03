@@ -10,9 +10,10 @@ const { SSM, Config, SharedIniFileCredentials } = require('aws-sdk');
  * Parameter names.
  */
 const paramNames = [
-  'mailchimpListId',
-  'dbConnectionString',
-  'dbName',
+  'MAILCHIMP_LIST_ID',
+  'MAILCHIMP_API_KEY',
+  'DB_CONNECTION_STRING',
+  'DB_NAME',
 ];
 
 function awsSsmParamName(stage, name) {
@@ -29,9 +30,10 @@ async function slsParams(stage, provider) {
   }));
   try {
     const [
-      mailchimpListId,
-      dbConnectionString,
-      dbName,
+      MAILCHIMP_LIST_ID,
+      MAILCHIMP_API_KEY,
+      DB_CONNECTION_STRING,
+      DB_NAME,
     ] = await Promise.all(paramNames.map(name => {
       const Name = awsSsmParamName(stage, name);
       return ssm.getParameter({
@@ -40,9 +42,10 @@ async function slsParams(stage, provider) {
       }).promise();
     }));
     return {
-      MAILCHIMP_LIST_ID: mailchimpListId.Parameter.Value,
-      DB_CONNECTION_STRING: dbConnectionString.Parameter.Value,
-      DB_NAME: dbName.Parameter.Value,
+      MAILCHIMP_LIST_ID: MAILCHIMP_LIST_ID.Parameter.Value,
+      MAILCHIMP_API_KEY: MAILCHIMP_API_KEY.Parameter.Value,
+      DB_CONNECTION_STRING: DB_CONNECTION_STRING.Parameter.Value,
+      DB_NAME: DB_NAME.Parameter.Value,
     };
   } catch (error) {
     console.error('error: ', error);
@@ -56,7 +59,7 @@ async function localParams() {
   //  ↑
   //  api
   //    ↑
-  const envPath = resolve(__dirname, 'newsletterconfig.env');
+  const envPath = resolve(__dirname, 'newsletter.config.env');
   if (existsSync(envPath)) {
     const file = readFileSync(envPath).toString('utf-8');
     const env = parse(file);

@@ -1,10 +1,10 @@
 // Libraries
-import { model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
 // Types
 import { ISubscriber } from './types';
 
-const subscribersSchema = new Schema<ISubscriber>({
+export const subscribersSchema = new Schema<ISubscriber>({
   email:  {
     type: String,
     required: true,
@@ -23,5 +23,3 @@ const subscribersSchema = new Schema<ISubscriber>({
     minlength: 1,
   },
 });
-
-export default model<ISubscriber>('Subscriber', subscribersSchema, 'subscriber');

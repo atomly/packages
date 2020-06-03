@@ -1,2 +1,3 @@
 export * from './db';
-export * from './schemas';
+export * from './db/types';
+export * from './schemas/types';

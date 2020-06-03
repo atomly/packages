@@ -1,11 +1,14 @@
-/* eslint-disable jest/expect-expect */
 // Libraries
+import request from 'supertest';
 import faker from 'faker';
 
 // Dependencies
-import { app } from '../utils/app';
+import { getApp } from '../utils/app';
+
+let app: request.SuperTest<request.Test>;
 
 beforeAll(async done => {
+  app = await getApp();
   done();
 });
 

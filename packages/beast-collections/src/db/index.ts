@@ -7,6 +7,7 @@ import { schemas } from '../schemas';
 // Types
 import {
   IDBContextModels,
+  IDBContextDocuments,
   IDBContextParamConnection,
   IDBContextParamConnectionString,
   IDBContext,
@@ -30,27 +31,30 @@ export class DBContext implements IDBContext {
   public connection: Connection;
   public models: IDBContextModels;
 
-  private setModels() {
-    this.models = schemas;
+  private setModels(): void {
+    if (!this.models) {
+      this.models = {
+        Subscriber: this.connection.model<IDBContextDocuments['Subscriber']>('Subscriber', schemas.subscribersSchema, 'subscriber'),
+      };
+    }
   }
 
   public async setup(options?: ConnectionOptions): Promise<void> {
-    const connection: Connection = await createConnection(
-      this.dbConnectionString,
-      Object.assign<any, Partial<ConnectionOptions>, ConnectionOptions>(
-        {},
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true
-        },
-        options || {},
-      ),
-    );
-    
-    // Bindings
-    this.connection = connection;
+    if (!this.connection) {
+      const connection: Connection = await createConnection(
+        this.dbConnectionString,
+        Object.assign<unknown, Partial<ConnectionOptions>, ConnectionOptions>(
+          {},
+          {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          },
+          options ?? {},
+        ),
+      );
+      // Bindings
+      this.connection = connection;
+    }
     this.setModels();
   }
 }
-
-export * from './types';

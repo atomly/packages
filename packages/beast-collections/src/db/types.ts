@@ -1,10 +1,15 @@
 // Types
-import { Connection } from 'mongoose';
-import { schemas } from '../schemas';
+import { Connection, Document, Model } from 'mongoose';
+import { ISubscriber } from '../schemas/types';
+
+// DB Models/Collections
+export interface IDBContextDocuments {
+  Subscriber: ISubscriber & Document
+}
 
 // DB Models/Collections
 export interface IDBContextModels {
-  Subscriber: typeof schemas.Subscriber;
+  Subscriber: Model<IDBContextDocuments['Subscriber']>;
 }
 
 // DBContext Class

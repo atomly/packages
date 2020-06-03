@@ -14,7 +14,7 @@ provider:
   apiKeys:
     - api_${{self:custom.stage}}
   profile: ${{self:custom.profile.${{self:custom.stage}}}}
-  timeout: 60 # Limit of 1 minute.
+  timeout: 30 # API Gateway limit
   memorySize: 512
   deploymentBucket: ${{self:custom.deploymentBucket.${{self:custom.stage}}}}
   versionFunctions: false # Optional function versioning
@@ -30,6 +30,23 @@ provider:
         - "logs:CreateLogStream"
         - "logs:PutLogEvents"
       Resource: arn:aws:logs:${{self:provider.region}}:*:*
+    - Effect: Allow
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: arn:aws:logs:${{self:provider.region}}:*:*
+    # - Effect: Allow
+    #   Action:
+    #     - s3:GetBucketLocation
+    #   Resource:
+    #     - arn:aws:s3:::${{self:provider.deploymentBucket}}
+    #     - arn:aws:s3:::${{self:provider.deploymentBucket}}/*
+    # - Effect: Allow
+    #   Action: s3:*
+    #   Resource:
+    #     - arn:aws:s3:::${{self:provider.deploymentBucket}}
+    #     - arn:aws:s3:::${{self:provider.deploymentBucket}}/*
 
 custom:
   stages:
@@ -68,13 +85,13 @@ custom:
     local: "*"
   # VPC configuration per stage.
   vpc: # Make sure your SSM parameters match the region.
-    # prod:
-    #   securityGroupIds:
-    #     - sg-<number> # <ip> | <name>
-    #   subnetIds:
-    #     - subnet-<number> # <ip> | us-east-1c, <name>
-    #     - subnet-<number> # <ip> | us-east-1a, <name>
-    #     - subnet-<number> # <ip> | us-east-1b, <name>
+    prod:
+      securityGroupIds:
+        - sg-012c9fa6c27b0bc9a
+      subnetIds:
+        - subnet-0c3d1d6d32ad9cbf9
+        - subnet-0b502e50d12ad4c8e
+        - subnet-06cc8690fdc2414c0
     # dev:
     #   securityGroupIds:
     #     - sg-<number>
@@ -87,7 +104,7 @@ custom:
     #   subnetIds:
     #     - subnet-<number>
     #     - subnet-<number>
-    local:
+    # local:
   # Resource Names
   resources:
     # TODO: Add RDS
@@ -118,6 +135,8 @@ functions:
     name: ${{self:custom.projectName}}-API-${{self:custom.stage}} # Deployed Lambda name
     description: Email Service API # Description to publish to AWS
     handler: dist/index.handler
+    timeout: 10 # Limit of 10 secs
+    tags: ${{self:custom.slsTags}} 
     events:
       - http:
           method: get
@@ -149,13 +168,13 @@ functions:
           path: "{proxy+}"
           cors: true
           private: true
-      - http:
-          method: delete
-          path: /
-          cors: true
-          private: true
-      - http:
-          method: delete
-          path: "{proxy+}"
-          cors: true
-          private: true
+      # - http:
+      #     method: delete
+      #     path: /
+      #     cors: true
+      #     private: true
+      # - http:
+      #     method: delete
+      #     path: "{proxy+}"
+      #     cors: true
+      #     private: true

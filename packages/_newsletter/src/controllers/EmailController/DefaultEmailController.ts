@@ -17,8 +17,11 @@ export class DefaultEmailController implements EmailController {
 
   constructor(args: {
     emailClient: EmailClient,
+    dbContext: DBContext,
   }) {
     this.emailClient = args.emailClient;
+    this.dbContext = args.dbContext;
+
     // Bindings
     this.getLists = this.getLists.bind(this);
     this.getList = this.getList.bind(this);
@@ -37,17 +40,11 @@ export class DefaultEmailController implements EmailController {
 
   private dbContext: DBContext;
 
-  /**
-   * Sets up a DB Context private member.
-   * @param args - Setup parameters.
-   */
-  public async setup(args: { dbContext: DBContext }): Promise<void> {
-    this.dbContext = args.dbContext;
-  }
-
   public async getLists(_: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log('DEBUG: res', res);
       const result = await this.emailClient.getSubscriptionLists();
+      console.log('DEBUG: result', result);
       res.json(result);
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -141,7 +138,7 @@ export class DefaultEmailController implements EmailController {
       const entity = await this.dbContext.models.Subscriber.findOne({
         email: {
           $eq: email,
-        }
+        },
       });
       if (entity) {
         result = await this.emailClient.updateSubscription(email, { status: 'subscribed'}, listId);

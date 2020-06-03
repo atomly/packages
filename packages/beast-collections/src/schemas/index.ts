@@ -1,7 +1,5 @@
-import Subscriber from './subscriber';
+import { subscribersSchema } from './subscriber';
 
 export const schemas = {
-  Subscriber,
+  subscribersSchema,
 }
-
-export * from './types';

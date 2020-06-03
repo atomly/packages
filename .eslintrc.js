@@ -104,7 +104,7 @@ module.exports = {
         'jest/globals': true,
       },
       rules: {
-        'eslint-plugin/no-identical-tests': 'error',
+        // 'eslint-plugin/no-identical-tests': 'error',
         'jest/no-disabled-tests': 'warn',
         'jest/no-focused-tests': 'error',
         'jest/no-alias-methods': 'error',
