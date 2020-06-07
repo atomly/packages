@@ -52,7 +52,7 @@ export async function handler(event: APIGatewayEvent, context: Context): Promise
   
     const proxy = awsServerlessExpress.proxy(server, event, context, 'PROMISE');
 
-    console.log('DEBUG: Successfully proxied Lambda event...');
+    console.log('DEBUG: Successfully proxied Lambda event, awaiting promise resolution...');
   
     result = await proxy.promise;
 
@@ -63,11 +63,13 @@ export async function handler(event: APIGatewayEvent, context: Context): Promise
       statusCode: 400,
       body: error.message,
     };
-  } finally {
-    // console.log('DEBUG: Closing MongoDB connection...');
-    // await dbContext.connection.close();
-    // console.log('DEBUG: Successfully closed MongoDB connection.');
   }
+  // No need to close the connection.
+  // finally {
+  //   console.log('DEBUG: Closing MongoDB connection...');
+  //   await dbContext.connection.close();
+  //   console.log('DEBUG: Successfully closed MongoDB connection.');
+  // }
 
   console.log('DEBUG: Returning result.');
   return result;

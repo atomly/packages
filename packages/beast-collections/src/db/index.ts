@@ -48,6 +48,12 @@ export class DBContext implements IDBContext {
           {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            /**
+             * Setting `useCreateIndex: true,` avoids the deprecation warning:
+             *    `DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.`
+             * (GitHub Issue)[https://github.com/nodkz/mongoose-plugin-autoinc/issues/26]
+             */
+            useCreateIndex: true,
           },
           options ?? {},
         ),

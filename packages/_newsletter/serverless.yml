@@ -87,11 +87,11 @@ custom:
   vpc: # Make sure your SSM parameters match the region.
     prod:
       securityGroupIds:
-        - sg-012c9fa6c27b0bc9a
+        - sg-abecca89
       subnetIds:
-        - subnet-0c3d1d6d32ad9cbf9
-        - subnet-0b502e50d12ad4c8e
-        - subnet-06cc8690fdc2414c0
+        - subnet-eec1d7d0
+        - subnet-62569504
+        # - subnet-06cc8690fdc2414c0
     # dev:
     #   securityGroupIds:
     #     - sg-<number>
@@ -135,7 +135,7 @@ functions:
     name: ${{self:custom.projectName}}-API-${{self:custom.stage}} # Deployed Lambda name
     description: Email Service API # Description to publish to AWS
     handler: dist/index.handler
-    timeout: 10 # Limit of 10 secs
+    timeout: 15 # Limit of 15 secs
     tags: ${{self:custom.slsTags}} 
     events:
       - http:

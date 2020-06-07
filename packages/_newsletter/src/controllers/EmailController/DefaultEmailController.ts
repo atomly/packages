@@ -42,9 +42,7 @@ export class DefaultEmailController implements EmailController {
 
   public async getLists(_: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log('DEBUG: res', res);
       const result = await this.emailClient.getSubscriptionLists();
-      console.log('DEBUG: result', result);
       res.json(result);
     } catch (err) {
       // eslint-disable-next-line no-console
