@@ -91,23 +91,19 @@ custom:
       subnetIds:
         - subnet-eec1d7d0
         - subnet-62569504
-        # - subnet-06cc8690fdc2414c0
-    # dev:
-    #   securityGroupIds:
-    #     - sg-<number>
-    #   subnetIds:
-    #     - subnet-<number>
-    #     - subnet-<number>
-    # sandbox:
-    #   securityGroupIds:
-    #     - sg-<number>
-    #   subnetIds:
-    #     - subnet-<number>
-    #     - subnet-<number>
-    # local:
-  # Resource Names
-  resources:
-    # TODO: Add RDS
+    dev:
+      # securityGroupIds:
+      #   - sg-<number>
+      # subnetIds:
+      #   - subnet-<number>
+      #   - subnet-<number>
+    sandbox:
+      # securityGroupIds:
+      #   - sg-<number>
+      # subnetIds:
+      #   - subnet-<number>
+      #   - subnet-<number>
+    local:
 
 resources:  ${{file(./serverless/resources.yml)}}
 

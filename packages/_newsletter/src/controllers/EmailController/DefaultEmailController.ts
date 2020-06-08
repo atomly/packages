@@ -133,14 +133,18 @@ export class DefaultEmailController implements EmailController {
       let result: unknown;
       // First, check if the user is subscribed. If the user is not subscribed,
       // create a new subscription. Otherwise, update the existing one.
-      const entity = await this.dbContext.models.Subscriber.findOne({
-        email: {
-          $eq: email,
-        },
-      });
-      if (entity) {
+      result = await this.emailClient.getSubscription(email, listId);
+      // If the email is not subscribed, resubscribe.
+      // If the email does not exists within the subscriptions, create it and subscribe.
+      // The default case is that the email will already be subscribed.
+      if (
+        (result as Record<string, string>).id
+        && (result as Record<string, string>).status === 'unsubscribed'
+      ) { 
         result = await this.emailClient.updateSubscription(email, { status: 'subscribed'}, listId);
-      } else {
+      } else if (
+        (result as Record<string, string>).title === 'Resource Not Found'
+      ) {
         [result] = await Promise.all([
           this.emailClient.postSubscription(email, listId),
           this.dbContext.models.Subscriber.create({ email, fullName, reference }),

@@ -60,7 +60,7 @@ export function app(args: { emailController: DefaultEmailController }): Express 
 
   app.get('/email/:email', validate({ params: schemas.getSubscribedEmail as ValidateFunction }), emailController.getSubscribedEmail);
   app.post('/email/subscribe', validate({ body: schemas.subscribeEmail as ValidateFunction }), emailController.subscribeEmail);
-  app.post('/email/unsubscribe', validate({ body: schemas.subscribeEmail as ValidateFunction }), emailController.unsubscribeEmail);
+  app.post('/email/unsubscribe', validate({ body: schemas.unsubscribeEmail as ValidateFunction }), emailController.unsubscribeEmail);
   // app.post('/emails/subscribe', validate({ body: schemas.subscribeEmailsBatch as ValidateFunction }), emailController.subscribeEmailsBatch);
   // app.post('/emails/unsubscribe', validate({ body: schemas.subscribeEmailsBatch as ValidateFunction }), emailController.subscribeEmailsBatch);
 

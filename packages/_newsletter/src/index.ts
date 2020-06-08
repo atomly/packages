@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 // Libraries
 import awsServerlessExpress from 'aws-serverless-express';
@@ -59,18 +60,21 @@ export async function handler(event: APIGatewayEvent, context: Context): Promise
     console.log('DEBUG: Result: ', JSON.stringify(result, null, 2));
   } catch (error) {
     console.error('ERROR: ', error.message);
+
     return {
       statusCode: 400,
       body: error.message,
     };
   }
-  // No need to close the connection.
   // finally {
   //   console.log('DEBUG: Closing MongoDB connection...');
+
   //   await dbContext.connection.close();
+
   //   console.log('DEBUG: Successfully closed MongoDB connection.');
   // }
 
   console.log('DEBUG: Returning result.');
+
   return result;
 }

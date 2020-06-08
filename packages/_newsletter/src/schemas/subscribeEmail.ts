@@ -6,9 +6,11 @@ export const subscribeEmail = {
     email: {
       '$ref': '#/definitions/email',
     },
-    list_id: {
-      type: 'string',
-      length: 10,
+    full_name: {
+      '$ref': '#/definitions/full_name',
+    },
+    reference: {
+      '$ref': '#/definitions/reference',
     },
   },
   definitions: {
