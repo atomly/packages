@@ -1,0 +1,20 @@
+{
+  "name": "@beast/beast-prisma",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Robert Molina <rmolinamir@gmail.com>",
+  "homepage": "https://github.com/beast-app/beast-prisma#readme",
+  "license": "ISC",
+	"main": "dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://rmolinamir@bitbucket.org/beast/beast-prisma.git"
+  },
+  "scripts": {
+		"cli": "ts-node cli/index.ts",
+		"build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+	"dependencies": {},
+	"devDependencies": {}
+}

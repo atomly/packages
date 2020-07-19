@@ -1,0 +1,27 @@
+{
+  "name": "@beast/beast-hubful",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Robert Molina <rmolinamir@gmail.com>",
+  "homepage": "https://github.com/beast-app/beast-hubful#readme",
+  "license": "ISC",
+	"main": "dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://rmolinamir@bitbucket.org/beast/beast-hubful.git"
+  },
+  "scripts": {
+		"cli": "ts-node cli/index.ts",
+		"build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+	"dependencies": {
+    "ioredis": "^2.5.0",
+    "socket.io": "^1.4.4",
+    "uuid": "^8.2.0"
+	},
+	"devDependencies": {
+    "@types/socket.io": "^2.1.8",
+    "@types/uuid": "^8.0.0"
+  }
+}
