@@ -8,7 +8,7 @@ import { makeExecutableSchema, IResolvers } from 'graphql-tools';
 import { print } from 'graphql/language/printer';
 
 // Typings
-import { TSJest } from '@typings/tests';
+import { TSJest } from '@types/tests';
 
 // Dependencies
 import { typeDefs, resolvers } from '@root/schema';

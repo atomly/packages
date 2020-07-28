@@ -71,17 +71,17 @@ server.express.use(
   }),
 );
 
+// applyMiddleware(schema, ...middlewares);
+
 /**
  * Starts the GraphQL server.
  * @return {void} - Void.
  */
 export async function startServer(): Promise<void> {
-  // applyMiddleware(schema, ...middlewares);
-
-  // Connecting Database
-  await database.getConnection();
-
   try {
+    // Connecting Database
+    await database.getConnection();
+
     server.start(
       // Options
       {
@@ -102,7 +102,7 @@ export async function startServer(): Promise<void> {
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
-      console.log('Something went wrong: ', error);
+      console.error('ERROR: Something went wrong: ', error);
     }
   }
 }

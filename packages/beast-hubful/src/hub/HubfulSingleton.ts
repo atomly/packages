@@ -1,10 +1,10 @@
 // Types
-import { IHubfulService } from './types';
+import { IHubfulService } from './HubfulService';
 
 // Dependencies
-import { HubfulService } from './HubfulService';
+import { DefaultHubfulService } from './DefaultHubfulService';
 
-class HubfulSingleton extends HubfulService implements IHubfulService {
+class HubfulSingleton extends DefaultHubfulService implements IHubfulService {
   private static instance: HubfulSingleton; // Member variable that will store the OnlyOne instance.
 
   /**
@@ -28,4 +28,4 @@ class HubfulSingleton extends HubfulService implements IHubfulService {
   }
 }
 
-export const Hubful = HubfulSingleton.getInstance();
+export default HubfulSingleton.getInstance();

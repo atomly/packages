@@ -1,5 +1,5 @@
-import { ISocketsService } from '../sockets';
-import { IStorageService, IStorageServiceStoreOptions } from '../storages';
+import { IEventsService } from '../events';
+import { IStorageService, IStorageServiceStoreOptions, TStorageServicePayload } from '../storages';
 
 export interface IPublisherServicePublishOptions extends IStorageServiceStoreOptions {
   /**
@@ -10,9 +10,9 @@ export interface IPublisherServicePublishOptions extends IStorageServiceStoreOpt
 
 export interface IPublisherService {
   /**
-   * Hubful generic SocketsService.
+   * Hubful generic EventsService.
    */
-  _socketsService: ISocketsService
+  _eventsService: IEventsService
   /**
    * Hubful generic StorageService.
    */
@@ -23,5 +23,5 @@ export interface IPublisherService {
    * @param payload - Payload sent to the clients.
    * @param options - Options to filter the topic, or set expiracy on the payload.
    */
-  publish(topic: string, payload: unknown, options?: IPublisherServicePublishOptions): Promise<void>
+  publish(topic: string, payload: TStorageServicePayload, options?: IPublisherServicePublishOptions): Promise<void>
 }

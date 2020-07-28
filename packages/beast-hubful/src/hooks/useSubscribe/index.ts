@@ -8,5 +8,5 @@ import { ISubscriberServiceSubscribeOptions } from '../../subscribers';
  * TODO: useSubscribe should return an AsyncIterator.
  */
 export async function useSubscribe(): Promise<void> {
-  await Hubful.subscriberService.subscribe()
+  await Hubful.subscriberService.subscribe();
 }

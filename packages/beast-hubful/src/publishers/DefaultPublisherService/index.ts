@@ -1,67 +1,43 @@
 // Dependencies
-import { generateTopicUUID, parseTopic } from '../../utils/index';
+import { parseTopic } from '../../utils';
 
 // Types
-import { KeyType, ValueType } from '../../storages';
-import { ESetExpiracyModes } from '../../storages';
+import { TStorageServicePayload, EStorageServiceSetExpiracyModes } from '../../storages';
 import { IPublisherServicePublishOptions } from '../PublisherService';
 import { IDefaultPublisherService } from './types';
 
+const DEFAULT_EXPIRACY_TIME = '3600'; // 1 hour of expiracy time when paired with the EX mode
+const DEFAULT_EXPIRACY_MODE = EStorageServiceSetExpiracyModes.EX;
+
 export class DefaultPublisherService implements IDefaultPublisherService {
-  public _socketsService: IDefaultPublisherService['_socketsService'];
+  public _eventsService: IDefaultPublisherService['_eventsService'];
   public _storageService: IDefaultPublisherService['_storageService'];
-  public _params: IDefaultPublisherService['_params'];
 
   constructor(
     args: {
-        _socketsService: IDefaultPublisherService['_socketsService']
-        _storageService: IDefaultPublisherService['_storageService']
+      eventsService: IDefaultPublisherService['_eventsService']
+      storageService: IDefaultPublisherService['_storageService']
     },
-    params: IDefaultPublisherService['_params'],
   ) {
-    this._socketsService = args._socketsService;
-    this._storageService = args._storageService;
-    this._params = {
-      defaultExpiracyTime: params.defaultExpiracyTime ?? '3600', // 1 hour of expiracy time
-      defaultExpiryMode: params.defaultExpiryMode ?? ESetExpiracyModes.EX,
-    };
+    this._eventsService = args.eventsService;
+    this._storageService = args.storageService;
   }
 
-  public async publish(topic: KeyType, payload: ValueType, options: IPublisherServicePublishOptions = {}): Promise<void> {
-    const topicId = generateTopicUUID(String(topic), options.filter);
-    // Storing the published message.
-    const processedPayload = this.processPayload(payload);
-    await this._storageService.store(
-      topicId,
-      processedPayload,
+  public async publish(topic: string, payload: TStorageServicePayload, options: IPublisherServicePublishOptions = {}): Promise<void> {
+    // A key is generated when storing payloads, this key is forwarded to the clients
+    // subscribed to the passed topic.
+    const key = await this._storageService.store(
+      payload,
       {
-        expiracyTime: options.expiracyTime ?? this._params.defaultExpiracyTime,
-        expiryMode: options.expiryMode ?? this._params.defaultExpiryMode,
+        expiracyTime: options.expiracyTime ?? DEFAULT_EXPIRACY_TIME,
+        expiryMode: options.expiryMode ?? DEFAULT_EXPIRACY_MODE,
       },
     );
-    // Publishing event AFTER the payload has been stored.
+    // Publishing event AFTER the payload has been stored:
     const parsedTopic = parseTopic(String(topic), options.filter);
-    await this._socketsService.emit(
+    await this._eventsService.emit(
       parsedTopic,
-      topicId,
+      key,
     );
-  }
-
-  /**
-   * Processes a published payload.
-   * @param payload - Payload sent to the clients.
-   */
-  private processPayload(payload: unknown): ValueType {
-    if (typeof payload === 'string') {
-      return payload;
-    } else if (typeof payload === 'number') {
-      return payload;
-    } else if (Array.isArray(payload)) {
-      return payload;
-    } else if (payload instanceof Buffer) {
-      return payload;
-    } else {
-      return JSON.stringify(payload);
-    }
   }
 }

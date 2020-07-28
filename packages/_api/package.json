@@ -79,11 +79,10 @@
   },
   "_moduleAliases": {
     "@root": "src/",
-    "@entity": "src/entity",
-    "@typings": "src/types",
-    "@resolvers": "src/resolvers",
+    "@types": "src/types",
+    "@schema": "src/schema",
     "@utils": "src/utils",
-    "@tests": "src/tests"
+    "@tests": "tests/"
   },
   "bugs": {
     "url": "https://github.com/beast-app/beast-api/issues"

@@ -8,14 +8,13 @@ module.exports = {
   // Module Aliases
   moduleNameMapper: {
     '^@root(.*)$': '<rootDir>/src/$1',
-    '^@entity(.*)$': '<rootDir>/src/entity$1',
-    '^@typings(.*)$': '<rootDir>/src/types$1',
-    '^@resolvers(.*)$': '<rootDir>/src/resolvers$1',
+    '^@types(.*)$': '<rootDir>/src/types$1',
+    '^@schema(.*)$': '<rootDir>/src/schema$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
-    '^@tests(.*)$': '<rootDir>/src/tests$1',
+    '^@tests(.*)$': '<rootDir>/tests/$1',
   },
   // Only run TypeScript tests.
-  "testMatch": [
-    "<rootDir>/src/tests/**/*.test.ts"
-  ]
+  testMatch: [
+    '<rootDir>/src/tests/**/*.test.ts',
+  ],
 };

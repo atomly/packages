@@ -4,15 +4,12 @@ import { Redis } from 'ioredis';
 // Types
 import { IStorageService } from '../StorageService';
 
-export interface IRedisStorageServiceParams {
+export interface IIORedisStorageServiceArgs {
   /**
    * Redis Cluster Nodes configuration.
    * [Documentation](https://redis.io/commands/cluster-nodes).
    */
-  nodes: {
-    host: string
-    port: number
-  }
+  nodes: { host: string, port: number } | Array<{ host: string, port: number }>
   /**
    * Redis connection name.
    */
@@ -31,13 +28,9 @@ export interface IRedisStorageServiceParams {
   db: number
 }
 
-export interface IRedisStorageService extends IStorageService {
+export interface IIORedisStorageService extends IStorageService {
   /**
    * Internal instance of the Redis client.
    */
   _redis: Redis
-  /**
-   * Internal parameters object of the Redis Storage Service instance.
-   */
-  _params: IRedisStorageServiceParams
 }

@@ -1,7 +1,7 @@
-import { ISocketsService } from '../sockets';
-import { IStorageService, IStorageServiceStoreOptions } from '../storages';
+import { IEventsService, TEventHandler, IEventsServiceOptions } from '../events';
+import { IStorageService } from '../storages';
 
-export interface ISubscriberServiceSubscribeOptions extends IStorageServiceStoreOptions {
+export interface ISubscriberServiceSubscribeOptions extends IEventsServiceOptions {
   /**
    * Filters topics by a string identifier.
    */
@@ -10,27 +10,31 @@ export interface ISubscriberServiceSubscribeOptions extends IStorageServiceStore
 
 export interface ISubscriberService {
   /**
-   * Hubful generic SocketsService.
+   * Hubful generic EventsService.
    */
-  _socketsService: ISocketsService
+  _eventsService: IEventsService;
   /**
    * Hubful generic StorageService.
    */
-  _storageService: IStorageService
+  _storageService: IStorageService;
   /**
-   * Subscriptions map. It maps a unique subscription ID to a tuple composed of the topic and listener.
-   */
-  _subscriptions: Map<string, [string, (socketsService: ISocketsService) => Promise<void>]>;
-  /**
-   * Subscribes to a topic and generates a subscription ID that will be used to
-   * map the topic and listener to the ID, then returns the ID.
+   * Subscribes to a topic by mapping the topic handler function to it, then returns a
+   * subscription ID necessary to unsubscribe from this topic.
    * @param topic - Subscription topic.
-   * @param listener - Subscription listener.
+   * @param options - Options to filter topics if desired.
+   * @returns Subscription ID of the registered handler.
    */
-  subscribe(topic: string, listener: (socketsService: ISocketsService) => Promise<void>, options?: ISubscriberServiceSubscribeOptions): Promise<string>
+  subscribe(topic: string, handler: TEventHandler, options?: ISubscriberServiceSubscribeOptions): Promise<string>
   /**
-   * Unsubscribes from a topic/listener by removing them from the subscriptions map and sockets service.
-   * @param subscriptionId - The subscription ID needed to remove the subscription.
+   * Unsubscribes a handler based on its subscription ID.
+   * @param subscriptionId - ID of the registered handler.
+   * @returns `true` if the topic was successfully unsubscribed, `false` if it failed.
    */
-  unsubscribe(subscriptionId: string): Promise<void>
+  unsubscribe(subscriptionId: string): Promise<boolean>
+  /**
+   * Unsubscribes from all topics or from a specific topic.
+   * @param topic - Subscription topic.
+   * @returns `true` if the handlers were successfully removed, `false` if the topic is invalid.
+   */
+  unsubscribeAll(topic?: string): Promise<boolean>
 }

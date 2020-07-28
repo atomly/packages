@@ -2,6 +2,7 @@
 
 ## TODO (sorted by highest to lowest priorities)
 
+- Add a `ConfigLoader` and `Config` service to load configurations from YML/JSON files instead of ENVs.
 - `authenticate`, `login`, `me`, `user`, and `users` end to end tests.
 - Place entities and utils in their respective packages (with `lerna` bootstrap).
 - [Lerna setup, possible fix to symlinks (?)](https://www.youtube.com/watch?v=LN1VD_oppEQ&list=PLN3n1USn4xlnfJIQBa6bBjjiECnk6zL6s&index=15&t=0s).
@@ -129,7 +130,7 @@ There are certain scripts that must be ran after updating certain files. Some of
 
 ### Scripts
 
-If our GraphQL schema changes, then we need to regenerate our schema typings which contains the typings for our queries, automatically generated using the `@graphql-codegen` API.
+If our GraphQL schema changes, then we need to regenerate our schema types which contains the types for our queries, automatically generated using the `@graphql-codegen` API.
 
 ### TypeORM Synchronize
 

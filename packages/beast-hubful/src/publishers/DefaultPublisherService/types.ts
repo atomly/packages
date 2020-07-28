@@ -2,7 +2,7 @@
 import { IStorageServiceStoreOptions } from '../../storages';
 import { IPublisherService } from '../PublisherService';
 
-export interface IDefaultPublisherServiceParams {
+export interface IDefaultPublisherServiceArgs {
   /**
    * Default Storage Service expiracy time of stored key/value pairs.
    */
@@ -13,9 +13,4 @@ export interface IDefaultPublisherServiceParams {
   defaultExpiryMode: IStorageServiceStoreOptions['expiryMode']
 }
 
-export interface IDefaultPublisherService extends IPublisherService {
-  /**
-   * Default PublisherService parameters.
-   */
-  _params: IDefaultPublisherServiceParams
-}
+export interface IDefaultPublisherService extends IPublisherService {}

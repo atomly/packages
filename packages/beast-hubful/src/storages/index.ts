@@ -1,2 +1,2 @@
+export * from './IORedisStorageService';
 export * from './StorageService';
-export * from './RedisStorageService';

@@ -3,9 +3,8 @@ import moduleAlias from 'module-alias';
 
 moduleAlias.addAliases({
   '@root': `${__dirname}`,
-  '@entity': `${__dirname}/entity/`,
-  '@typings': `${__dirname}/types/`,
-  '@resolvers': `${__dirname}/resolvers/`,
+  '@types': `${__dirname}/types/`,
+  '@schema': `${__dirname}/schema/`,
   '@utils': `${__dirname}/utils/`,
   '@tests': `${__dirname}/tests/`,
 });

@@ -1,0 +1,10 @@
+// Dependencies
+// import { getHubfulInstance } from './utils';
+
+describe('', () => {
+  it('sets up hubful without problems', async () => {
+    // const Hubful = await getHubfulInstance();
+    // console.log('Hubful: ', Hubful);
+    expect(true).toBe(true);
+  });
+});

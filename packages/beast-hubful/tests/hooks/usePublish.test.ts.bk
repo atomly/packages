@@ -1,0 +1,50 @@
+// Test Utils
+import { setupHubfulInstance } from '../utils';
+
+// Mocks
+import { SocketIOClient } from '../mocks';
+
+// Dependencies
+import Hubful, { usePublish } from '../../src';
+
+const TOPIC = 'bar';
+const PAYLOAD = { foo: 'baz' };
+
+let socketOne: SocketIOClient;
+let socketTwo: SocketIOClient;
+
+describe('', () => {
+  // Setting up Hubful:
+  beforeAll(
+    async () => {
+      await setupHubfulInstance();
+      // Setting up a socket client:
+      socketOne = new SocketIOClient({ host: 'ws://localhost:3000' });
+      socketTwo = new SocketIOClient({ host: 'ws://localhost:3000' });
+      // const socket = socketIOClient('http://localhost');
+      // Adding listeners to both events:
+      socketOne.on(TOPIC, function (payload: unknown) {
+        console.log(`DEBUG [socketOne.on] ${TOPIC}: `, payload);
+      });
+      socketTwo.on(TOPIC, function (payload: unknown) {
+        console.log(`DEBUG [socketTwo.on] ${TOPIC}: `, payload);
+      });
+    },
+    120000,
+  );
+
+  it('correctly publishes a value', async () => {
+    await expect(usePublish(TOPIC, PAYLOAD)).resolves.not.toThrow(); // Emits TO client (socketOne)
+    // const value = await Hubful.storageService.get(TOPIC);
+    // console.log('value: ', value);
+    // Setting up socket
+    Hubful.eventsService.topic(TOPIC, (payload: unknown) => {
+      console.log(`DEBUG [Hubful.eventsService.topic] ${TOPIC}: `, payload);
+    });
+    // Publishing two payloads:
+    socketOne.emit(TOPIC, 'test'); // Emits TO server (Hubful)
+    socketTwo.emit(TOPIC, 'test'); // Emits TO server (Hubful)
+    await new Promise((resolve) => setTimeout(() => resolve(), 1000));
+    console.log('done');
+  }, 10000);
+});

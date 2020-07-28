@@ -18,17 +18,26 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --ignore-scripts --force-local",
     "bootstrap:hoist": "npm run bootstrap -- --hoist",
+
     "build": "lerna run build",
+
     "clean": "npm run clean-dist && npm run clean-output && npm run clean-logs",
     "clean-deps": "rm -fr node_modules && rm -fr packages/*/node_modules && rm -f package-lock.json && rm -fr */**/package-lock.json && rm -f package-lock.json && rm -fr */**/package-lock.json",
     "clean-dist": "rm -fr packages/*/*.tsbuildinfo && rm -fr packages/*/dist",
     "clean-incl-deps": "npm run clean && npm run clean-deps",
     "clean-logs": "rm -f *.log && rm -fr */**/*.log",
     "clean-output": "rm -fr output && rm -fr */**/output",
+
     "commit": "npx git-cz",
+
     "test": "lerna run test",
+
     "readme": "ts-node ./utils/table-of-contents/index.ts",
-    "watch": "lerna run watch --parallel"
+  
+    "watch": "lerna run watch --parallel",
+
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down"
   },
   "config": {
     "commitizen": {
