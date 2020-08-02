@@ -1,6 +1,10 @@
+/**
+ * Forked from [davidyaha](https://github.com/davidyaha).
+ * [Raw](https://raw.githubusercontent.com/davidyaha/graphql-redis-subscriptions/master/src/pubsub-async-iterator.ts).
+ */
 
 import { $$asyncIterator } from 'iterall';
-import { PubSubEngine } from './PubSubEngine';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 /**
  * A class for digesting PubSubEngine events via the new AsyncIterator interface.
@@ -42,10 +46,6 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
     this.eventsArray = typeof eventNames === 'string' ? [eventNames] : eventNames;
   }
 
-  /**
-   * Async iterator functions:
-   */
-
   public async next() {
     await this.subscribeAll();
     return this.listening ? this.pullValue() : this.return();
@@ -64,10 +64,6 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   public [$$asyncIterator]() {
     return this;
   }
-
-  /**
-   * PubSub methods:
-   */
 
   private pullQueue: Function[];
   private pushQueue: any[];

@@ -17,22 +17,35 @@ export class IORedisEventsService implements IIORedisEventsService {
     this._handlersMap = new Map<string, { event: string, handler: TEventHandler, index: number, options?: IEventsServiceOptions }>();
     this._ioSubscriberRedis = this.setupIORedisInstance(args);
     this._ioPublisherRedis = this.setupIORedisInstance(args);
+    // Bindings:
+    this.onMessage = this.onMessage.bind(this);
   }
 
   public async start(): Promise<void> {
-    this._ioSubscriberRedis.on('message', async (event, payload) => {
-      // If a payload was published but there are no active subscriptions, 
-      // simply return.
-      if (!this._handlersMap.size || !this._eventsMap.size) { return; }
-      // Otherwise, execute all handlers of the payload's event:
-      const handlers = this._eventsMap.get(event);
-      if (handlers) {
-        const eventHandlers = handlers.map(handler => handler(event, payload));
-        await Promise.all(eventHandlers);
-      } else {
-        throw new Error(`Handler for event [${event}] not found.`);
-      }
-    });
+    this._ioSubscriberRedis.on('pmessage', this.onMessage);
+    this._ioSubscriberRedis.on('message', this.onMessage);
+  }
+
+  /**
+   * Handles incoming regular events (`message`) and pattern (`pmessage`)
+   * events. Whenever an event is triggered, ALL of the handlers related to
+   * the event will be executed and will receive the respective event
+   * and payload.
+   * @param event - The triggered event that handlers are subscribed to.
+   * @param payload - A payload that will be sent to the subscribed handlers.
+   */
+  private async onMessage(event: string, payload: string): Promise<void> {
+    // If a payload was published but there are no active subscriptions, 
+    // simply return.
+    if (!this._handlersMap.size || !this._eventsMap.size) { return; }
+    // Otherwise, execute all handlers of the payload's event:
+    const handlers = this._eventsMap.get(event);
+    if (handlers) {
+      const eventHandlers = handlers.map(handler => handler(event, payload));
+      await Promise.all(eventHandlers);
+    } else {
+      throw new Error(`Handler for event [${event}] not found.`);
+    }
   }
 
   public async on(event: string, handler: TEventHandler, options?: IEventsServiceOptions): Promise<string> {

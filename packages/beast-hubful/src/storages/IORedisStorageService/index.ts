@@ -61,12 +61,13 @@ export class IORedisStorageService implements IIORedisStorageService {
     const storedValue = await this._redis.get(key);
     if (storedValue) {
       const value = JSON.parse(storedValue) as IStorageServiceValue;
-      if (value.type === EStorageServiceValueType.UNKNOWN) {
-        return JSON.parse(value.payload as string).payload;
-      } else if (value.type === EStorageServiceValueType.BUFFER) {
-        return Buffer.from(value.payload as string[]);
-      } else {
-        return value.payload;
+      switch(value.type) {
+        case EStorageServiceValueType.UNKNOWN:
+          return JSON.parse(value.payload as string).payload;
+        case EStorageServiceValueType.BUFFER:
+          return Buffer.from(value.payload as string[]);
+        default:
+          return value.payload;
       }
     } else {
       return null;
@@ -74,18 +75,19 @@ export class IORedisStorageService implements IIORedisStorageService {
   }
 
   public _processPayload(payload: TStorageServicePayload): IStorageServiceValue {
-    if (typeof payload === 'string') {
-      return { type: EStorageServiceValueType.ARRAY, payload };
-    } else if (typeof payload === 'boolean') {
-      return { type: EStorageServiceValueType.BOOLEAN, payload };
-    } else if (typeof payload === 'number') {
-      return { type: EStorageServiceValueType.NUMBER, payload };
-    } else if (Array.isArray(payload)) {
-      return { type: EStorageServiceValueType.ARRAY, payload };
-    } else if (payload instanceof Buffer) {
-      return { type: EStorageServiceValueType.BUFFER, payload };
-    } else {
-      return { type: EStorageServiceValueType.UNKNOWN, payload: JSON.stringify({ payload }) };
+    switch(true) {
+      case typeof payload === 'string':
+        return { type: EStorageServiceValueType.ARRAY, payload };
+      case typeof payload === 'boolean':
+        return { type: EStorageServiceValueType.BOOLEAN, payload };
+      case typeof payload === 'number':
+        return { type: EStorageServiceValueType.NUMBER, payload };
+      case Array.isArray(payload):
+        return { type: EStorageServiceValueType.ARRAY, payload };
+      case payload instanceof Buffer:
+        return { type: EStorageServiceValueType.BUFFER, payload };
+      default:
+        return { type: EStorageServiceValueType.UNKNOWN, payload: JSON.stringify({ payload }) };
     }
   }
 }

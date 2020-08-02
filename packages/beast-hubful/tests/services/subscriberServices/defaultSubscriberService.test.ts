@@ -5,14 +5,15 @@ import faker from 'faker';
 import { TEventHandler } from '../../../src';
 
 // Dependencies
-import { getDefaultSubscriberService, getRandomInt, wait } from '../../utils';
+import { getDefaultSubscriberService, getDefaultPublisherService, getRandomInt, wait } from '../../utils';
 
 const defaultSubscriberService = getDefaultSubscriberService();
+const defaultPublisherService = getDefaultPublisherService();
 
 // Constants
 const WAIT_TIMER = 50;
-const AMOUNT_PUBLICATIONS = 2500;
-const AMOUNT_UNIQUE_TOPICS = 500;
+const AMOUNT_PUBLICATIONS = 1000;
+const AMOUNT_UNIQUE_TOPICS = 2500;
 const UNIQUE_TOPICS = new Array(AMOUNT_UNIQUE_TOPICS)
   .fill(undefined)
   .map(() => faker.random.uuid());
@@ -41,6 +42,8 @@ describe('correctly subscribes to multiple topics', () => {
       console.log('[onTopicHandler] receivedPayloadsPerTopic[topic]: ', receivedPayloadsPerTopic[topic]);
       console.log('[onTopicHandler] receivedPayloadsPerTopic: ', receivedPayloadsPerTopic);
     }
+    expect(topic).toBeTruthy();
+    expect(payload).toBeTruthy();
   }
 
   beforeAll(
@@ -48,6 +51,8 @@ describe('correctly subscribes to multiple topics', () => {
       await Promise.all([
         defaultSubscriberService._eventsService.start(),
         defaultSubscriberService._storageService.connect(),
+        defaultPublisherService._eventsService.start(),
+        defaultPublisherService._storageService.connect(),
       ]);
     },
     120000,
@@ -58,6 +63,8 @@ describe('correctly subscribes to multiple topics', () => {
       await Promise.all([
         defaultSubscriberService._eventsService.close(),
         defaultSubscriberService._storageService.disconnect(),
+        defaultPublisherService._eventsService.close(),
+        defaultPublisherService._storageService.disconnect(),
       ]);
     },
     120000,
@@ -76,24 +83,24 @@ describe('correctly subscribes to multiple topics', () => {
     expect(defaultSubscriberService._eventsService._handlersMap.size).toBe(AMOUNT_UNIQUE_TOPICS);
   }, 10000);
 
-  it(`correctly publishes 1 payload to all ${UNIQUE_TOPICS.length} unique topics`, async() => {
+  it(`correctly publishes exactly 1 payload to each ${UNIQUE_TOPICS.length} unique topics`, async() => {
     for (let i = 0; i < AMOUNT_PUBLICATIONS; i += 1) {
       const index = getRandomInt(0, AMOUNT_UNIQUE_TOPICS - 1);
       const randomTopic = UNIQUE_TOPICS[index];
-      await defaultSubscriberService._eventsService.emit(randomTopic, faker.random.words());
+      await defaultPublisherService.publish(randomTopic, faker.random.words());
     }
     await wait(WAIT_TIMER);
-    // Expect the received payloads to be 1 payload per topic:
+    // Expect the received payloads to be 1 payload p er topic:
     const receivedPayloadsPerTopicList = Object.keys(receivedPayloadsPerTopic);
     console.log('receivedPayloadsPerTopicList.length: ', receivedPayloadsPerTopicList.length);
     expect(receivedPayloadsPerTopicList).toHaveLength(UNIQUE_TOPICS.length);
   });
 
-  it(`correctly randomly publishes ${AMOUNT_PUBLICATIONS} to random topics`, async() => {
+  it(`correctly randomly publishes ${AMOUNT_PUBLICATIONS} payloads to random topics`, async() => {
     for (let i = 0; i < AMOUNT_PUBLICATIONS; i += 1) {
       const index = getRandomInt(0, AMOUNT_UNIQUE_TOPICS - 1);
       const randomTopic = UNIQUE_TOPICS[index];
-      await defaultSubscriberService._eventsService.emit(randomTopic, faker.random.words());
+      await defaultPublisherService.publish(randomTopic, faker.random.words());
     }
     await wait(WAIT_TIMER);
     // Expect the received payloads to be a total AMOUNT_PUBLICATIONS spread
@@ -110,7 +117,7 @@ describe('correctly subscribes to multiple topics', () => {
   const topic = UNIQUE_TOPICS[0];
   let subscriptionId: string;
 
-  it('correctly subscribes a new handlers on existing subscribed topics', async () => {
+  it('correctly subscribes a new handler on existing subscribed topics', async () => {
     // Originally it has 1 handler, but it should now subscribe a new one to give a
     // total of 2.
     const topic = UNIQUE_TOPICS[0];

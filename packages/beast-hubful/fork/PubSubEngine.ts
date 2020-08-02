@@ -1,3 +1,8 @@
+/**
+ * Forked from [apollographql](https://github.com/apollographql).
+ * [Raw](https://raw.githubusercontent.com/apollographql/graphql-subscriptions/master/src/pubsub.ts).
+ */
+
 import { PubSubAsyncIterator } from './PubSubAsyncIterator';
 
 export abstract class PubSubEngine {

@@ -24,8 +24,9 @@ export class DefaultPublisherService implements IDefaultPublisherService {
   }
 
   public async publish(topic: string, payload: TStorageServicePayload, options: IPublisherServicePublishOptions = {}): Promise<void> {
-    // A key is generated when storing payloads, this key is forwarded to the clients
-    // subscribed to the passed topic.
+    // A key is generated when storing payloads, this key is forwarded subscriber handlers.
+    // The subscriber service is in charge of getting the values from the Storage Service
+    // using this key, when the subscriber handler is executed.
     const key = await this._storageService.store(
       payload,
       {

@@ -4,7 +4,9 @@ import { parseTopic } from '../../utils';
 // Types
 import { TEventHandler } from '../../events';
 import { ISubscriberServiceSubscribeOptions } from '../SubscriberService';
+import { TSubscribeHandler } from '../types';
 import { IDefaultSubscriberService } from './types';
+import { TStorageServicePayload } from '../../storages';
 
 export class DefaultSubscriberService implements IDefaultSubscriberService {
   public _eventsService: IDefaultSubscriberService['_eventsService'];
@@ -20,9 +22,13 @@ export class DefaultSubscriberService implements IDefaultSubscriberService {
     this._storageService = args.storageService;
   }
 
-  public async subscribe(topic: string, handler: TEventHandler, options: ISubscriberServiceSubscribeOptions = {}): Promise<string> {
+  public async subscribe<T = TStorageServicePayload>(topic: string, handler: TSubscribeHandler<T>, options: ISubscriberServiceSubscribeOptions = {}): Promise<string> {
     const parsedTopic = parseTopic(String(topic), options.filter);
-    const subscriptionId = await this._eventsService.on(parsedTopic, handler, options);
+    const subscriptionId = await this._eventsService.on(
+      parsedTopic,
+      await this.onSubscribeHandler(handler),
+      options,
+    );
     return subscriptionId;
   }
 
@@ -32,5 +38,18 @@ export class DefaultSubscriberService implements IDefaultSubscriberService {
 
   public async unsubscribeAll(topic?: string): Promise<boolean> {
     return await this._eventsService.removeAll(topic);
+  }
+
+  /**
+   * Generates a subscription handler middleware that retrieves the published
+   * payload from the Storage Service, then forwards that payload to the subscribed
+   * handlers.
+   * @param subscribeHandler 
+   */
+  private async onSubscribeHandler<T = TStorageServicePayload>(subscribeHandler: TSubscribeHandler<T>): Promise<TEventHandler> {
+    return async (topic: string, key: string): Promise<void> => {
+      const payload = await this._storageService.get(key) as T;
+      subscribeHandler(topic, payload);
+    };
   }
 }

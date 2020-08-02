@@ -121,5 +121,8 @@ describe('IORedisEventsService works correctly', () => {
       expect(callsPerTopic[TOPIC_1]).toBe(2); // TOPIC_1 should not change values because events service is closed
       expect(callsPerTopic[TOPIC_2]).toBe(2); // TOPIC_2 should not change values because events service is closed
     }, 10000);
+
+    // TODO: pattern events
+    // TODO: test error `Handler for event [${event}] not found.`
   });
 });

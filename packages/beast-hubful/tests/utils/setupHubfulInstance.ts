@@ -1,20 +1,18 @@
-// Libraries
-
 // Dependencies
-import Hubful, {
-  DefaultSubscriberService,
-} from '../../src';
+import Hubful, { DefaultSubscriberService, DefaultPublisherService } from '../../src';
 import {
   getIORedisEventsService,
   getIORedisStorageService,
-  getDefaultPublisherService,
 } from './instances';
 
 const socketIOEventsService = getIORedisEventsService();
 
 const ioRedisStorageService = getIORedisStorageService();
 
-const publisherService = getDefaultPublisherService();
+const publisherService = new DefaultPublisherService({
+  eventsService: socketIOEventsService,
+  storageService: ioRedisStorageService,
+});
 
 const subscriberService = new DefaultSubscriberService({
   eventsService: socketIOEventsService,

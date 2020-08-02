@@ -1,6 +1,6 @@
 /**
- * TODO: Make each handler a function to mimic Hooks.
- * [Forked from apollographql](https://github.com/apollographql/graphql-subscriptions/blob/master/src/pubsub-engine.ts)
+ * Forked from [apollographql](https://github.com/apollographql).
+ * [Raw](https://raw.githubusercontent.com/apollographql/graphql-subscriptions/master/src/pubsub.ts).
  */
 
 import { RedisOptions, Redis as RedisClient } from 'ioredis';

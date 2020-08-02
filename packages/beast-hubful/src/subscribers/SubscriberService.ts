@@ -1,5 +1,6 @@
-import { IEventsService, TEventHandler, IEventsServiceOptions } from '../events';
-import { IStorageService } from '../storages';
+import { IEventsService, IEventsServiceOptions } from '../events';
+import { IStorageService, TStorageServicePayload } from '../storages';
+import { TSubscribeHandler } from './types';
 
 export interface ISubscriberServiceSubscribeOptions extends IEventsServiceOptions {
   /**
@@ -24,7 +25,7 @@ export interface ISubscriberService {
    * @param options - Options to filter topics if desired.
    * @returns Subscription ID of the registered handler.
    */
-  subscribe(topic: string, handler: TEventHandler, options?: ISubscriberServiceSubscribeOptions): Promise<string>
+  subscribe<T = TStorageServicePayload>(topic: string, handler: TSubscribeHandler<T>, options?: ISubscriberServiceSubscribeOptions): Promise<string>
   /**
    * Unsubscribes a handler based on its subscription ID.
    * @param subscriptionId - ID of the registered handler.

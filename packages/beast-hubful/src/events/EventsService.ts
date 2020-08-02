@@ -46,7 +46,7 @@ export interface IEventsService {
   /**
    * Emits an event to the clients subscribed to the event parameter (if any).
    * @param event - The event that we want to emit, if empty it will send the payload to all events.
-   * @param payload - A payload that will be sent to the subscribe handlers.
+   * @param payload - A payload that will be sent to the subscribed handlers.
    */
   emit(event: string, payload: string): Promise<void>
 }

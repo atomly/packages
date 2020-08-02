@@ -95,4 +95,6 @@ describe('RIORedisStorageService works correctly', () => {
       expect(retrievedValue).toBe(value);
     }).not.toThrow();
   });
+
+  // TODO: payload expiracy tests
 });

@@ -60,4 +60,6 @@ describe('correctly publishes payloads', () => {
     expect(randomValues.length).toBeTruthy();
     await Promise.all(randomValues.map((value, index) => defaultPublisherService.publish(TOPIC, { value, index })));
   }, 10000);
+
+  // TODO: payload expiracy tests
 });
