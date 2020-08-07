@@ -100,6 +100,12 @@ export class IORedisEventsService implements IIORedisEventsService {
   public async removeAll(event?: string): Promise<boolean> {
     try {
       if (event) {
+        // Unsubscribe the Redis client from this event:
+        await Promise.all([
+          this._ioSubscriberRedis.unsubscribe(event),
+          this._ioSubscriberRedis.punsubscribe(event),
+        ]);
+        // Clear the respetive handlers and event from the maps:
         const subscriptionIdsToRemove: string[] = [];
         this._handlersMap.forEach((handlersData, key) => {
           if (handlersData.event === event) { subscriptionIdsToRemove.push(key); }
@@ -110,6 +116,15 @@ export class IORedisEventsService implements IIORedisEventsService {
         this._eventsMap.delete(event);
         return true;
       } else {
+        // Unsubscribe the Redis client from all events:
+        const events = this._eventsMap.keys();
+        const unsubscribePromises = [];
+        for (const event of events) {
+          unsubscribePromises.push(this._ioSubscriberRedis.unsubscribe(event));
+          unsubscribePromises.push(this._ioSubscriberRedis.punsubscribe(event));
+        }
+        await Promise.all(unsubscribePromises);
+        // Clear all of the maps:
         this._handlersMap.clear();
         this._eventsMap.clear();
         return true;
@@ -122,6 +137,7 @@ export class IORedisEventsService implements IIORedisEventsService {
   }
 
   public async close(callback?: (...args: unknown[]) => Promise<void> | void): Promise<void> {
+    await this.removeAll();
     await Promise.all([
       this._ioSubscriberRedis.quit(),
       this._ioPublisherRedis.quit(),

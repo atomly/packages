@@ -7,7 +7,8 @@ export enum EStorageServiceValueType {
   UNKNOWN = 'unknown',
 }
 
-export type TStorageServicePayload = string | Buffer | number | unknown[] | boolean | Record<string, unknown>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TStorageServicePayload = string | Buffer | number | any[] | boolean | Record<string, any>;
 
 export interface IStorageServiceValue {
   type: EStorageServiceValueType

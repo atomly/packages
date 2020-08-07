@@ -53,7 +53,7 @@ function buildSchema<T = unknown>(regularIterator: AsyncIterator<T>, patternIter
   });
 }
 
-describe('correctly publishes payloads', () => {
+describe('correctly integrates with graphql', () => {
   const regularQuery = parse(`
     subscription S1 {
       testSubscription

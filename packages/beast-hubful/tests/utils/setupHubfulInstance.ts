@@ -5,25 +5,25 @@ import {
   getIORedisStorageService,
 } from './instances';
 
-const socketIOEventsService = getIORedisEventsService();
+const ioRedisEventsService = getIORedisEventsService();
 
 const ioRedisStorageService = getIORedisStorageService();
 
-const publisherService = new DefaultPublisherService({
-  eventsService: socketIOEventsService,
+const defaultPublisherService = new DefaultPublisherService({
+  eventsService: ioRedisEventsService,
   storageService: ioRedisStorageService,
 });
 
-const subscriberService = new DefaultSubscriberService({
-  eventsService: socketIOEventsService,
+const defaultSubscriberService = new DefaultSubscriberService({
+  eventsService: ioRedisEventsService,
   storageService: ioRedisStorageService,
 });
 
 export async function setupHubfulInstance(): Promise<void> {
   await Hubful.setup({
-    eventsService: socketIOEventsService,
+    eventsService: ioRedisEventsService,
     storageService: ioRedisStorageService,
-    publisherService,
-    subscriberService,
+    publisherService: defaultPublisherService,
+    subscriberService: defaultSubscriberService,
   });
 }

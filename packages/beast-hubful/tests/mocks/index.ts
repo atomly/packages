@@ -1,1 +1,1 @@
-export * from './SocketIOClient';
+export * from './W3CWebSocketClient';

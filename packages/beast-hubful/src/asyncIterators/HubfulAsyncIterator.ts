@@ -8,7 +8,7 @@ import { TStorageServicePayload } from '../storages';
 import { IAsyncIterator } from './AsyncIterator';
 
 /**
- * A class for digesting Hubful topic payloadss via the IAsyncIterator interface.
+ * A class for digesting Hubful topic payloads via the IAsyncIterator interface.
  * [This implementation is a generic version of this one](https://github.com/apollographql/graphql-subscriptions/blob/master/src/topic-emitter-to-async-iterator.ts).
  * [Based on this implementation](https://github.com/davidyaha/graphql-redis-subscriptions/blob/master/src/pubsub-async-iterator.ts).
  */

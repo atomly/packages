@@ -28,7 +28,7 @@ describe('correctly publishes payloads', () => {
   );
 
   it('correctly instantiates the asyncIterator', () => {
-  const topic = faker.random.words();
+    const topic = faker.random.words();
     const hubfulAsyncIterator = new HubfulAsyncIterator({
       hubful: Hubful,
       topics: topic,
