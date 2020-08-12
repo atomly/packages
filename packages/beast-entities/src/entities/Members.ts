@@ -11,7 +11,9 @@ import {
 
 // Dependencies
 import { BaseEntity } from './BaseEntity';
-import { Teams, Posts, Profiles } from '.';
+import { Teams } from './Teams';
+import { Posts } from './Posts';
+import { Profiles } from './Profiles';
 
 @Entity('members', { schema: 'public' })
 export class Members extends BaseEntity {

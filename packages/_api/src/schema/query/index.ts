@@ -14,7 +14,7 @@ const resolvers: IQueryResolverMap = {
       });
     },
     ping(_, __, { response }): string {
-      return `pong:qid=${response.req?.headers.cookie}`;
+      return `pong:qid=${response.req?.headers.cookie || 'null'}`;
     },
   },
 }

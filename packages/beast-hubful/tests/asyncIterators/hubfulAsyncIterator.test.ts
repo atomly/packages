@@ -86,7 +86,7 @@ describe('correctly publishes payloads', () => {
         resolve(res);
       });
       Hubful.publish(topics[0], { test: true });
-    })
+    });
     expect(result.value).toMatchObject({ test: true });
     expect(mockFunction.mock.calls).toHaveLength(1);
   });

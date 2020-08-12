@@ -26,7 +26,7 @@ export class DefaultSubscriberService implements IDefaultSubscriberService {
     const parsedTopic = parseTopic(String(topic), options.filter);
     const subscriptionId = await this._eventsService.on(
       parsedTopic,
-      await this.onSubscribeHandler(handler),
+      this.onSubscribeHandler(handler),
       options,
     );
     return subscriptionId;
@@ -46,7 +46,7 @@ export class DefaultSubscriberService implements IDefaultSubscriberService {
    * handlers.
    * @param subscribeHandler 
    */
-  private async onSubscribeHandler<T = TStorageServicePayload>(subscribeHandler: TSubscribeHandler<T>): Promise<TEventHandler> {
+  private onSubscribeHandler<T = TStorageServicePayload>(subscribeHandler: TSubscribeHandler<T>): TEventHandler {
     return async (topic: string, key: string): Promise<void> => {
       const payload = await this._storageService.get(key) as T;
       subscribeHandler(topic, payload);

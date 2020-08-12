@@ -86,7 +86,7 @@ export class HubfulAsyncIterator<T = TStorageServicePayload> implements IAsyncIt
     await this.emptyQueue();
     return Promise.reject(error);
   }
-  
+
   //
   // HubfulAsyncIterator methods
   //

@@ -39,7 +39,7 @@ export interface IEventsService {
    */
   removeAll(event?: string): Promise<boolean>
   /**
-   * Closes the socket server. The callback argument is optional and will be called
+   * Closes the event service. The callback argument is optional and will be called
    * when all connections are closed.
    */
   close(callback?: (...args: unknown[]) => Promise<void> | void): Promise<void>

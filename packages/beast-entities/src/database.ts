@@ -9,15 +9,17 @@ import {
 } from 'typeorm';
 
 // Entities
-import * as entities from './entities';
+import { entitiesArray } from './entities';
 
 // Types
 import { IDatabase } from './types';
 
-const entitiesArr = Object.values(entities);
-
 /**
  * Database manager class.
+ * TODO:
+ *  - Improve architecture of this class.
+ *  - Remove hardcoded shit.
+ *  - Use magic variables if necessary.
  */
 export class Database implements IDatabase {
   public connection: Connection;
@@ -53,7 +55,7 @@ export class Database implements IDatabase {
           ...connectionOptions,
           ...this.ormConfig,
           name: CONNECTION_NAME,
-          entities: entitiesArr,
+          entities: entitiesArray,
         } as ConnectionOptions);
       // Otherwise, only use the ormConfig variables.
       } catch(error) {
@@ -61,7 +63,7 @@ export class Database implements IDatabase {
         this.connection = await createConnection({
           ...this.ormConfig,
           name: CONNECTION_NAME,
-          entities: entitiesArr,
+          entities: entitiesArray,
         } as ConnectionOptions);
       }
     }
@@ -88,7 +90,7 @@ export class Database implements IDatabase {
       databaseName === 'beast_sandbox_test'
     ) {
       // DELETE entities but not the tables:
-      for (const entity of entitiesArr) {
+      for (const entity of entitiesArray) {
         await this.connection.getRepository(entity).delete({});
       }
     } else {

@@ -77,7 +77,7 @@ export class IORedisStorageService implements IIORedisStorageService {
   public _processPayload(payload: TStorageServicePayload): IStorageServiceValue {
     switch(true) {
       case typeof payload === 'string':
-        return { type: EStorageServiceValueType.ARRAY, payload };
+        return { type: EStorageServiceValueType.STRING, payload };
       case typeof payload === 'boolean':
         return { type: EStorageServiceValueType.BOOLEAN, payload };
       case typeof payload === 'number':

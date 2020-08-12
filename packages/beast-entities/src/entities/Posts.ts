@@ -10,7 +10,7 @@ import {
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import { Members } from '.';
+import { Members } from './Members';
 
 @Index('post_pk', ['id'], { unique: true })
 @Entity('posts', { schema: 'public' })

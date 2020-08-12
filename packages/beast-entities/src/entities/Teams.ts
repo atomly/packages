@@ -12,7 +12,7 @@ import {
 
 // Dependencies
 import { BaseEntity } from './BaseEntity'
-import { Members } from '.';
+import { Members } from './Members';
 
 @Index('teams_pk', ['id'], { unique: true })
 @Entity('teams', { schema: 'public' })
