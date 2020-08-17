@@ -7,7 +7,7 @@ enum EMembersEntityReferenceKeys {
   PROFILE_ID = 'profileId',
 }
 
-const membersEntityLoaders = new DefaultEntityLoadersFactory<typeof Members, EMembersEntityReferenceKeys>({
+export const membersEntityLoaders = new DefaultEntityLoadersFactory<typeof Members, EMembersEntityReferenceKeys>({
   entity: Members,
   entityReferenceIdKeysEnum: EMembersEntityReferenceKeys,
   entityReferenceIdKeysParams: {
@@ -15,9 +15,7 @@ const membersEntityLoaders = new DefaultEntityLoadersFactory<typeof Members, EMe
       entityIdKey: EMembersEntityReferenceKeys.ID,
     },
     profileId: {
-      entityIdKey: EMembersEntityReferenceKeys.ID,
+      entityIdKey: EMembersEntityReferenceKeys.PROFILE_ID,
     },
   },
 });
-
-membersEntityLoaders.by.id.dataLoader.one.load

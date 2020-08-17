@@ -1,9 +1,11 @@
-// Dependencies
+// Libraries
 import { In } from 'typeorm';
+
+// Dependencies
+import { BaseEntity } from '../../entities';
 import { DEFAULT_ENTITY_ID_KEY, DEFAULT_ORDER_CREATED_BY } from '../constants';
 
 // Types
-import { Entity } from '../../entities';
 import { IBatchOneToOneConfig } from './types';
 
 /**
@@ -13,7 +15,7 @@ import { IBatchOneToOneConfig } from './types';
  * @param entity - TypeORM Entity that will be batched.
  * @param config - Configuration parameters for the batch function query.
  */
-export async function batchOneToOne<T extends Entity>(
+export async function batchOneToOne<T extends typeof BaseEntity>(
   ids: readonly string[],
   entity: T,
   batchConfig: IBatchOneToOneConfig<T> = {},
@@ -23,14 +25,13 @@ export async function batchOneToOne<T extends Entity>(
     config = {
       where: { [entityIdKey]: In(ids as string[]) },
       order: { createdAt: DEFAULT_ORDER_CREATED_BY },
-    }
+    },
   } = batchConfig;
   // Setting up the necessary config object properties:
   if (!config.where) { config.where = { [entityIdKey!]: In(ids as string[]) }; }
   if (!config.order) { config.order = { createdAt: DEFAULT_ORDER_CREATED_BY }; }
   // Fetching entities, using the set entityIdKey parameter (defaults to `id`).
   const entities = await entity.find(config);
-  // const entities = await entity.find(config);
   // Entities map that will hold the fetched entities. Each parent ID will be assigned its respective entity.
   const entitiesMap: { [key: string]: T } = {};
   // Key identifier of the entity.

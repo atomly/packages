@@ -1,5 +1,5 @@
-import { Entity } from "../../entities";
-import { ICacheMaps, IDataLoaders, IUpdates, IDeletes, IClears } from "../types";
+import { BaseEntity } from '../../entities'; // TODO: Use a TypeORM adapter for this.
+import { ICacheMaps, IDataLoaders, ILoaders, IPrimers, IUpdaters, IClearers, IDeleters } from "../types";
 import { IBatchOneToOneConfig, IBatchOneToManyConfig, IBatchEfficientOneToManyConfig } from '../batch';
 import { IDataLoaderOneToOneOptions, IDataLoaderOneToManyOptions, IDataLoaderEfficientOneToManyOptions } from './types';
 
@@ -8,7 +8,7 @@ import { IDataLoaderOneToOneOptions, IDataLoaderOneToManyOptions, IDataLoaderEff
 // being enums more explicit.
 export type TEnum = string | number;
 
-export interface IEntityReferenceIdKeysParams<T extends Entity> {
+export interface IEntityReferenceIdKeysParams<T extends typeof BaseEntity> {
   entityIdKey: string
   loadOneConfig?: {
     batchConfig: Omit<IBatchOneToOneConfig<T>, 'entityIdKey'>
@@ -24,7 +24,7 @@ export interface IEntityReferenceIdKeysParams<T extends Entity> {
   }
 }
 
-export interface IEntityReferenceIdKeysConfig<T extends Entity> {
+export interface IEntityReferenceIdKeysConfig<T extends typeof BaseEntity> {
   entityIdKey: string
   loadOneConfig: {
     batchConfig: IBatchOneToOneConfig<T>
@@ -40,14 +40,20 @@ export interface IEntityReferenceIdKeysConfig<T extends Entity> {
   }
 }
 
-export interface EntityLoadersFactory<T extends Entity, E extends TEnum> {
-  by: {
+export interface EntityLoadersFactory<T extends typeof BaseEntity, E extends TEnum> {
+  _by: {
     [key in E]: {
       cacheMap: ICacheMaps<T>
       dataLoader: IDataLoaders<T>
-      update: IUpdates<T>
-      clear: IClears
-      delete: IDeletes
+    }
+  }
+  by: {
+    [key in E]: {
+      load: ILoaders<T>
+      prime: IPrimers<T>
+      update: IUpdaters<T>
+      clear: IClearers
+      delete: IDeleters
     }
   }
   // cacheMapsBy: { [key in E]: ICacheMap<T>; }

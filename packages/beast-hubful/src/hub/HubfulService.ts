@@ -15,11 +15,9 @@ export interface IHubfulService {
    */
   status: EHubfulServiceStatus
   /**
-   * Used to allow real-time connections from front-end clients to the server.
-   * It allows:
-   * - 1 socket per client.
-   * - Sockets can have many events (topics), for the PubSub system.
-   * - Can initiate/store, update and auto-expire payloads.
+   * Handles incoming events depenting on the event types/messages/topics,
+   * executes the respective registered event handlers, and removes events,
+   * and emits events.
    */
   eventsService: IEventsService
   /**
@@ -30,15 +28,14 @@ export interface IHubfulService {
    */
   storageService: IStorageService
   /**
-   * The entity that pulls data from the Hub. All the request
-   * responses are captured by this component which writes to
-   * the StorageService.
+   * This service pushes data to the Hub. All the request payloads are captured
+   * by this component which writes to the StorageService.
    */
   publisherService: IPublisherService
   /**
-   * This reads data from the StorageService. It is also the web server
+   * This service reads data from the StorageService. It is also the web server
    * for clients to connect via WebSocket (or HTTP) to get data and
-   * then sends it to clients.
+   * then sends it to clients or vice-versa.
    */
   subscriberService: ISubscriberService
   /**

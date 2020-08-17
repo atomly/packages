@@ -5,14 +5,14 @@ import { $$asyncIterator } from 'iterall';
 import { IHubfulService } from '../hub';
 import { ISubscriberServiceSubscribeOptions } from '../subscribers';
 import { TStorageServicePayload } from '../storages';
-import { IAsyncIterator } from './AsyncIterator';
+import { IHubfulAsyncIterator } from './types';
 
 /**
- * A class for digesting Hubful topic payloads via the IAsyncIterator interface.
+ * A class for digesting Hubful topic payloads via the IHubfulAsyncIterator interface.
  * [This implementation is a generic version of this one](https://github.com/apollographql/graphql-subscriptions/blob/master/src/topic-emitter-to-async-iterator.ts).
  * [Based on this implementation](https://github.com/davidyaha/graphql-redis-subscriptions/blob/master/src/pubsub-async-iterator.ts).
  */
-export class HubfulAsyncIterator<T = TStorageServicePayload> implements IAsyncIterator<T> {
+export class HubfulAsyncIterator<T = TStorageServicePayload> implements IHubfulAsyncIterator<T> {
   /**
    * A queue of resolve functions waiting for an incoming topic payload which has not yet arrived.
    * This queue expands as next() calls are made without Hubful topic payloads arriving in between.
@@ -67,7 +67,7 @@ export class HubfulAsyncIterator<T = TStorageServicePayload> implements IAsyncIt
   public [$$asyncIterator](): HubfulAsyncIterator<T> {
     return this;
   }
-  
+
   //
   // AsyncIterator methods
   //
@@ -174,5 +174,4 @@ export class HubfulAsyncIterator<T = TStorageServicePayload> implements IAsyncIt
       await Promise.all(subscriptionIds.map(subscriptionId => this.hubful.unsubscribe(subscriptionId)));
     }
   }
-
 }

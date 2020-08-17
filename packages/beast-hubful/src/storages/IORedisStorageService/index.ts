@@ -6,7 +6,9 @@ import { v4 } from 'uuid';
 import { IStorageServiceStoreOptions, TStorageServicePayload, IStorageServiceValue, EStorageServiceValueType } from '../StorageService';
 import { IIORedisStorageService, IIORedisStorageServiceArgs } from './types';
 
-export class IORedisStorageService implements IIORedisStorageService {
+// TODO: Create an adapter to process payloads respective to which service (e.g. Redis)
+// is being used for the implementation.
+export class IORedisStorageService implements IIORedisStorageService { // TODO: Remove this interface and implement the base one.
   public _redis: Redis;
 
   constructor(args: IIORedisStorageServiceArgs) {

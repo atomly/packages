@@ -12,8 +12,8 @@ import {
 } from 'class-validator';
 
 export abstract class BaseEntity extends Base {
-  @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @IsOptional()
   @IsDate()

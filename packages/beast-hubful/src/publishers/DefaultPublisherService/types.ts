@@ -1,6 +1,5 @@
 // Types
 import { IStorageServiceStoreOptions } from '../../storages';
-import { IPublisherService } from '../PublisherService';
 
 export interface IDefaultPublisherServiceArgs {
   /**
@@ -12,5 +11,3 @@ export interface IDefaultPublisherServiceArgs {
    */
   defaultExpiryMode: IStorageServiceStoreOptions['expiryMode']
 }
-
-export interface IDefaultPublisherService extends IPublisherService {}

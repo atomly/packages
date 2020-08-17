@@ -1,8 +1,8 @@
 // Dependencies
+import { BaseEntity } from '../../entities';
 import { DEFAULT_ENTITY_ID_KEY, DEFAULT_SQL_QUERY_ORDER_ENTITY_KEY, DEFAULT_SQL_QUERY_ORDER_BY, DEFAULT_SQL_QUERY_ENTITIES_PER_ID } from '../constants';
 
 // Types
-import { Entity } from '../../entities';
 import { IBatchEfficientOneToManyConfig } from './types';
 
 /**
@@ -14,7 +14,7 @@ import { IBatchEfficientOneToManyConfig } from './types';
  * @param config - Configuration parameters for the batch function SQL query. Includes ID key,
  * order key, order by parameter, and entities fetched per id. 
  */
-export async function efficientBatchOneToMany<T extends Entity>(
+export async function efficientBatchOneToMany<T extends typeof BaseEntity>(
   ids: readonly string[],
   entity: T,
   batchConfig: IBatchEfficientOneToManyConfig = {},

@@ -1,9 +1,11 @@
-// Dependencies
+// Libraries
 import { In } from 'typeorm';
+
+// Dependencies
+import { BaseEntity } from '../../entities';
 import { DEFAULT_ENTITY_ID_KEY, DEFAULT_ORDER_CREATED_BY } from '../constants';
 
 // Types
-import { Entity } from '../../entities';
 import { IBatchOneToManyConfig } from './types';
 
 /**
@@ -13,7 +15,7 @@ import { IBatchOneToManyConfig } from './types';
  * @param entity - TypeORM Entity that will be batched.
  * @param config - Configuration parameters for the batch function query. 
  */
-export async function batchOneToMany<T extends Entity>(
+export async function batchOneToMany<T extends typeof BaseEntity>(
   ids: readonly string[],
   entity: T,
   batchConfig: IBatchOneToManyConfig<T> = {},

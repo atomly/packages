@@ -4,7 +4,7 @@
 
 ## Concerns ([excerpts taken from the DataLoader documentation](https://github.com/graphql/dataloader))
 
-- Loading by alternative keys
+- [ ] Loading by alternative keys
 
     Occasionally, some kind of value can be accessed in multiple ways.
     For example, perhaps a "User" type can be loaded not only by an "id"
@@ -29,7 +29,7 @@
       });
     ```
 
-- Clearing Cache
+- [ ] Clearing Cache
 
     In certain uncommon cases, clearing the request cache may be necessary.
 
@@ -54,7 +54,7 @@
       // Request completes.
     ```
 
-- Memory consumption for long-lived DataLoaders
+- [ ] Memory consumption for long-lived DataLoaders
 
     **Custom Cache**. As mentioned above, DataLoader is intended to be used as a per-request cache. Since requests are short-lived, DataLoader uses an infinitely growing Map as a memoization cache. This should not pose a problem as most requests are short-lived and the entire cache can be discarded after the request completes.
 

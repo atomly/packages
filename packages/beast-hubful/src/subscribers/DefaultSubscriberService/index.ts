@@ -3,19 +3,18 @@ import { parseTopic } from '../../utils';
 
 // Types
 import { TEventHandler } from '../../events';
-import { ISubscriberServiceSubscribeOptions } from '../SubscriberService';
+import { ISubscriberService, ISubscriberServiceSubscribeOptions } from '../SubscriberService';
 import { TSubscribeHandler } from '../types';
-import { IDefaultSubscriberService } from './types';
 import { TStorageServicePayload } from '../../storages';
 
-export class DefaultSubscriberService implements IDefaultSubscriberService {
-  public _eventsService: IDefaultSubscriberService['_eventsService'];
-  public _storageService: IDefaultSubscriberService['_storageService'];
+export class DefaultSubscriberService implements ISubscriberService {
+  public _eventsService: ISubscriberService['_eventsService'];
+  public _storageService: ISubscriberService['_storageService'];
 
   constructor(
     args: {
-      eventsService: IDefaultSubscriberService['_eventsService']
-      storageService: IDefaultSubscriberService['_storageService']
+      eventsService: ISubscriberService['_eventsService']
+      storageService: ISubscriberService['_storageService']
     },
   ) {
     this._eventsService = args.eventsService;

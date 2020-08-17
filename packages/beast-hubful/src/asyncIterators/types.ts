@@ -2,7 +2,7 @@ import { IHubfulService } from '../hub';
 import { ISubscriberServiceSubscribeOptions } from '../subscribers';
 import { TStorageServicePayload } from '../storages';
 
-export interface IAsyncIterator<T = TStorageServicePayload> extends AsyncIterator<T> {
+export interface IHubfulAsyncIterator<T = TStorageServicePayload> extends AsyncIterator<T> {
   /**
    * A queue of resolve functions waiting for an incoming topic payload which has not yet arrived.
    * This queue expands as next() calls are made without Hubful topic payloads arriving in between.

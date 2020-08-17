@@ -55,7 +55,7 @@ export class Database implements IDatabase {
           ...connectionOptions,
           ...this.ormConfig,
           name: CONNECTION_NAME,
-          entities: entitiesArray,
+          entities: this.ormConfig.entities ?? entitiesArray,
         } as ConnectionOptions);
       // Otherwise, only use the ormConfig variables.
       } catch(error) {
@@ -63,7 +63,7 @@ export class Database implements IDatabase {
         this.connection = await createConnection({
           ...this.ormConfig,
           name: CONNECTION_NAME,
-          entities: entitiesArray,
+          entities: this.ormConfig.entities ?? entitiesArray,
         } as ConnectionOptions);
       }
     }

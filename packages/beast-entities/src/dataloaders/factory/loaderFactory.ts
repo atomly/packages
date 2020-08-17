@@ -1,8 +1,8 @@
 // Libraries
 import DataLoader from 'dataloader';
+import { BaseEntity } from '../../entities'; // TODO: Use a TypeORM adapter for this.
 
 // Types
-import { Entity } from '../../entities';
 import {
   IBatchOneToOneConfig,
   IBatchOneToManyConfig,
@@ -21,7 +21,7 @@ import {
   efficientBatchOneToMany,
 } from '../batch';
 
-export function oneToOneFactory<T extends Entity>(
+export function oneToOneFactory<T extends typeof BaseEntity>(
   entity: T,
   batchConfig?: IBatchOneToOneConfig<T>,
   dataLoaderOptions?: IDataLoaderOneToOneOptions<T>,
@@ -38,7 +38,7 @@ export function oneToOneFactory<T extends Entity>(
   );
 }
 
-export function oneToManyFactory<T extends Entity>(
+export function oneToManyFactory<T extends typeof BaseEntity>(
   entity: T,
   batchConfig?: IBatchOneToManyConfig<T>,
   dataLoaderOptions?: IDataLoaderOneToManyOptions<T>,
@@ -55,7 +55,7 @@ export function oneToManyFactory<T extends Entity>(
   );
 }
 
-export function limitedOneToManyFactory<T extends Entity>(
+export function limitedOneToManyFactory<T extends typeof BaseEntity>(
   entity: T,
   batchConfig?: IBatchEfficientOneToManyConfig,
   dataLoaderOptions?: IDataLoaderEfficientOneToManyOptions<T>,

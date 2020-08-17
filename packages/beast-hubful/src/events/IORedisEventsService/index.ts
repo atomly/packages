@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import { TEventHandler, IEventsServiceOptions } from '../EventsService';
 import { IIORedisEventsService, IIORedisEventsServiceArgs } from './types';
 
-export class IORedisEventsService implements IIORedisEventsService {
+export class IORedisEventsService implements IIORedisEventsService { // TODO: Remove this interface and implement the base one.
   public _eventsMap: IIORedisEventsService['_eventsMap']
   public _handlersMap: IIORedisEventsService['_handlersMap']
   public _ioPublisherRedis: IIORedisEventsService['_ioPublisherRedis']
@@ -14,7 +14,7 @@ export class IORedisEventsService implements IIORedisEventsService {
 
   constructor(args: IIORedisEventsServiceArgs) {
     this._eventsMap = new Map<string, TEventHandler[]>();
-    this._handlersMap = new Map<string, { event: string, handler: TEventHandler, index: number, options?: IEventsServiceOptions }>();
+    this._handlersMap = new Map<string, { event: string, handler: TEventHandler, options?: IEventsServiceOptions }>();
     this._ioSubscriberRedis = this.setupIORedisInstance(args);
     this._ioPublisherRedis = this.setupIORedisInstance(args);
     // Bindings:

@@ -9,6 +9,9 @@ lerna-debug.log*
 # Config files
 **.config.**
 
+# Exclude Jest config files
+!jest.config.js
+
 # Vagrant stuff
 acceptance_config.yml
 boxes/*

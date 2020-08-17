@@ -3,20 +3,19 @@ import { parseTopic } from '../../utils';
 
 // Types
 import { TStorageServicePayload, EStorageServiceSetExpiracyModes } from '../../storages';
-import { IPublisherServicePublishOptions } from '../PublisherService';
-import { IDefaultPublisherService } from './types';
+import { IPublisherService, IPublisherServicePublishOptions } from '../PublisherService';
 
 const DEFAULT_EXPIRACY_TIME = '3600'; // 1 hour of expiracy time when paired with the EX mode
 const DEFAULT_EXPIRACY_MODE = EStorageServiceSetExpiracyModes.EX;
 
-export class DefaultPublisherService implements IDefaultPublisherService {
-  public _eventsService: IDefaultPublisherService['_eventsService'];
-  public _storageService: IDefaultPublisherService['_storageService'];
+export class DefaultPublisherService implements IPublisherService {
+  public _eventsService: IPublisherService['_eventsService'];
+  public _storageService: IPublisherService['_storageService'];
 
   constructor(
     args: {
-      eventsService: IDefaultPublisherService['_eventsService']
-      storageService: IDefaultPublisherService['_storageService']
+      eventsService: IPublisherService['_eventsService']
+      storageService: IPublisherService['_storageService']
     },
   ) {
     this._eventsService = args.eventsService;
