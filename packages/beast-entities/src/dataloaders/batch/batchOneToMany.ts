@@ -15,9 +15,9 @@ import { IBatchOneToManyConfig } from './types';
  * @param entity - TypeORM Entity that will be batched.
  * @param config - Configuration parameters for the batch function query. 
  */
-export async function batchOneToMany<T extends typeof BaseEntity>(
+export async function batchOneToMany<C extends typeof BaseEntity, T extends BaseEntity>(
   ids: readonly string[],
-  entity: T,
+  entity: C,
   batchConfig: IBatchOneToManyConfig<T> = {},
 ): Promise<T[][]> {
   const {

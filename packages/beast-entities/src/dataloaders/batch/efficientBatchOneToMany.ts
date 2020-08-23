@@ -14,9 +14,9 @@ import { IBatchEfficientOneToManyConfig } from './types';
  * @param config - Configuration parameters for the batch function SQL query. Includes ID key,
  * order key, order by parameter, and entities fetched per id. 
  */
-export async function efficientBatchOneToMany<T extends typeof BaseEntity>(
+export async function efficientBatchOneToMany<C extends typeof BaseEntity, T extends BaseEntity>(
   ids: readonly string[],
-  entity: T,
+  entity: C,
   batchConfig: IBatchEfficientOneToManyConfig = {},
 ): Promise<Array<T[]>> {
   const {

@@ -21,8 +21,8 @@ import {
   efficientBatchOneToMany,
 } from '../batch';
 
-export function oneToOneFactory<T extends typeof BaseEntity>(
-  entity: T,
+export function oneToOneFactory<C extends typeof BaseEntity, T extends BaseEntity>(
+  entity: C,
   batchConfig?: IBatchOneToOneConfig<T>,
   dataLoaderOptions?: IDataLoaderOneToOneOptions<T>,
 ): DataLoader<string, T, unknown> {
@@ -33,13 +33,13 @@ export function oneToOneFactory<T extends typeof BaseEntity>(
     );
   }
   return new DataLoader<string, T, unknown>(
-    ids => batchOneToOne<T>(ids, entity, batchConfig),
+    ids => batchOneToOne<C, T>(ids, entity, batchConfig),
     dataLoaderOptions,
   );
 }
 
-export function oneToManyFactory<T extends typeof BaseEntity>(
-  entity: T,
+export function oneToManyFactory<C extends typeof BaseEntity, T extends BaseEntity>(
+  entity: C,
   batchConfig?: IBatchOneToManyConfig<T>,
   dataLoaderOptions?: IDataLoaderOneToManyOptions<T>,
 ): DataLoader<string, T[], unknown> {
@@ -50,18 +50,18 @@ export function oneToManyFactory<T extends typeof BaseEntity>(
     );
   }
   return new DataLoader<string, T[], unknown>(
-    ids => batchOneToMany<T>(ids, entity, batchConfig),
+    ids => batchOneToMany<C, T>(ids, entity, batchConfig),
     dataLoaderOptions,
   );
 }
 
-export function limitedOneToManyFactory<T extends typeof BaseEntity>(
-  entity: T,
+export function limitedOneToManyFactory<C extends typeof BaseEntity, T extends BaseEntity>(
+  entity: C,
   batchConfig?: IBatchEfficientOneToManyConfig,
   dataLoaderOptions?: IDataLoaderEfficientOneToManyOptions<T>,
 ): DataLoader<string, T[], unknown> {
   return new DataLoader<string, T[], unknown>(
-    ids => efficientBatchOneToMany<T>(ids, entity, batchConfig),
+    ids => efficientBatchOneToMany<C, T>(ids, entity, batchConfig),
     dataLoaderOptions,
   );
 }

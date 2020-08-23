@@ -8,7 +8,7 @@ import { IDataLoaderOneToOneOptions, IDataLoaderOneToManyOptions, IDataLoaderEff
 // being enums more explicit.
 export type TEnum = string | number;
 
-export interface IEntityReferenceIdKeysParams<T extends typeof BaseEntity> {
+export interface IEntityReferenceIdKeysParams<T extends BaseEntity> {
   entityIdKey: string
   loadOneConfig?: {
     batchConfig: Omit<IBatchOneToOneConfig<T>, 'entityIdKey'>
@@ -24,7 +24,7 @@ export interface IEntityReferenceIdKeysParams<T extends typeof BaseEntity> {
   }
 }
 
-export interface IEntityReferenceIdKeysConfig<T extends typeof BaseEntity> {
+export interface IEntityReferenceIdKeysConfig<T extends BaseEntity> {
   entityIdKey: string
   loadOneConfig: {
     batchConfig: IBatchOneToOneConfig<T>
@@ -40,7 +40,7 @@ export interface IEntityReferenceIdKeysConfig<T extends typeof BaseEntity> {
   }
 }
 
-export interface EntityLoadersFactory<T extends typeof BaseEntity, E extends TEnum> {
+export interface EntityLoadersFactory<T extends BaseEntity, E extends TEnum> {
   _by: {
     [key in E]: {
       cacheMap: ICacheMaps<T>

@@ -21,7 +21,11 @@ const DEFAULT_FACTORY_LOADER_CONFIG = {
   dataLoaderOptions: {},
 };
 
-export class DefaultEntityLoadersFactory<T extends typeof BaseEntity, E extends TEnum> implements EntityLoadersFactory<T, E> {
+export class DefaultEntityLoadersFactory<
+  C extends typeof BaseEntity, // Class instantiator of T.
+  T extends BaseEntity,// T, typeof C.
+  E extends TEnum, // Properties of T.
+> implements EntityLoadersFactory<T, E> {
   /**
    * Since DataLoader caches values, it's typically assumed these values will be treated
    * as if they were immutable. While DataLoader itself doesn't enforce this, you can create
@@ -36,13 +40,13 @@ export class DefaultEntityLoadersFactory<T extends typeof BaseEntity, E extends 
 
   public _by: EntityLoadersFactory<T, E>['_by'];
   public by: EntityLoadersFactory<T, E>['by'];
-  private entity: T;
+  private entity: C;
   private entityReferenceIdKeysEnum: Record<string, E>;
   private entityReferenceIdKeysList: E[];
   private entityReferenceIdKeysParams: Record<E, IEntityReferenceIdKeysParams<T>>;
 
   constructor(args: {
-    entity: T,
+    entity: C,
     entityReferenceIdKeysEnum: Record<string, E>,
     entityReferenceIdKeysParams: Record<E, IEntityReferenceIdKeysParams<T>>
   }) {
@@ -132,17 +136,17 @@ export class DefaultEntityLoadersFactory<T extends typeof BaseEntity, E extends 
     };
     // Setting up DataLoaders:
     const dataLoaders: IDataLoaders<T> = {
-      one: oneToOneFactory<T>(
+      one: oneToOneFactory<C, T>(
         this.entity,
         oneConfig.batchConfig,
         oneConfig.dataLoaderOptions,
       ),
-      many: oneToManyFactory<T>(
+      many: oneToManyFactory<C, T>(
         this.entity,
         manyConfig.batchConfig,
         manyConfig.dataLoaderOptions,
       ),
-      manyLimited: limitedOneToManyFactory<T>(
+      manyLimited: limitedOneToManyFactory<C, T>(
         this.entity,
         manyLimitedConfig.batchConfig,
         manyLimitedConfig.dataLoaderOptions,

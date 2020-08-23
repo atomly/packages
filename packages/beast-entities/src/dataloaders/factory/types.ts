@@ -6,13 +6,13 @@ import {
   IBatchOneToManyConfig,
 } from '../batch';
 
-export interface IDataLoaderOneToOneOptions<T extends typeof BaseEntity> extends DataLoader.Options<string, T> {}
+export interface IDataLoaderOneToOneOptions<T extends BaseEntity> extends DataLoader.Options<string, T> {}
 
-export interface IDataLoaderOneToManyOptions<T extends typeof BaseEntity> extends DataLoader.Options<string, T[]> {}
+export interface IDataLoaderOneToManyOptions<T extends BaseEntity> extends DataLoader.Options<string, T[]> {}
 
-export interface IDataLoaderEfficientOneToManyOptions<T extends typeof BaseEntity> extends DataLoader.Options<string, T[]> {}
+export interface IDataLoaderEfficientOneToManyOptions<T extends BaseEntity> extends DataLoader.Options<string, T[]> {}
 
-export interface EntityLoaderFactoryParams<T extends typeof BaseEntity> {
+export interface EntityLoaderFactoryParams<T extends BaseEntity> {
   entityIdKey: string
   loadOneTypeormOptions?: IBatchOneToOneConfig<T>
   loadManyTypeormOptions?: IBatchOneToManyConfig<T>
