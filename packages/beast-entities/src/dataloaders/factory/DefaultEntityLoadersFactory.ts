@@ -107,7 +107,7 @@ export class DefaultEntityLoadersFactory<
     const oneConfig: IEntityReferenceIdKeysConfig<T>['loadOneConfig'] = {
       batchConfig: {
         ...(params.loadOneConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).batchConfig,
-        entityIdKey: params.entityIdKey,
+        entityIdKey: params.entityIdKey, // GET FROM `entityReferenceIdKeysEnum`
       },
       dataLoaderOptions: {
         ...(params.loadOneConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).dataLoaderOptions,
@@ -117,7 +117,7 @@ export class DefaultEntityLoadersFactory<
     const manyConfig: IEntityReferenceIdKeysConfig<T>['loadManyConfig'] = {
       batchConfig: {
         ...(params.loadManyConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).batchConfig,
-        entityIdKey: params.entityIdKey,
+        entityIdKey: params.entityIdKey, // GET FROM `entityReferenceIdKeysEnum`
       },
       dataLoaderOptions: {
         ...(params.loadManyConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).dataLoaderOptions,
@@ -127,7 +127,7 @@ export class DefaultEntityLoadersFactory<
     const manyLimitedConfig: IEntityReferenceIdKeysConfig<T>['manyLimitedConfig'] = {
       batchConfig: {
         ...(params.manyLimitedConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).batchConfig,
-        entityIdKey: params.entityIdKey,
+        entityIdKey: params.entityIdKey, // GET FROM `entityReferenceIdKeysEnum`
       },
       dataLoaderOptions: {
         ...(params.manyLimitedConfig ?? DEFAULT_FACTORY_LOADER_CONFIG).dataLoaderOptions,

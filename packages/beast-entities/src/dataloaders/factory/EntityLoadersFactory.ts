@@ -56,10 +56,4 @@ export interface EntityLoadersFactory<T extends BaseEntity, E extends TEnum> {
       delete: IDeleters
     }
   }
-  // cacheMapsBy: { [key in E]: ICacheMap<T>; }
-  // loadersBy: { [key in E]: ILoaders<T>; }
-  // deleteBy: { [key in E]: (key: string) => Promise<void>; }
-  // update(entityReferenceIdKey: E, key: string): Promise<void>
-  // delete(entityReferenceIdKey: E, key: string): Promise<void>
-  // clear(): void;
 }

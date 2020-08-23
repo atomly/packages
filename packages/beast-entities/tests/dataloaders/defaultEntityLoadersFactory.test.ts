@@ -6,9 +6,17 @@ import { getRandomInt } from '../utils';
 
 // Dependencies
 import { Database, DefaultEntityLoadersFactory } from '../../src';
-import { TestEntity1, TestEntity2 } from '../mocks';
+import {
+  TestEntity1, // Used to test one-to-one loaders.
+  TestEntity2, // Used to test one-to-one loaders.
+  TestEntity3, // Used to test one-to-many loaders.
+  TestEntity4, // Used to test one-to-many loaders.
+} from '../mocks';
 
+//
 // CONSTANTS
+//
+
 const TYPE = 'postgres';
 const HOST = 'localhost';
 const PORT = 5432;
@@ -19,12 +27,17 @@ const LOGGING = false;
 const SYNCHRONIZE = true;
 const TEST_ENTITITIES_AMOUNT = 100;
 
+//
 // TEST VARIABLES
+//
+
 let db: Database;
 
 const entities = [
   TestEntity1,
   TestEntity2,
+  TestEntity3,
+  TestEntity4,
 ];
 
 const randomTestEntity1Ids: string[] = new Array(TEST_ENTITITIES_AMOUNT)
@@ -32,6 +45,12 @@ const randomTestEntity1Ids: string[] = new Array(TEST_ENTITITIES_AMOUNT)
   .map(() => faker.random.uuid());
 
 const randomTestEntity2Ids: string[] = new Array(TEST_ENTITITIES_AMOUNT)
+  .fill(undefined)
+  .map(() => faker.random.uuid());
+
+const randomTestEntity3Id: string = faker.random.uuid();
+
+const randomTestEntity4Ids: string[] = new Array(TEST_ENTITITIES_AMOUNT)
   .fill(undefined)
   .map(() => faker.random.uuid());
 
@@ -50,7 +69,16 @@ const randomTestEntities2: Partial<TestEntity2>[] = randomTestEntity2Ids.map((te
   }
 });
 
-// DATALOADERS FOR TEST ENTITIES
+const randomTestEntity3: Partial<TestEntity3> = {
+  id: randomTestEntity3Id,
+  testEntities4s: [],
+  testEntities4sIds: [],
+};
+
+//
+// DATALOADERS FOR ONE-TO-ONE TEST ENTITIES
+//
+
 enum ETestEntity1ReferenceKeys {
   ID = 'id',
   TEST_ENTITY_2_ID = 'testEntity2Id',
@@ -95,6 +123,32 @@ const testEntity2Loader = new DefaultEntityLoadersFactory<
   },
 });
 
+//
+// DATALOADERS FOR ONE-TO-MANY TEST ENTITIES
+//
+
+enum ETestEntity4ReferenceKeys {
+  ID = 'id',
+  TEST_ENTITY_3_ID = 'testEntity3Id',
+}
+
+const testEntity4Loader = new DefaultEntityLoadersFactory<
+  typeof TestEntity4,
+  TestEntity4,
+  ETestEntity4ReferenceKeys
+>({
+  entity: TestEntity4,
+  entityReferenceIdKeysEnum: ETestEntity4ReferenceKeys,
+  entityReferenceIdKeysParams: {
+    id: {
+      entityIdKey: ETestEntity4ReferenceKeys.ID,
+    },
+    testEntity3Id: {
+      entityIdKey: ETestEntity4ReferenceKeys.TEST_ENTITY_3_ID,
+    },
+  },
+});
+
 describe('DefaultEntityLoadersFactory works correctly', () => {
   beforeAll(
     async () => {
@@ -107,10 +161,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
         database: DATABASE,
         logging: LOGGING,
         synchronize: SYNCHRONIZE,
-        entities: [
-          TestEntity1,
-          TestEntity2,
-        ],
+        entities,
       });
       await db.getConnection();
     },
@@ -128,19 +179,38 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
   );
   let testEntities1: TestEntity1[];
   let testEntities2: TestEntity2[];
+  let testEntity3: TestEntity3;
+  let testEntities4: TestEntity4[];
 
   it('successfully instantiates TypeORM repositories', async () => {
     const testEntity1Repository = db.connection.getRepository(TestEntity1);
     const testEntity2Repository = db.connection.getRepository(TestEntity2);
+    const testEntity3Repository = db.connection.getRepository(TestEntity3);
+    const testEntity4Repository = db.connection.getRepository(TestEntity4);
     expect(testEntity1Repository).toBeTruthy();
     expect(testEntity2Repository).toBeTruthy();
+    expect(testEntity3Repository).toBeTruthy();
+    expect(testEntity4Repository).toBeTruthy();
   });
 
   it('successfully created all random test entities', async () => {
+    // Creating one-to-one entities:
     testEntities1 = await Promise.all(randomTestEntities1.map(testEntity1 => db.connection.getRepository(TestEntity1).create(testEntity1).save()));
     expect(testEntities1).toHaveLength(randomTestEntities1.length);
     testEntities2 = await Promise.all(randomTestEntities2.map(testEntity2 => db.connection.getRepository(TestEntity2).create(testEntity2).save()));
     expect(testEntities2).toHaveLength(randomTestEntities2.length);
+    // Creating one-to-many entities:
+    testEntity3 = await db.connection.getRepository(TestEntity3).create(randomTestEntity3).save();
+    expect(testEntity3).toMatchObject(randomTestEntity3);
+    const randomTestEntities4: Partial<TestEntity4>[] = randomTestEntity4Ids.map((testEntity4Id) => {
+      return {
+        id: testEntity4Id,
+        testEntity3: testEntity3,
+        testEntity3Id: testEntity3.id,
+      }
+    });
+    testEntities4 = await Promise.all(randomTestEntities4.map(testEntity4 => db.connection.getRepository(TestEntity4).create(testEntity4).save()));
+    expect(testEntities4).toHaveLength(randomTestEntities4.length);
   });
 
   describe('DefaultEntityLoadersFactory works correctly for one to one relations', () => {
@@ -201,12 +271,12 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
         testEntity2Id: randomTestEntity2Id,
       }).save() as TestEntity1;
       testEntity1Loader.by.id.prime.one(randomTestEntity1Id, randomTestEntity1);
-      // Checking if it was primed correctly:
+      // Checking if it was primed correctly w/o loading it:
       const primedTestEntity1ById = await testEntity1Loader.by.id.load.one(randomTestEntity1.id);
       expect(primedTestEntity1ById).toMatchObject(randomTestEntity1);
     });
 
-    it('correctly uploads entity', async () => {
+    it('correctly updates entity', async () => {
       // Updating an existing entity:
       const randomTestEntity2Id = faker.random.uuid();
       let testEntity1: TestEntity1 = await testEntity1Loader.by.id.load.one(randomTestEntity1Id);
@@ -231,7 +301,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
     it('correctly clears entity', async () => {
       const testEntity1 = await testEntity1Loader.by.id.load.one(randomTestEntity1Id);
       await testEntity1Loader.by.id.clear.one(randomTestEntity1Id);
-      // Checking if it was updated correctly:
+      // Checking if it was cleared correctly:
       const testEntity1ById = testEntity1Loader._by.id.cacheMap.one.get(testEntity1.id);
       expect(testEntity1ById).toBeUndefined();
       const testEntity1ByTestEntity2Id = testEntity1Loader._by.testEntity2Id.cacheMap.one.get(testEntity1.testEntity2Id);
@@ -240,7 +310,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
 
     it('correctly clears all entities', async () => {
       await testEntity1Loader.by.id.clear.one();
-      // Checking if it was updated correctly:
+      // Checking if it was cleared correctly:
       const testEntity1 = testEntity1Loader._by.id.cacheMap.one.get(randomTestEntity1Id);
       expect(testEntity1).toBeUndefined();
       for (const testEntity1Id of randomTestEntity1Ids) {
@@ -251,7 +321,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
     it('correctly deletes entity', async () => {
       const testEntity1 = await testEntity1Loader.by.id.load.one(randomTestEntity1Id);
       await testEntity1Loader.by.id.delete.one(randomTestEntity1Id);
-      // Checking if it was updated correctly:
+      // Checking if it was deleted correctly:
       const testEntity1ById = testEntity1Loader._by.id.cacheMap.one.get(testEntity1.id);
       expect(testEntity1ById).toBeUndefined();
       const testEntity1ByTestEntity2Id = testEntity1Loader._by.testEntity2Id.cacheMap.one.get(testEntity1.testEntity2Id);
@@ -259,6 +329,119 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
     });
   });
 
-  // TODO: Test many loader
+  describe('DefaultEntityLoadersFactory works correctly for one to many relations', () => {
+    it('correctly loads many related entities', async () => {
+      const testEntities4 = await testEntity4Loader.by.testEntity3Id.load.many(randomTestEntity3Id);
+      expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+    });
+
+    it('correctly primes many related entities', async () => {
+      // Setting up a new testEntity3 to prime testEntity4 objects to it:
+      const randomTestEntity3: Partial<TestEntity3> = {
+        id: faker.random.uuid(),
+        testEntities4s: [],
+        testEntities4sIds: [],
+      };
+      await db.connection.getRepository(TestEntity3).create(randomTestEntity3).save();
+      testEntity4Loader.by.testEntity3Id.prime.many(randomTestEntity3.id, [testEntities4[0]]);
+      // Checking if it was primed correctly w/o loading it:
+      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.many(randomTestEntity3.id);
+      expect(primedTestEntities4).toHaveLength(1);
+      expect(primedTestEntities4).toMatchObject([testEntities4[0]]);
+    });
+
+    it('correctly updates many related entities', async () => {
+      // Update related test entities 4 related to test entities 3:
+      await db.connection.getRepository(TestEntity4).delete({});
+      const randomTestEntities4: Partial<TestEntity4>[] = randomTestEntity4Ids.map((testEntity4Id) => {
+        return {
+          id: testEntity4Id,
+          testEntity3: testEntity3,
+          testEntity3Id: testEntity3.id,
+        }
+      });
+      testEntities4 = await Promise.all(randomTestEntities4.map(testEntity4 => db.connection.getRepository(TestEntity4).create(testEntity4).save()));
+      expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      // Check if they were updated correctly:
+      const updatedTestEntities4 = await testEntity4Loader.by.testEntity3Id.update.many(randomTestEntity3Id);
+      expect(updatedTestEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      for (const updatedTestEntity4 of updatedTestEntities4) {
+        expect(testEntities4.find(testEntity4 => testEntity4.id === updatedTestEntity4.id)).toBeTruthy();
+      }
+    });
+
+    it('correctly clears many related entities', async () => {
+      await testEntity4Loader.by.testEntity3Id.clear.many(randomTestEntity3Id);
+      // Checking if it was cleared correctly:
+      const testEntities4 = testEntity4Loader._by.id.cacheMap.many.get(randomTestEntity3Id);
+      expect(testEntities4).toBeUndefined();
+    });
+
+    it('correctly deletes many related entities', async () => {
+      await testEntity4Loader.by.testEntity3Id.load.many(randomTestEntity3Id);
+      await testEntity4Loader.by.testEntity3Id.delete.many(randomTestEntity3Id);
+      // Checking if it was deleted correctly:
+      const testEntities4 = testEntity4Loader._by.id.cacheMap.many.get(randomTestEntity3Id);
+      expect(testEntities4).toBeUndefined();
+    });
+  });
+
   // TODO: Test many limited loader
+  describe('DefaultEntityLoadersFactory works correctly for limited one to many relations', () => {
+    it('correctly loads manyLimited related entities', async () => {
+      const testEntities4 = await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3Id);
+      console.log('testEntities4.length: ', testEntities4.length);
+      expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+    });
+
+    it('correctly primes manyLimited related entities', async () => {
+      // Setting up a new testEntity3 to prime testEntity4 objects to it:
+      const randomTestEntity3: Partial<TestEntity3> = {
+        id: faker.random.uuid(),
+        testEntities4s: [],
+        testEntities4sIds: [],
+      };
+      await db.connection.getRepository(TestEntity3).create(randomTestEntity3).save();
+      testEntity4Loader.by.testEntity3Id.prime.manyLimited(randomTestEntity3.id, [testEntities4[0]]);
+      // Checking if it was primed correctly w/o loading it:
+      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3.id);
+      expect(primedTestEntities4).toHaveLength(1);
+      expect(primedTestEntities4).toMatchObject([testEntities4[0]]);
+    });
+
+    it('correctly updates manyLimited related entities', async () => {
+      // Update related test entities 4 related to test entities 3:
+      await db.connection.getRepository(TestEntity4).delete({});
+      const randomTestEntities4: Partial<TestEntity4>[] = randomTestEntity4Ids.map((testEntity4Id) => {
+        return {
+          id: testEntity4Id,
+          testEntity3: testEntity3,
+          testEntity3Id: testEntity3.id,
+        }
+      });
+      testEntities4 = await Promise.all(randomTestEntities4.map(testEntity4 => db.connection.getRepository(TestEntity4).create(testEntity4).save()));
+      expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      // Check if they were updated correctly:
+      const updatedTestEntities4 = await testEntity4Loader.by.testEntity3Id.update.manyLimited(randomTestEntity3Id);
+      expect(updatedTestEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      for (const updatedTestEntity4 of updatedTestEntities4) {
+        expect(testEntities4.find(testEntity4 => testEntity4.id === updatedTestEntity4.id)).toBeTruthy();
+      }
+    });
+
+    it('correctly clears manyLimited related entities', async () => {
+      await testEntity4Loader.by.testEntity3Id.clear.manyLimited(randomTestEntity3Id);
+      // Checking if it was cleared correctly:
+      const testEntities4 = testEntity4Loader._by.id.cacheMap.manyLimited.get(randomTestEntity3Id);
+      expect(testEntities4).toBeUndefined();
+    });
+
+    it('correctly deletes manyLimited related entities', async () => {
+      await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3Id);
+      await testEntity4Loader.by.testEntity3Id.delete.manyLimited(randomTestEntity3Id);
+      // Checking if it was deleted correctly:
+      const testEntities4 = testEntity4Loader._by.id.cacheMap.manyLimited.get(randomTestEntity3Id);
+      expect(testEntities4).toBeUndefined();
+    });
+  });
 });
