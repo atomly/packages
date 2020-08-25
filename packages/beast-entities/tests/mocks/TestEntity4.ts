@@ -21,7 +21,7 @@ export class TestEntity4 extends BaseEntity {
   @JoinColumn({ referencedColumnName: 'id' })
   testEntity3: TestEntity3;
 
-  @Column({ nullable: false, name: 'memberId' })
+  @Column({ nullable: false, name: 'testEntity3Id' })
   @RelationId((testEntities4s: TestEntity4) => testEntities4s.testEntity3)
   testEntity3Id: string;
 }

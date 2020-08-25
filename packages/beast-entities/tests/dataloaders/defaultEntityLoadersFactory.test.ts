@@ -171,7 +171,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
   afterAll(
     async () => {
       for (const entity of entities) {
-        await db.connection.getRepository(entity).delete({});
+        // await db.connection.getRepository(entity).delete({});
       }
       await db.closeConnection();
     },
