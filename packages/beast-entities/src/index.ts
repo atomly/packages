@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 
 // CLI
-export * from './cli';
+// export * from './cli';
 
 // Entities
 export * from './entities';

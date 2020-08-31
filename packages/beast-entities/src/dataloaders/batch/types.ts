@@ -29,8 +29,8 @@ export interface IBatchOneToManyConfig<T extends BaseEntity> extends IDefaultBat
 
 export interface IBatchEfficientOneToManyConfig extends IDefaultBatchConfig {
   config?: {
-    orderEntityKey: 'createdAt' | 'updatedAt'
-    orderBy: 'ASC' | 'DESC'
-    entitiesPerId: number
+    orderEntityKey?: 'createdAt' | 'updatedAt'
+    orderBy?: 'ASC' | 'DESC'
+    entitiesPerId?: number
   }
 }

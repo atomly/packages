@@ -26,6 +26,7 @@ const DATABASE = 'test';
 const LOGGING = false;
 const SYNCHRONIZE = true;
 const TEST_ENTITITIES_AMOUNT = 100;
+const LIMITED_TEST_ENTITITIES_AMOUNT = 5;
 
 //
 // TEST VARIABLES
@@ -145,6 +146,13 @@ const testEntity4Loader = new DefaultEntityLoadersFactory<
     },
     testEntity3Id: {
       entityIdKey: ETestEntity4ReferenceKeys.TEST_ENTITY_3_ID,
+      manyLimitedConfig: {
+        batchConfig: {
+          config: {
+            entitiesPerId: LIMITED_TEST_ENTITITIES_AMOUNT,
+          },
+        },
+      },
     },
   },
 });
@@ -171,7 +179,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
   afterAll(
     async () => {
       for (const entity of entities) {
-        // await db.connection.getRepository(entity).delete({});
+        await db.connection.getRepository(entity).delete({});
       }
       await db.closeConnection();
     },
@@ -343,9 +351,9 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
         testEntities4sIds: [],
       };
       await db.connection.getRepository(TestEntity3).create(randomTestEntity3).save();
-      testEntity4Loader.by.testEntity3Id.prime.many(randomTestEntity3.id, [testEntities4[0]]);
+      testEntity4Loader.by.testEntity3Id.prime.many(randomTestEntity3.id!, [testEntities4[0]]);
       // Checking if it was primed correctly w/o loading it:
-      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.many(randomTestEntity3.id);
+      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.many(randomTestEntity3.id!);
       expect(primedTestEntities4).toHaveLength(1);
       expect(primedTestEntities4).toMatchObject([testEntities4[0]]);
     });
@@ -386,12 +394,10 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
     });
   });
 
-  // TODO: Test many limited loader
   describe('DefaultEntityLoadersFactory works correctly for limited one to many relations', () => {
     it('correctly loads manyLimited related entities', async () => {
       const testEntities4 = await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3Id);
-      console.log('testEntities4.length: ', testEntities4.length);
-      expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      expect(testEntities4).toHaveLength(LIMITED_TEST_ENTITITIES_AMOUNT);
     });
 
     it('correctly primes manyLimited related entities', async () => {
@@ -402,9 +408,9 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
         testEntities4sIds: [],
       };
       await db.connection.getRepository(TestEntity3).create(randomTestEntity3).save();
-      testEntity4Loader.by.testEntity3Id.prime.manyLimited(randomTestEntity3.id, [testEntities4[0]]);
+      testEntity4Loader.by.testEntity3Id.prime.manyLimited(randomTestEntity3.id!, [testEntities4[0]]);
       // Checking if it was primed correctly w/o loading it:
-      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3.id);
+      const primedTestEntities4 = await testEntity4Loader.by.testEntity3Id.load.manyLimited(randomTestEntity3.id!);
       expect(primedTestEntities4).toHaveLength(1);
       expect(primedTestEntities4).toMatchObject([testEntities4[0]]);
     });
@@ -423,7 +429,7 @@ describe('DefaultEntityLoadersFactory works correctly', () => {
       expect(testEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
       // Check if they were updated correctly:
       const updatedTestEntities4 = await testEntity4Loader.by.testEntity3Id.update.manyLimited(randomTestEntity3Id);
-      expect(updatedTestEntities4).toHaveLength(TEST_ENTITITIES_AMOUNT);
+      expect(updatedTestEntities4).toHaveLength(LIMITED_TEST_ENTITITIES_AMOUNT);
       for (const updatedTestEntity4 of updatedTestEntities4) {
         expect(testEntities4.find(testEntity4 => testEntity4.id === updatedTestEntity4.id)).toBeTruthy();
       }

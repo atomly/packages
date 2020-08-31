@@ -11,16 +11,16 @@ export type TEnum = string | number;
 export interface IEntityReferenceIdKeysParams<T extends BaseEntity> {
   entityIdKey: string
   loadOneConfig?: {
-    batchConfig: Omit<IBatchOneToOneConfig<T>, 'entityIdKey'>
-    dataLoaderOptions: Omit<IDataLoaderOneToOneOptions<T>, 'cacheMap'>
+    batchConfig?: Omit<IBatchOneToOneConfig<T>, 'entityIdKey'>
+    dataLoaderOptions?: Omit<IDataLoaderOneToOneOptions<T>, 'cacheMap'>
   }
   loadManyConfig?: {
-    batchConfig: Omit<IBatchOneToManyConfig<T>, 'entityIdKey'>
-    dataLoaderOptions: Omit<IDataLoaderOneToManyOptions<T>, 'cacheMap'>
+    batchConfig?: Omit<IBatchOneToManyConfig<T>, 'entityIdKey'>
+    dataLoaderOptions?: Omit<IDataLoaderOneToManyOptions<T>, 'cacheMap'>
   }
   manyLimitedConfig?: {
-    batchConfig: Omit<IBatchEfficientOneToManyConfig, 'entityIdKey'>
-    dataLoaderOptions: Omit<IDataLoaderEfficientOneToManyOptions<T>, 'cacheMap'>
+    batchConfig?: Omit<IBatchEfficientOneToManyConfig, 'entityIdKey'>
+    dataLoaderOptions?: Omit<IDataLoaderEfficientOneToManyOptions<T>, 'cacheMap'>
   }
 }
 

@@ -67,7 +67,6 @@ program
   .alias('r')
   .description('This command will execute all pending migrations and run them in a sequence ordered by their timestamps.')
   .action(sub => actionHandler(sub, ECommands.RUN));
-
 program
   .on('--help', onHelp)
   program.parse(process.argv);

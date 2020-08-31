@@ -12,9 +12,9 @@ module.exports = {
   globals: {
     'ts-jest': {
       // tsConfig: '<rootDir>/tsconfig.json',
-      tsConfig: {
-        experimentalDecorators: true,
-      },
+      // tsConfig: {
+      //   experimentalDecorators: true,
+      // },
       diagnostics: false, // Disabling diagnostics
       // pathRegex: /\.(spec|test)\.ts$/, // Disabling by pathRegex
     },
