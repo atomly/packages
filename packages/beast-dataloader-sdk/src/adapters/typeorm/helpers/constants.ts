@@ -1,0 +1,6 @@
+export const DEFAULT_ENTITY_ID_KEY = 'id';
+export const DEFAULT_ORDER_BY_KEY = DEFAULT_ENTITY_ID_KEY;
+export const DEFAULT_ORDER_BY_VALUE = -1;
+export const DEFAULT_SQL_QUERY_ORDER_ENTITY_KEY = 'createdAt';
+export const DEFAULT_SQL_QUERY_ORDER_BY = 'DESC';
+export const DEFAULT_SQL_QUERY_ENTITIES_PER_ID = 5;
