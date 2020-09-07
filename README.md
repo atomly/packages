@@ -7,14 +7,14 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [atomly](#atomly)
-  - [Packages](#packages)
-  - [Installation](#installation)
-  - [Commiting code changes](#commiting-code-changes)
-  - [Versioning a package](#versioning-a-package)
-  - [Creating a new package](#creating-a-new-package)
-  - [Add a dependency](#add-a-dependency)
-  - [Building](#building)
+- [Packages](#packages)
+- [Installation](#installation)
+- [Commiting code changes](#commiting-code-changes)
+- [Versioning a package](#versioning-a-package)
+- [Creating a new package](#creating-a-new-package)
+- [Add a dependency](#add-a-dependency)
+- [Building](#building)
+- [EOL](#eol)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -27,7 +27,7 @@
 - [@atomly/dataloader-sdk](https://github.com/atomly/atomly/tree/master/packages/dataloader-sdk "@atomly/dataloader-sdk package homepage")
 - [@atomly/hubful](https://github.com/atomly/atomly/tree/master/packages/hubful "@atomly/hubful package homepage")
 - [@atomly/mongoose-sdk](https://github.com/atomly/atomly/tree/master/packages/mongoose-sdk "@atomly/mongoose-sdk package homepage")
-- [@atomly/prisma](https://github.com/atomly/atomly/tree/master/packages/prisma-sdk "@atomly/prisma package homepage")
+- [@atomly/prisma-sdk](https://github.com/atomly/atomly/tree/master/packages/prisma-sdk "@atomly/prisma-sdk package homepage")
 - [@atomly/typeorm-sdk](https://github.com/atomly/atomly/tree/master/packages/typeorm-sdk "@atomly/typeorm-sdk package homepage")
 
 <!-- END custom generated Lerna Packages please keep comment here to allow auto update -->
@@ -71,3 +71,9 @@ See [@lerna/add](https://github.com/lerna/lerna/tree/master/commands/add) for mo
 To build all the packages `lerna run build`. To build an specify package `lerna run build --scope=@atomly/<package-name>`.
 
 See [`@lerna/run`](https://github.com/lerna/lerna/tree/master/commands/run) for more options.
+
+## EOL
+
+This monorepo uses `LF` line endings **only**. If your local copy of this repository is using `CRLF` line endings, follow this answer:
+
+[Force LF eol in git repo and working copy](https://stackoverflow.com/a/42135910/10246377).

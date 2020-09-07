@@ -1,14 +1,14 @@
 {
-  "name": "@atomly/prisma",
+  "name": "@atomly/prisma-sdk",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Robert Molina <rmolinamir@gmail.com>",
-  "homepage": "https://github.com/atomly/prisma#readme",
+  "homepage": "https://github.com/atomly/prisma-sdk#readme",
   "license": "ISC",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://rmolinamir@bitbucket.org/atomly/prisma.git"
+		"url": "git+https://rmolinamir@bitbucket.org/atomly/prisma-sdk.git"
   },
   "scripts": {
 		"cli": "ts-node cli/index.ts",
