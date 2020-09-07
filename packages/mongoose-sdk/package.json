@@ -1,0 +1,41 @@
+{
+  "name": "@atomly/mongoose-sdk",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Robert Molina <rmolinamir@gmail.com>",
+  "homepage": "https://github.com/atomly/mongoose-sdk#readme",
+  "license": "ISC",
+	"main": "dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://rmolinamir@bitbucket.org/atomly/mongoose-sdk.git"
+  },
+  "scripts": {
+		"build": "tsc -b",
+    "watch": "tsc -b -w",
+		"test": "npx jest",
+		"test:watch": "npx jest --watch"
+  },
+	"dependencies": {},
+	"peerDependencies": {
+		"mongoose": "^5.9.15"
+	},
+	"devDependencies": {
+		"mongoose": "^5.9.15",
+		"@types/faker": "^4.1.9",
+		"@types/jest": "^25.1.1",
+		"@types/jest-dev-server": "^4.2.0",
+		"@types/mongoose": "^5.7.21",
+    "@types/uuid": "^7.0.0",
+		"@typescript-eslint/eslint-plugin": "^2.17.0",
+		"@typescript-eslint/parser": "^2.17.0",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.9.0",
+		"eslint-plugin-jest": "^23.6.0",
+		"eslint-plugin-prettier": "^3.1.2",
+		"faker": "^4.1.0",
+		"jest": "^25.1.0",
+		"ts-jest": "^25.2.0",
+		"typescript": "^3.9.3"
+	}
+}

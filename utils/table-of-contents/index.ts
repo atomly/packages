@@ -1,3 +1,5 @@
+// TODO: Make this a package within the repository.
+
 // Libraries
 import shell from 'shelljs';
 import {
@@ -11,8 +13,6 @@ import {
 } from 'fs';
 
 // Dependencies
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore - No need to compile this file into JavaScript.
 import config from '../../package.json';
 import { knuthMorrisPratt } from './knuthMorrisPratt';
 
@@ -68,10 +68,10 @@ function getPackageName(pacakgeDirent: Dirent, path: string): string {
   }
 }
 
+/**
+ * Creating the table of contents.
+ */
 async function generateToC(): Promise<void> {
-  /**
-   * Creating the table of contents.
-   */
   await new Promise((resolve, reject) => {
     const child = shell.exec('ts-node ./node_modules/doctoc/doctoc.js ./README.md', { async: true });
     // eslint-disable-next-line no-console
@@ -85,9 +85,7 @@ async function generateToC(): Promise<void> {
       }
     });
   });
-  /**
-   * Creating the packages table of contents.
-   */
+  // Creating the packages table of contents.
   const packageLinks: Array<string> = [];
   for await (const [packageDirent, path] of getPackages()) {
     const name = getPackageName(packageDirent, path);
@@ -97,10 +95,8 @@ async function generateToC(): Promise<void> {
     packageLinks.push(packageMarkdown);
   }
   const packagesMarkdown: string = packageLinks.join('\n');
-  /**
-   * Writing the generated lerna packages table of contents into the
-   * original README.md file.
-   */
+  // Writing the generated lerna packages table of contents into the
+  // original README.md file.
   const readme = readFileSync(resolve(__dirname, '..', '..', 'README.md')).toString('utf-8');
   // Splitting the file in two, in order to insert the new table:
   const firstHalfStartIndex = knuthMorrisPratt(readme, tocPattern.start);
@@ -117,6 +113,7 @@ async function generateToC(): Promise<void> {
     '\n\n',
     secondHalfMarkdown,
   ].join('');
+  // TODO: Add support for logging if a `DEBUG` flag is passed.
   // console.log('newReadme: ', newReadme);
   writeFileSync(resolve(__dirname, '..', '..', 'README.md'), newReadme);
 }

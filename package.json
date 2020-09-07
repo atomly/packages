@@ -1,11 +1,11 @@
 {
-  "name": "beast-api",
+  "name": "atomly",
   "version": "1.0.0",
-  "description": "Beast monorepo.",
-  "homepage": "https://github.com/beast-app/beast-api/tree/master",
+  "description": "Atomly monorepo.",
+  "homepage": "https://github.com/atomly/atomly/tree/master",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beast-app/beast-api.git"
+    "url": "git+https://github.com/atomly/atomly.git"
   },
   "license": "ISC",
   "author": "Robert Molina <rmolinamir@gmail.com>",
@@ -16,21 +16,23 @@
     ]
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --ignore-scripts --force-local",
-    "bootstrap:hoist": "npm run bootstrap -- --hoist",
+    "bootstrap": "npm run bootstrap:hoist",
+    "bootstrap:local": "lerna bootstrap --ignore-scripts --force-local",
+    "bootstrap:hoist": "lerna bootstrap --ignore-scripts --hoist",
     "build": "lerna run build",
-    "clean": "npm run clean-dist && npm run clean-deps && npm run clean-output && npm run clean-logs",
+    "clean": "npm run clean-deps && npm run clean-dist",
     "clean-deps": "rm -fr node_modules && rm -fr packages/*/node_modules && rm -f package-lock.json && rm -fr */**/package-lock.json && rm -f package-lock.json && rm -fr */**/package-lock.json",
     "clean-dist": "rm -fr packages/*/*.tsbuildinfo && rm -fr packages/*/dist",
-    "clean-incl-deps": "npm run clean && npm run clean-deps",
+    "clean-tmp": "rm -fr tmp && rm -fr */**/tmp",
     "clean-logs": "rm -f *.log && rm -fr */**/*.log",
     "clean-output": "rm -fr output && rm -fr */**/output",
     "commit": "npx git-cz",
     "test": "lerna run test",
     "readme": "ts-node ./utils/table-of-contents/index.ts",
     "watch": "lerna run watch --parallel",
-    "docker:up": "docker-compose up",
-    "docker:down": "docker-compose down"
+    "start": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up -d",
+    "start:attached": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up",
+    "stop": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env down"
   },
   "config": {
     "commitizen": {
@@ -51,6 +53,6 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/beast-app/beast-api/issues"
+    "url": "https://github.com/atomly/atomly/issues"
   }
 }
