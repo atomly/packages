@@ -4,6 +4,8 @@
 
 > TODO: description
 
+Heavily based on [Algorithms and Data Structures](https://github.com/rmolinamir/algorithms-and-data-structures).
+
 ## Usage
 
 ```js
