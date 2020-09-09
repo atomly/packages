@@ -20,7 +20,7 @@ interface Answer {
   value: string;
 }
 
-interface End {
+interface Final {
   id: string;
   type: 'end';
   value: string;
@@ -153,42 +153,44 @@ const edges = [ // Array of unique edges
 /**
  * Based on surveys offered and hosted by [SurveyShark](http://surveyshark.app).
  */
-const surveyGraph = new Graph<Question | Answer | End>();
+const surveyGraph = new Graph<Question | Answer | Final>();
 
-describe('Graph works correctly', () => {
+describe('Undirected & Unweighted Graph works correctly', () => {
   it('should add a vertex correctly', () => {
-    const vertex = {
-      key: 'Foo.A',
-      value: {
-        id: faker.random.uuid(),
-        type: 'question',
-        value: faker.random.words(),
-      } as Question,
+    const vertexKey = 'Foo.A';
+    const vertexValue: Question = {
+      id: faker.random.uuid(),
+      type: 'question',
+      value: faker.random.words(),
     };
-    surveyGraph.addVertex(vertex);
-    expect(surveyGraph.verticesMap.get(vertex.key)).toMatchObject(vertex);
-    expect(surveyGraph.adjacencyList.get(vertex.key)).toMatchObject(new Set());
+    surveyGraph.addVertex(
+      vertexKey,
+      vertexValue,
+    );
+    expect(surveyGraph.verticesMap.get(vertexKey)).toMatchObject({ key: vertexKey, value: vertexValue });
+    expect(surveyGraph.adjacencyList.get(vertexKey)).toMatchObject(new Set());
     expect(surveyGraph.adjacencyList.size).toBe(1);
   });
 
   it('should NOT duplicate already added vertices', () => {
-    const vertex = {
-      key: 'Foo.A',
-      value: {
-        id: faker.random.uuid(),
-        type: 'question',
-        value: faker.random.words(),
-      } as Question,
+    const vertexKey = 'Foo.A';
+    const vertexValue: Question = {
+      id: faker.random.uuid(),
+      type: 'question',
+      value: faker.random.words(),
     };
-    surveyGraph.addVertex(vertex);
-    expect(surveyGraph.verticesMap.get(vertex.key)).toMatchObject(vertex);
-    expect(surveyGraph.adjacencyList.get(vertex.key)).toMatchObject(new Set());
+    surveyGraph.addVertex(
+      vertexKey,
+      vertexValue,
+    );
+    expect(surveyGraph.verticesMap.get(vertexKey)).toMatchObject({ key: vertexKey, value: vertexValue });
+    expect(surveyGraph.adjacencyList.get(vertexKey)).toMatchObject(new Set());
     expect(surveyGraph.adjacencyList.size).toBe(1);
   });
 
   it('should add multiple vertex correctly (edges will be added later)', () => {
     vertices.forEach(vertex => {
-      surveyGraph.addVertex(vertex as Vertex<Question | Answer | End>);
+      surveyGraph.addVertex(vertex.key, vertex.value as Question | Answer | Final);
     })
     expect(surveyGraph.verticesMap.size).toBe(vertices.length);
     expect(surveyGraph.adjacencyList.size).toBe(vertices.length);
@@ -314,9 +316,75 @@ describe('Graph works correctly', () => {
     });
   });
 
-  it('should correctly return vertices using Breadth First Traversal from origin vertex "Foo.A"', () => {
-    const originVertexKey = 'Foo.A';
-    const breadthFirstTraversalVertices = surveyGraph.breadthFirstTraversal(originVertexKey);
+  it('should correctly find vertices', () => {
+    const vertexKey = 'Foo.A';
+    expect(surveyGraph.getVertex(vertexKey)).toBeTruthy();
+  });
+
+  it('should NOT find vertices that don\'t exist', () => {
+    const vertexKey = faker.random.uuid();
+    expect(surveyGraph.getVertex(vertexKey)).toBe(undefined);
+  });
+
+  it('should correctly find edges', () => {
+    const edges = [
+      { from: 'Foo.A', to: '1.A' },
+      { from: 'Foo.A', to: '2.A' },
+      { from: 'Foo.A', to: '3.A' },
+    ];
+    edges.forEach(edge => {
+      expect(surveyGraph.getEdge(edge.from, edge.to)).toBeTruthy();
+      expect(surveyGraph.getEdge(edge.to, edge.from)).toBeTruthy();
+    });
+  });
+
+  it('should NOT find edges that don\'t exist', () => {
+    const edges = [
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+    ];
+    edges.forEach(edge => {
+      expect(surveyGraph.getEdge(edge.from, edge.to)).toBe(undefined);
+      expect(surveyGraph.getEdge(edge.to, edge.from)).toBe(undefined);
+    });
+  });
+
+  it('should correctly validate whether a vertex exists', () => {
+    // Valid vertex:
+    const vertexKey = 'Foo.A';
+    expect(surveyGraph.hasVertex(vertexKey)).toBe(true);
+    // Invalid vertex:
+    const invalidVertexKey = faker.random.uuid();
+    expect(surveyGraph.hasVertex(invalidVertexKey)).toBe(false);
+  });
+
+  it('should correctly validate whether an edge exists', () => {
+    // Valid edges:
+    const edges = [
+      { from: 'Foo.A', to: '1.A' },
+      { from: 'Foo.A', to: '2.A' },
+      { from: 'Foo.A', to: '3.A' },
+    ];
+    edges.forEach(edge => {
+      expect(surveyGraph.hasEdge(edge.from, edge.to)).toBe(true);
+      expect(surveyGraph.hasEdge(edge.to, edge.from)).toBe(true);
+    });
+    // Invalid edges:
+    const invalidEdges = [
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+    ];
+    invalidEdges.forEach(edge => {
+      expect(surveyGraph.hasEdge(edge.from, edge.to)).toBe(false);
+      expect(surveyGraph.hasEdge(edge.to, edge.from)).toBe(false);
+    });
+  });
+
+  it('should correctly return vertices using Breadth First Traversal starting from vertex "Foo.A"', () => {
+    const startingVertexKey = 'Foo.A';
+    const breadthFirstTraversalVertices = surveyGraph.traversal.breadthFirst(startingVertexKey);
     // console.debug('DEBUG: breadthFirstTraversalVertices: ', breadthFirstTraversalVertices);
     // Should've found all nodes:
     expect(breadthFirstTraversalVertices).toHaveLength(vertices.length);
@@ -345,11 +413,128 @@ describe('Graph works correctly', () => {
     ]);
   });
 
-  it('should correctly return vertices using Depth First Traversal from origin vertex "Foo.A"', () => {
-    const originVertexKey = 'Foo.A';
-    const depthFirstTraversalVertices = surveyGraph.depthFirstTraversal(originVertexKey);
+  it('should correctly invoke the callback during the previous BF traversal', () => {
+    const startingVertexKey = 'Foo.A';
+    const onLevelCallback = jest.fn((vertices: Vertex<Question | Answer | Final>[], depth: number) => {
+      expect(vertices).toBeInstanceOf(Array);
+      expect(vertices.length).toBeGreaterThan(0);
+      expect(vertices[0].key).toBeTruthy();
+      expect(vertices[0].value).toBeTruthy();
+      expect(typeof depth === 'number').toBe(true);
+    });
+    surveyGraph.traversal.breadthFirst(
+      startingVertexKey,
+      onLevelCallback,
+    );
+  })
+
+  // TODO: should correctly return empty array of vertices using BFT from an invalid vertex or a vertex with no edges
+
+  it('should correctly return vertices using Depth First Traversal starting from vertex "Foo.A"', () => {
+    const startingVertexKey = 'Foo.A';
+    const depthFirstTraversalVertices = surveyGraph.traversal.depthFirst(startingVertexKey);
     // console.debug('DEBUG: depthFirstTraversalVertices: ', depthFirstTraversalVertices);
     expect(depthFirstTraversalVertices).toHaveLength(vertices.length);
-    expect(false).toBeTruthy();
+    // Testing the order of the BF traversal:
+    expect(depthFirstTraversalVertices.map(({ key }) => key)).toMatchObject([
+      'Foo.A',
+      '1.A',
+      'Foo.B',
+      '2.A',
+      '1.B',
+      'Foo.D',
+      '1.D',
+      'Bar',
+      '3.C',
+      'Foo.C',
+      '3.A',
+      '1.C',
+      'Foo.E',
+      '2.C',
+      '2.D',
+      '1.E',
+      '2.E',
+      '3.E',
+      '4.C',
+      '2.B',
+    ]);
   });
+
+  it('should correctly invoke the callback during the previous DF traversal', () => {
+    const startingVertexKey = 'Foo.A';
+    const onVertexCallback = jest.fn((vertex: Vertex<Question | Answer | Final>) => {
+      expect(vertex.key).toBeTruthy();
+      expect(vertex.value).toBeTruthy();
+    });
+    const vertices = surveyGraph.traversal.depthFirst(
+      startingVertexKey,
+      onVertexCallback,
+    );
+    expect(vertices).toHaveLength(onVertexCallback.mock.calls.length);
+  })
+
+  // TODO: should correctly return empty array of vertices using DFT from an invalid vertex or a vertex with no edges
+
+  it('should correctly remove vertices', () => {
+    const vertexKey = 'Foo.E';
+    const edgesBeforeRemoval = Array.from(surveyGraph.edgesMap.values());
+    const amountOfVertexEdges = surveyGraph.adjacencyList.get(vertexKey)!.size * 2; // NOTE: The edges are multiplied by 2 because it's an undirected graph.
+    expect(surveyGraph.removeVertex(vertexKey)).toBeTruthy();
+    // Checking if the related edges were also removed:
+    const edgesAfterRemoval = Array.from(surveyGraph.edgesMap.values());
+    edgesAfterRemoval.forEach(edge => {
+      expect(edge.key).not.toContain(vertexKey);
+      expect(edge.from).not.toBe(vertexKey);
+      expect(edge.to).not.toBe(vertexKey);
+    });
+    // Checking that other edges are left intact:
+    expect(edgesBeforeRemoval).toHaveLength(edgesAfterRemoval.length + amountOfVertexEdges);
+  });
+
+  it('should correctly "remove" vertices that don\'t exist', () => {
+    const vertexKey = faker.random.uuid();
+    expect(surveyGraph.removeVertex(vertexKey)).toBe(undefined);
+  });
+
+  it('should correctly remove edges', () => {
+    const edges = [
+      { from: 'Foo.A', to: '1.A' },
+      { from: 'Foo.A', to: '2.A' },
+      { from: 'Foo.A', to: '3.A' },
+    ];
+    edges.forEach(edge => {
+      expect(surveyGraph.removeEdge(edge.from, edge.to)).toBeTruthy();
+      // NOTE: Because this graph is undirected, the incoming edge is also automatically
+      // removed.
+      // expect(surveyGraph.removeEdge(edge.to, edge.from)).toBeTruthy();
+    });
+  });
+
+  it('should correctly "remove" edges that don\'t exist', () => {
+    const edges = [
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+      { from: faker.random.uuid(), to: faker.random.uuid() },
+    ];
+    edges.forEach(edge => {
+      expect(surveyGraph.removeEdge(edge.from, edge.to)).toBe(undefined);
+      expect(surveyGraph.removeEdge(edge.to, edge.from)).toBe(undefined);
+    });
+  });
+
+  it('should correctly clear the graph', () => {
+    surveyGraph.clear();
+    expect(surveyGraph.verticesMap.size).toBe(0);
+    expect(surveyGraph.adjacencyList.size).toBe(0);
+  });
+
+  it('should correctly clear an empty graph', () => {
+    surveyGraph.clear();
+    expect(surveyGraph.verticesMap.size).toBe(0);
+    expect(surveyGraph.adjacencyList.size).toBe(0);
+  });
+});
+
+describe('should correctly instantiate the graph when initialized with non-default parameters', () => {
+
 });
