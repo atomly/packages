@@ -1,10 +1,13 @@
 {
 	"name": "@atomly/dataloader-sdk",
-	"version": "1.0.0",
+	"version": "1.0.1-alpha.0",
 	"description": "> TODO: description",
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/dataloader-sdk#readme",
 	"license": "ISC",
+	"publishConfig": {
+		"access": "public"
+	},
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
@@ -39,5 +42,6 @@
 		"ts-jest": "26.2.0",
 		"typeorm": "^0.2.22",
 		"typescript": "^3.7.5"
-	}
+	},
+	"gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
 }

@@ -1,11 +1,14 @@
 {
 	"name": "@atomly/typeorm-sdk",
-	"version": "0.0.1",
+	"version": "0.0.2-alpha.0",
 	"description": "> TODO: description",
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/typeorm-sdk#readme",
 	"license": "ISC",
 	"main": "dist/index.js",
+	"publishConfig": {
+		"access": "public"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://rmolinamir@bitbucket.org/atomly/typeorm-sdk.git"
@@ -49,5 +52,6 @@
 		"typeorm": "0.2.22",
 		"typescript": "^3.7.5",
 		"uuid": "^7.0.1"
-	}
+	},
+	"gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
 }

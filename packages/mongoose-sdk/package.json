@@ -1,11 +1,14 @@
 {
 	"name": "@atomly/mongoose-sdk",
-	"version": "1.0.1-alpha.0",
+	"version": "1.0.1-alpha.1",
 	"description": "> TODO: description",
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/mongoose-sdk#readme",
 	"license": "ISC",
 	"main": "dist/index.js",
+	"publishConfig": {
+		"access": "public"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://rmolinamir@bitbucket.org/atomly/mongoose-sdk.git"
@@ -36,5 +39,6 @@
 		"mongoose": "^5.9.15",
 		"ts-jest": "^25.2.0",
 		"typescript": "^3.9.3"
-	}
+	},
+	"gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
 }

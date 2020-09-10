@@ -1,11 +1,14 @@
 {
   "name": "@atomly/hubful",
-  "version": "1.0.1-0.0.1.0",
+  "version": "1.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "Robert Molina <rmolinamir@gmail.com>",
   "homepage": "https://github.com/atomly/hubful#readme",
   "license": "ISC",
   "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://rmolinamir@bitbucket.org/atomly/hubful.git"
@@ -41,5 +44,6 @@
     "ts-jest": "^25.2.0",
     "typescript": "^3.9.7",
     "websocket": "1.0.31"
-  }
+  },
+  "gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
 }
