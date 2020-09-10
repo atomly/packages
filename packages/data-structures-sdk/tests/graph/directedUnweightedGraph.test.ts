@@ -241,36 +241,6 @@ describe('Directed & Unweighted Graph works correctly', () => {
   });
 
   it('should add multiple edges', () => {
-    const edges = [ // Array of unique edges
-      { from: 'Foo.A', to: '1.A' },
-      { from: 'Foo.A', to: '2.A' },
-      { from: 'Foo.A', to: '3.A' },
-      { from: '1.A', to: 'Foo.B' },
-      { from: '2.A', to: 'Foo.B' },
-      { from: '3.A', to: 'Foo.C' },
-      { from: 'Foo.B', to: '1.B' },
-      { from: 'Foo.B', to: '2.B' },
-      { from: 'Foo.C', to: '1.C' },
-      { from: 'Foo.C', to: '2.C' },
-      { from: 'Foo.C', to: '3.C' },
-      { from: 'Foo.C', to: '4.C' },
-      { from: '1.B', to: 'Foo.D' },
-      { from: '2.B', to: 'Foo.C' },
-      { from: '1.C', to: 'Foo.E' },
-      { from: '2.C', to: 'Foo.E' },
-      { from: '3.C', to: 'Bar' },
-      // { from: '4.C', to: 'Foo.A' },
-      { from: 'Foo.D', to: '1.D' },
-      { from: 'Foo.D', to: '2.D' },
-      { from: '1.D', to: 'Bar' },
-      { from: '2.D', to: 'Foo.E' },
-      { from: 'Foo.E', to: '1.E' },
-      { from: 'Foo.E', to: '2.E' },
-      { from: 'Foo.E', to: '3.E' },
-      { from: '1.E', to: 'Bar' },
-      { from: '2.E', to: 'Bar' },
-      { from: '3.E', to: 'Bar' },
-    ];
     // Adding edges:
     edges.forEach(edge => {
       surveyGraph.addEdge(edge.from, edge.to);

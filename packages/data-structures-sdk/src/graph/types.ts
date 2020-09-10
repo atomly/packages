@@ -83,8 +83,11 @@ export interface IEdgesMap<T> {
 
 /**
  * TODOs for v2:
+ *  - [ ] Add an optimized `Queue` data structure for the traversals.
  *  - [ ] Add internal Djikstra's Algorithm to find the shortest path between two vertices,
- *    this will be used by the `query` API.
+ *    this will be used by the `query` API (this will need a `PriorityQueue` data structure).
+ *  - [ ] Add internal Bellman-Ford algorithm, similar to Djikstra's Algorithm except it supports
+ *    negative edge weights and edge weights equal to zero.
  *  - [ ] Add `query` API to: query if certain vertices are connected, or filtering by weight
  *    (i.e. added/accumulated weight), or resolving all vertices connected to a certain vertex
  *    (although the traversals already achieve this, so maybe merge both APIs?). 
