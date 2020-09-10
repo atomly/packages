@@ -1,2 +1,4 @@
+export * from './Edge';
+export * from './EdgesMap';
 export * from './Graph';
-export * from './types';
+export * from './Vertex';

@@ -137,7 +137,7 @@ const edges = [ // Array of unique edges
   { from: '1.C', to: 'Foo.E' },
   { from: '2.C', to: 'Foo.E' },
   { from: '3.C', to: 'Bar' },
-  // { from: '4.C', to: 'Foo.A' },
+  { from: '4.C', to: 'Foo.A' },
   { from: 'Foo.D', to: '1.D' },
   { from: 'Foo.D', to: '2.D' },
   { from: '1.D', to: 'Bar' },
@@ -158,9 +158,9 @@ class UnitTestsGraph<T> extends Graph<T> {
   public _adjacencyList: Graph<T>['adjacencyList'] = this.adjacencyList;
 }
 
-describe('Undirected & Unweighted Graph works correctly', () => {
+describe('Directed & Unweighted Graph works correctly', () => {
   // The graph for these tests will be based on surveys.
-  const surveyGraph = new UnitTestsGraph<Question | Answer | Final>();
+  const surveyGraph = new UnitTestsGraph<Question | Answer | Final>({ isDirectedGraph: true });
 
   it('should add a vertex correctly', () => {
     const vertexKey = 'Foo.A';
@@ -290,7 +290,7 @@ describe('Undirected & Unweighted Graph works correctly', () => {
     const vertexKeys = Array.from(surveyGraph._adjacencyList.keys());
     // Every vertex should contain the correct amount of respective (added) unique edges:
     vertexKeys.forEach(vertexKey => {
-      const addedEges = edges.filter(edge => edge.from === vertexKey || edge.to === vertexKey);
+      const addedEges = edges.filter(edge => edge.from === vertexKey);
       const adjacentVertexKeys = surveyGraph._adjacencyList.get(vertexKey);
       expect(addedEges).toHaveLength(adjacentVertexKeys!.size);
     });
@@ -316,7 +316,7 @@ describe('Undirected & Unweighted Graph works correctly', () => {
     const vertexKeys = Array.from(surveyGraph._adjacencyList.keys());
     // Every vertex should contain the correct amount of respective (added) unique edges:
     vertexKeys.forEach(vertexKey => {
-      const addedEges = edges.filter(edge => edge.from === vertexKey || edge.to === vertexKey);
+      const addedEges = edges.filter(edge => edge.from === vertexKey);
       const adjacentVertexKeys = surveyGraph._adjacencyList.get(vertexKey);
       expect(addedEges).toHaveLength(adjacentVertexKeys!.size);
     });
@@ -340,7 +340,6 @@ describe('Undirected & Unweighted Graph works correctly', () => {
     ];
     edges.forEach(edge => {
       expect(surveyGraph.getEdge(edge.from, edge.to)).toBeTruthy();
-      expect(surveyGraph.getEdge(edge.to, edge.from)).toBeTruthy();
     });
   });
 
@@ -374,7 +373,6 @@ describe('Undirected & Unweighted Graph works correctly', () => {
     ];
     edges.forEach(edge => {
       expect(surveyGraph.hasEdge(edge.from, edge.to)).toBe(true);
-      expect(surveyGraph.hasEdge(edge.to, edge.from)).toBe(true);
     });
     // Invalid edges:
     const invalidEdges = [
@@ -454,23 +452,23 @@ describe('Undirected & Unweighted Graph works correctly', () => {
       'Foo.A',
       '1.A',
       'Foo.B',
-      '2.A',
       '1.B',
       'Foo.D',
       '1.D',
       'Bar',
-      '3.C',
-      'Foo.C',
-      '3.A',
-      '1.C',
-      'Foo.E',
-      '2.C',
       '2.D',
+      'Foo.E',
       '1.E',
       '2.E',
       '3.E',
-      '4.C',
       '2.B',
+      'Foo.C',
+      '1.C',
+      '2.C',
+      '3.C',
+      '4.C',
+      '2.A',
+      '3.A',
     ]);
   });
 
@@ -515,13 +513,12 @@ describe('Undirected & Unweighted Graph works correctly', () => {
   it('should correctly remove vertices', () => {
     const vertexKey = 'Foo.E';
     const edgesBeforeRemoval = Array.from(surveyGraph.edgesMap.values());
-    const amountOfVertexEdges = surveyGraph._adjacencyList.get(vertexKey)!.size * 2; // NOTE: The edges are multiplied by 2 because it's an undirected graph.
+    const amountOfVertexEdges = surveyGraph._adjacencyList.get(vertexKey)!.size;
     expect(surveyGraph.removeVertex(vertexKey)).toBeTruthy();
     // Checking if the related edges were also removed:
     const edgesAfterRemoval = Array.from(surveyGraph.edgesMap.values());
     edgesAfterRemoval.forEach(edge => {
       expect(edge.from).not.toBe(vertexKey);
-      expect(edge.to).not.toBe(vertexKey);
     });
     // Checking that other edges are left intact:
     expect(edgesBeforeRemoval).toHaveLength(edgesAfterRemoval.length + amountOfVertexEdges);
@@ -540,7 +537,7 @@ describe('Undirected & Unweighted Graph works correctly', () => {
     ];
     edges.forEach(edge => {
       expect(surveyGraph.removeEdge(edge.from, edge.to)).toBeTruthy();
-      // NOTE: Because this graph is undirected, the incoming edge is also automatically
+      // NOTE: Because this graph is directed, the incoming edge is also automatically
       // removed.
       // expect(surveyGraph.removeEdge(edge.to, edge.from)).toBeTruthy();
     });
@@ -576,19 +573,21 @@ describe('Undirected & Unweighted Graph works correctly', () => {
 describe('should correctly instantiate the graph when initialized with non-default parameters', () => {
   // The graph for these tests will be based on surveys.
   const surveyGraph = new UnitTestsGraph<Question | Answer | Final>({
+    isDirectedGraph: true,
     vertices: vertices as Vertex<Question | Answer | Final>[],
     edges: edges,
   });
 
   it('should have instantiated the graph with existing vertices and edges', () => {
     expect(surveyGraph.verticesMap.size).toBe(vertices.length);
-    expect(surveyGraph.edgesMap.values()).toHaveLength(edges.length * 2); // NOTE: The edges are multiplied by 2 because it's an undirected graph.
+    expect(surveyGraph.edgesMap.values()).toHaveLength(edges.length);
   });
 });
 
 describe('should correctly return the graph values', () => {
   // The graph for these tests will be based on surveys.
   const surveyGraph = new UnitTestsGraph<Question | Answer | Final>({
+    isDirectedGraph: true,
     vertices: vertices as Vertex<Question | Answer | Final>[],
     edges: edges,
   });
@@ -596,6 +595,6 @@ describe('should correctly return the graph values', () => {
   it('should correctly return the graph values when calling `values` method', () => {
     const { vertices: graphVertices, edges: graphEdges } = surveyGraph.values();
     expect(vertices).toHaveLength(graphVertices.length)
-    expect(edges).toHaveLength(graphEdges.length / 2);  // NOTE: The edges are divided by 2 because it's an undirected graph.
+    expect(edges).toHaveLength(graphEdges.length);
   });
 });

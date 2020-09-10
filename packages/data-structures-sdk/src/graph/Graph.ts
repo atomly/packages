@@ -1,5 +1,14 @@
 // Types
-import { IGraph, Vertex, Edge } from './types';
+import { IGraph, IEdge } from './types';
+
+// Dependencies
+import {
+  __DEFAULT_EDGE_WEIGHT,
+  __DEFAULT_IS_DIRECTED_GRAPH,
+} from './constants';
+import { Vertex } from './Vertex';
+import { Edge } from './Edge';
+import { EdgesMap } from './EdgesMap';
 
 /**
  * Graph data structure using an adjacency list to store edges. The graph can be configured
@@ -8,41 +17,44 @@ import { IGraph, Vertex, Edge } from './types';
  * any nodes.
  */
 export class Graph<T> implements IGraph<T> {
-  static __DEFAULT_EDGE_WEIGHT = 0;
+  static __DEFAULT_EDGE_WEIGHT = __DEFAULT_EDGE_WEIGHT;
 
-  static __DEFAULT_IS_DIRECTED_GRAPH = false;
+  static __DEFAULT_IS_DIRECTED_GRAPH = __DEFAULT_IS_DIRECTED_GRAPH;
 
-  /**
-   * Generates a unique key of the edge based on the connected vertices' key values.
-   * Returns the serialized key.
-   * @param fromVertexKey - (from) Vertex identifier.
-   * @param toVertexKey - (to) Vertex identifier.
-   */
-  static serializeEdgeKey(fromVertexKey: Vertex<unknown>['key'], toVertexKey: Vertex<unknown>['key']): string {
-    return `${fromVertexKey}_${toVertexKey}`;
-  }
+  static Vertex = Vertex
+
+  static Edge = Edge
 
   public isDirectedGraph: boolean;
 
   public verticesMap: Map<Vertex<T>['key'], Vertex<T>>;
 
-  public edgesMap: Map<Edge<T>['key'], Edge<T>>;
+  public edgesMap: EdgesMap<T>;
 
-  public adjacencyList: Map<Vertex<T>['key'], Set<Edge<T>['key']>>;
+  protected adjacencyList: Map<Vertex<T>['key'], Set<Vertex<T>['key']>>;
 
   constructor(args: {
     isDirectedGraph?: boolean;
-    verticesMap?: Map<Vertex<T>['key'], Vertex<T>>;
-    edgesMap?: Map<Edge<T>['key'], Edge<T>>;
-    adjacencyList?: Map<Vertex<T>['key'], Set<Vertex<T>['key']>>;
+    vertices?: Vertex<T>[];
+    edges?: IEdge<T>[];
   } = {}) {
     // Setting up the graph "metadata" configuration:
     this.isDirectedGraph = args.isDirectedGraph ?? Graph.__DEFAULT_IS_DIRECTED_GRAPH;
-    // Instantiating and binding maps of vertices and edges:
-    this.verticesMap = args.verticesMap ?? new Map();
-    this.edgesMap = args.edgesMap ?? new Map();
     // Instantiating adjacency list:
-    this.adjacencyList = args.adjacencyList ?? new Map();
+    this.adjacencyList = new Map();
+    // Instantiating and binding maps of vertices and edges:
+    this.verticesMap = new Map();
+    if (args.vertices) {
+      args.vertices.forEach(vertex => {
+        this.addVertex(vertex.key, vertex.value);
+      });
+    }
+    this.edgesMap = new EdgesMap();
+    if (args.edges) {
+      args.edges.forEach(edge => {
+        this.addEdge(edge.from, edge.to, edge.weight);
+      });
+    }
     // Binding traversals:
     this.traversal = {
       breadthFirst: this._breadthFirstTraversal.bind(this),
@@ -51,10 +63,10 @@ export class Graph<T> implements IGraph<T> {
   }
 
   public addVertex(key: Vertex<T>['key'], value: Vertex<T>['value']): Vertex<T> {
-    const vertex = { key, value };
-    this.verticesMap.set(key, { key, value });
-    if (!this.adjacencyList.get(key)) {
-      this.adjacencyList.set(key, new Set<Edge<T>['key']>());
+    const vertex = new Vertex(key, value);
+    this.verticesMap.set(vertex.key, vertex);
+    if (!this.adjacencyList.get(vertex.key)) {
+      this.adjacencyList.set(vertex.key, new Set<Vertex<T>['key']>());
     }
     return vertex;
   }
@@ -62,42 +74,36 @@ export class Graph<T> implements IGraph<T> {
   public addEdge(
     fromVertexKey: Vertex<T>['key'],
     toVertexKey: Vertex<T>['key'],
-    weight: Edge<T>['weight'] = Graph.__DEFAULT_EDGE_WEIGHT,
-  ): boolean {
-    // Checking if the vertices exist.
+    weight: IEdge<T>['weight'] = Graph.__DEFAULT_EDGE_WEIGHT,
+  ): IEdge<T> | undefined {
+    // Checking if the vertices exist and if the edge already exists.
     const shouldAddEdge = (
       this.hasVertex(fromVertexKey) &&
-      this.hasVertex(toVertexKey)
+      this.hasVertex(toVertexKey) &&
+      !this.edgesMap.hasEdge(fromVertexKey, toVertexKey)
     );
     // Using JavaScript `Set` data structures to make sure that the edges
     // are unique respective to the interconnected vertices.
     if (shouldAddEdge) {
       this.adjacencyList.get(fromVertexKey)!.add(toVertexKey);
       // Adding the outgoing Edge:
-      const outgoingEdgeKey = Graph.serializeEdgeKey(fromVertexKey, toVertexKey);
-      this.edgesMap.set(
-        outgoingEdgeKey,
-        { key: outgoingEdgeKey, from: fromVertexKey, to: toVertexKey, weight },
-      );
-      // If it's an undirected graph, also add the incoming Edge:
+      const addedEdge = this.edgesMap.addEdge(fromVertexKey, toVertexKey, weight);
+      // If it's NOT a directed graph, also add the incoming Edge:
       if (!this.isDirectedGraph) {
         this.adjacencyList.get(toVertexKey)!.add(fromVertexKey);
-        const incomingEdgeKey = Graph.serializeEdgeKey(toVertexKey, fromVertexKey);
-        this.edgesMap.set(
-          incomingEdgeKey,
-          { key: incomingEdgeKey, from: toVertexKey, to: fromVertexKey, weight },
-        );
+        this.edgesMap.addEdge(toVertexKey, fromVertexKey, weight);
       }
+      return addedEdge;
     }
-    return shouldAddEdge;
+    return undefined;
   }
 
   public getVertex(key: Vertex<T>['key']): Vertex<T> | undefined {
     return this.verticesMap.get(key);
   }
 
-  public getEdge(fromVertexKey: Vertex<T>['key'], toVertexKey: Vertex<T>['key']): Edge<T> | undefined {
-    return this.edgesMap.get(Graph.serializeEdgeKey(fromVertexKey, toVertexKey));
+  public getEdge(fromVertexKey: Vertex<T>['key'], toVertexKey: Vertex<T>['key']): IEdge<T> | undefined {
+    return this.edgesMap.getEdge(fromVertexKey, toVertexKey);
   }
 
   public hasVertex(key: Vertex<T>['key']): boolean {
@@ -105,7 +111,7 @@ export class Graph<T> implements IGraph<T> {
   }
 
   public hasEdge(fromVertexKey: Vertex<T>['key'], toVertexKey: Vertex<T>['key']): boolean {
-    return this.edgesMap.has(Graph.serializeEdgeKey(fromVertexKey, toVertexKey));
+    return this.edgesMap.hasEdge(fromVertexKey, toVertexKey);
   }
 
   public removeVertex(key: Vertex<T>['key']): Vertex<T> | undefined {
@@ -128,7 +134,7 @@ export class Graph<T> implements IGraph<T> {
     return removedVertex;
   }
 
-  public removeEdge(fromVertexKey: Vertex<T>['key'], toVertexKey: Vertex<T>['key']): Edge<T> | undefined {
+  public removeEdge(fromVertexKey: Vertex<T>['key'], toVertexKey: Vertex<T>['key']): IEdge<T> | undefined {
     // Checking if the vertices exist in the list.
     const shouldRemoveEdge = (
       this.hasVertex(fromVertexKey) &&
@@ -136,15 +142,21 @@ export class Graph<T> implements IGraph<T> {
     );
     if (shouldRemoveEdge) {
       this.adjacencyList.get(fromVertexKey)!.delete(toVertexKey);
-      const outgoingEdgeKey = Graph.serializeEdgeKey(fromVertexKey, toVertexKey);
-      const removedEdge = this.edgesMap.get(outgoingEdgeKey)
-      this.edgesMap.delete(Graph.serializeEdgeKey(fromVertexKey, toVertexKey));
+      const removedEdge = this.edgesMap.removeEdge(fromVertexKey, toVertexKey);
       if (!this.isDirectedGraph) {
         this.adjacencyList.get(toVertexKey)!.delete(fromVertexKey);
-        const incomingEdgeKey = Graph.serializeEdgeKey(toVertexKey, fromVertexKey);
-        this.edgesMap.delete(incomingEdgeKey);
+        this.edgesMap.removeEdge(toVertexKey, fromVertexKey);
       }
       return removedEdge;
+    }
+    return undefined;
+  }
+
+  public updateVertexValue(key: Vertex<T>['key'], value: Vertex<T>['value']): Vertex<T> | undefined {
+    const updatedVertex = this.getVertex(key);
+    if (updatedVertex) {
+      updatedVertex.value = value;
+      return updatedVertex;
     }
     return undefined;
   }
@@ -156,6 +168,13 @@ export class Graph<T> implements IGraph<T> {
     return this;
   }
 
+  public values(): { vertices: Vertex<T>[], edges: IEdge<T>[] } {
+    return {
+      vertices: Array.from(this.verticesMap.values()),
+      edges: this.edgesMap.values(),
+    };
+  }
+
   public traversal: IGraph<T>['traversal'];
 
   /**
@@ -165,7 +184,7 @@ export class Graph<T> implements IGraph<T> {
    * @param key - Vertex identifier.
    * @param callback - Optional callback invoked on every level of the BF traversal. All of the  vertices of the level as well as the depth are passed as parameters.
    */
-  private _breadthFirstTraversal<U = unknown>(key: Vertex<T>['key'], callback?: (adjacentVertices: Vertex<T>[], depth: number) => U): Vertex<T>[] {
+  protected _breadthFirstTraversal<U = unknown>(key: Vertex<T>['key'], callback?: (adjacentVertices: Vertex<T>[], depth: number) => U): Vertex<T>[] {
     if (!this.hasVertex(key)) { return []; }
 
     const startingVertex = this.getVertex(key)!;
@@ -214,7 +233,7 @@ export class Graph<T> implements IGraph<T> {
    * @param key - Vertex identifier.
    * @param callback - Optional callback invoked on every vertex of the DF traversal.
    */
-  private _depthFirstTraversal<U = unknown>(key: Vertex<T>['key'], callback?: (vertex: Vertex<T>) => U): Vertex<T>[] {
+  protected _depthFirstTraversal<U = unknown>(key: Vertex<T>['key'], callback?: (vertex: Vertex<T>) => U): Vertex<T>[] {
     if (!this.hasVertex(key)) { return []; }
 
     const vertices: Vertex<T>[] = [];
