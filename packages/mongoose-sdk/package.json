@@ -1,6 +1,6 @@
 {
 	"name": "@atomly/mongoose-sdk",
-	"version": "1.0.1-alpha.1",
+	"version": "1.0.1-alpha.2",
 	"description": "> TODO: description",
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/mongoose-sdk#readme",
