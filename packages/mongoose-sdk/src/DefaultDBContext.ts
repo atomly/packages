@@ -56,6 +56,8 @@ export abstract class DefaultDBContext<T> implements DBContext<T> {
       if (callback) { callback(); }
     } catch (err) {
       if (callback) { callback(err); }
+    } finally {
+      delete this.connection;
     }
   }
 }
