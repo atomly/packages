@@ -1,11 +1,14 @@
 {
   "name": "@atomly/hubful",
-  "version": "1.0.1-alpha.1",
+  "version": "1.0.2-alpha.0",
   "description": "> TODO: description",
   "author": "Robert Molina <rmolinamir@gmail.com>",
   "homepage": "https://github.com/atomly/hubful#readme",
   "license": "ISC",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
