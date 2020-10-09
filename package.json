@@ -32,7 +32,8 @@
     "watch": "lerna run watch --parallel",
     "start": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up -d",
     "start:attached": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up",
-    "stop": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env down"
+    "stop": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env down",
+    "publish": "lerna publish"
   },
   "config": {
     "commitizen": {
