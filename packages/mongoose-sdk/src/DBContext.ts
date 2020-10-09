@@ -2,7 +2,7 @@
 import { Connection, ConnectionOptions } from 'mongoose';
 
 export interface DBContext<T> {
-  connection: Connection;
+  connection: Connection | null;
 
   collections: T;
 

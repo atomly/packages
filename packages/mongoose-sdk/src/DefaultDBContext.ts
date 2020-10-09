@@ -9,7 +9,7 @@ import {
 import {  DBContext } from './DBContext';
 
 export abstract class DefaultDBContext<T> implements DBContext<T> {
-  public connection: Connection;
+  public connection: Connection | null = null;
 
   public collections: T;
 
@@ -52,12 +52,12 @@ export abstract class DefaultDBContext<T> implements DBContext<T> {
 
   public async close(callback?: (err?: unknown) => void): Promise<void> {
     try {
-      await this.connection.close();
+      await this.connection?.close();
       if (callback) { callback(); }
     } catch (err) {
       if (callback) { callback(err); }
     } finally {
-      delete this.connection;
+      this.connection = null;
     }
   }
 }
