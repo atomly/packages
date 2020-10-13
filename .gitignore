@@ -9,6 +9,9 @@ lerna-debug.log*
 # Config files
 **.config.**
 
+# Exclude sample config files
+!packages/**/config/samples/*
+
 # Exclude Jest config files
 !jest.config.js
 
@@ -123,3 +126,7 @@ tmp
 
 # AWS SSM Parameter Store Configuration
 aws.ssm.config.json
+
+# Environmental Variables Files
+.env.dev
+.env.prod

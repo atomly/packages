@@ -27,7 +27,7 @@
 - [@atomly/dataloader-sdk](https://github.com/atomly/atomly/tree/master/packages/dataloader-sdk "@atomly/dataloader-sdk package homepage")
 - [@atomly/hubful](https://github.com/atomly/atomly/tree/master/packages/hubful "@atomly/hubful package homepage")
 - [@atomly/mongoose-sdk](https://github.com/atomly/atomly/tree/master/packages/mongoose-sdk "@atomly/mongoose-sdk package homepage")
-- [@atomly/prisma-sdk](https://github.com/atomly/atomly/tree/master/packages/prisma-sdk "@atomly/prisma-sdk package homepage")
+- [@atomly/config](https://github.com/atomly/atomly/tree/master/packages/config "@atomly/config package homepage")
 - [@atomly/typeorm-sdk](https://github.com/atomly/atomly/tree/master/packages/typeorm-sdk "@atomly/typeorm-sdk package homepage")
 
 <!-- END custom generated Lerna Packages please keep comment here to allow auto update -->

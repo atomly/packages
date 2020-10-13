@@ -24,7 +24,7 @@
 		"test:watch": "npx jest --watch"
 	},
 	"peerDependencies": {
-		"class-validator": "^0.11.0",
+		"class-validator": "^0.12.2",
 		"moment": "2.27.0",
 		"pg": "^7.17.1",
 		"reflect-metadata": "^0.1.13",
@@ -37,7 +37,6 @@
 		"@types/uuid": "^7.0.0",
 		"@typescript-eslint/eslint-plugin": "^2.17.0",
 		"@typescript-eslint/parser": "^2.17.0",
-		"class-validator": "^0.11.0",
 		"commander": "^5.0.0",
 		"dataloader": "2.0.0",
 		"dotenv": "^8.2.0",
