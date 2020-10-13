@@ -7,7 +7,7 @@
 ## Usage
 
 ```js
-const atomlyPrismaSdk = require('@atomly/config');
+const atomlyConfig = require('@atomly/config');
 
 // TODO: DEMONSTRATE API
 ```
