@@ -5,7 +5,7 @@ import faker from 'faker';
 import { getDefaultPublisherService, getRandomInt } from '../../utils';
 
 const TOPIC = faker.random.words();
-const UNIT_TESTS_COUNT = 2500;
+const UNIT_TESTS_COUNT = 250;
 const RANDOM_VALUE_GETTERS = [
   faker.random.alphaNumeric,
   faker.random.arrayElement,

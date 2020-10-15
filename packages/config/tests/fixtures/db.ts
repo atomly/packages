@@ -1,16 +1,16 @@
-// Libraries
-import { Matches } from 'class-validator';
-
 // Dependencies
-import { Validator } from '../src';
+import {
+  Loader,
+  Matches,
+} from '../../src';
 
-export class MongoDBConfig extends Validator<'db'> {
+export class MongoDBLoader extends Loader<'db'> {
   public readonly __name: 'db' = 'db';
 
   @Matches(
     /^mongodb:\/\/.*$/g,
     {
-      message: Validator.errorMessageTemplate(
+      message: Loader.errorMessageTemplate(
         'the database connection string is not valid',
         'check that the database connection string matches a MongoDB connection URI and try again',
       ),

@@ -12,8 +12,8 @@ const defaultPublisherService = getDefaultPublisherService();
 
 // Constants
 const WAIT_TIMER = 50;
-const AMOUNT_PUBLICATIONS = 1000;
-const AMOUNT_UNIQUE_TOPICS = 2500;
+const AMOUNT_PUBLICATIONS = 100;
+const AMOUNT_UNIQUE_TOPICS = 250;
 const UNIQUE_TOPICS = new Array(AMOUNT_UNIQUE_TOPICS)
   .fill(undefined)
   .map(() => faker.random.uuid());

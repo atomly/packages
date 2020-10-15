@@ -19,7 +19,9 @@
   "scripts": {
     "cli": "ts-node cli/index.ts",
     "build": "tsc -b",
-    "watch": "tsc -b -w"
+    "watch": "tsc -b -w",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch"
   },
   "dependencies": {
     "class-transformer": "^0.3.1",
@@ -40,6 +42,7 @@
     "faker": "^5.1.0",
     "jest": "^26.4.2",
     "prettier": "^2.1.1",
+    "reflect-metadata": "^0.1.13",
     "ts-jest": "^26.3.0",
     "ts-node": "9.0.0",
     "ts-node-dev": "^1.0.0-pre.62",

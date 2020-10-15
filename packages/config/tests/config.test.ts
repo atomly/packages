@@ -1,14 +1,16 @@
 // Libraries
+import 'reflect-metadata'; // Necessary for nested configurations
 import path from 'path';
 
 // Dependencies
-import { Loader } from '../src';
-import { MongoDBConfig } from './db';
-import { ExpressConfig } from './express';
-import { RedisConfig } from './redis';
+import { Config } from '../src';
+import { MongoDBLoader } from './fixtures/db';
+import { ExpressLoader } from './fixtures/express';
+import { RedisLoader } from './fixtures/redis';
+import { NestedLoader } from './fixtures/nested';
 
 function resolveConfigFileLoation(fileLocation: string): { fileLocationUri: string } {
-  return { fileLocationUri: `file://${path.resolve(__dirname, '..', '..', fileLocation).replace(/\\/g, '/')}` };
+  return { fileLocationUri: `file://${path.resolve(__dirname, '..', fileLocation).replace(/\\/g, '/')}` };
 }
 
 //
@@ -108,43 +110,69 @@ const redisErrors = [
   },
 ];
 
-describe('loader using .env.test works correctly', () => {
-  const loader = new Loader(
-    new MongoDBConfig(resolveConfigFileLoation(process.env.DB_CONFIG_FILE_LOCATION!)),
-    new ExpressConfig(resolveConfigFileLoation(process.env.EXPRESS_CONFIG_FILE_LOCATION!)),
-    new RedisConfig(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
+const nestedErrors = [
+  {
+    children: [],        
+    constraints: {      
+      isDefined: "foo should not be null or undefined",
+      isNotEmptyObject: "foo must be a non-empty object",
+      isObject: "foo must be an object",
+    },
+    property: "foo",
+    target: {     
+      __fileLocationUri: "",   
+      __name: "nested",        
+    },
+    value: undefined,
+  },
+];
+
+describe('config using .env.test works correctly', () => {
+  const config = new Config(
+    new MongoDBLoader(resolveConfigFileLoation(process.env.DB_CONFIG_FILE_LOCATION!)),
+    new ExpressLoader(resolveConfigFileLoation(process.env.EXPRESS_CONFIG_FILE_LOCATION!)),
+    new RedisLoader(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
+    new NestedLoader(resolveConfigFileLoation(process.env.NESTED_CONFIG_FILE_LOCATION!)),
   );
 
   test('db validator works correctly', async () => {
-    const db = new MongoDBConfig({ fileLocationUri: '' });
+    const db = new MongoDBLoader({ fileLocationUri: '' });
     await expect(db.__validate()).rejects.toMatchObject(dbErrors);
   });
 
   test('express validator works correctly', async () => {
-    const express = new ExpressConfig({ fileLocationUri: '' });
+    const express = new ExpressLoader({ fileLocationUri: '' });
     await expect(express.__validate()).rejects.toMatchObject(expressErrors);
   });
 
   test('redis validator works correctly', async () => {
-    const redis = new RedisConfig({ fileLocationUri: '' });
+    const redis = new RedisLoader({ fileLocationUri: '' });
     await expect(redis.__validate()).rejects.toMatchObject(redisErrors);
   });
 
-  test('configuration API works correctly', async () => {
-    await loader.load();
-    expect(loader.config.db).toBeTruthy();
-    expect(loader.config.express).toBeTruthy();
-    expect(loader.config.redis).toBeTruthy();
+  test('nested validator works correctly', async () => {
+    const nested = new NestedLoader({ fileLocationUri: '' });
+    await expect(nested.__validate()).rejects.toMatchObject(nestedErrors);
   });
 
   test('duplicate configurations should throw error, i.e. non-unique validators `__name` index key', async () => {
-    const loader = new Loader(
-      new RedisConfig(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
-      new RedisConfig(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
+    const config = new Config(
+      new RedisLoader(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
+      new RedisLoader(resolveConfigFileLoation(process.env.REDIS_CONFIG_FILE_LOCATION!)),
     );
-    await expect(loader.load()).rejects.toBeTruthy();
+    await expect(config.load()).rejects.toBeTruthy();
   });
 
-  // TODO: Test nested configurations, e.g. `config.foo.bar.baz.foobar as string` using
-  // `class-transformer` decorators.
+  test('configuration API works correctly', async () => {
+    await config.load();
+    expect(config.db).toBeTruthy();
+    expect(config.express).toBeTruthy();
+    expect(config.redis).toBeTruthy();
+    expect(config.nested).toBeTruthy();
+  });
+
+  test('nested configuration works correctly (config.nested.foo.bar.baz.foobar as string)', async () => {
+    expect(config.nested.foo.bar.baz).toBeTruthy();
+    expect(typeof config.nested.foo.bar.baz === 'string').toBeTruthy();
+  });
 });

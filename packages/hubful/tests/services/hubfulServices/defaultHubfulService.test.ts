@@ -8,7 +8,7 @@ import Hubful, { EHubfulServiceStatus } from '../../../src';
 import { setupHubfulInstance, getRandomInt } from '../../utils';
 
 const TOPIC = faker.random.words();
-const UNIT_TESTS_COUNT = 1000;
+const UNIT_TESTS_COUNT = 100;
 const RANDOM_VALUE_GETTERS = [
   faker.random.alphaNumeric,
   faker.random.arrayElement,
