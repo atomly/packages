@@ -5,7 +5,8 @@ import { Loader } from './loader';
 // Dependencies
 import { errorMessageTemplate } from './utils';
 
-class AtomlyConfig<T extends Loader[]> {
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+export class __Config<T extends Loader[]> {
   constructor(...loaders: T) {
     this.__loaders = loaders;
   }
@@ -36,4 +37,4 @@ class AtomlyConfig<T extends Loader[]> {
   }
 }
 
-export const Config = AtomlyConfig as new<T extends Loader[]>(...loaders: T) => AtomlyConfig<T> & KeyedByName<T>;
+export const Config = __Config as new<T extends Loader[]>(...loaders: T) => __Config<T> & KeyedByName<T>;

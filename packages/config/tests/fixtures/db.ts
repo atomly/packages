@@ -8,7 +8,7 @@ export class MongoDBLoader extends Loader<'db'> {
   public readonly __name: 'db' = 'db';
 
   @Matches(
-    /^mongodb:\/\/.*$/g,
+    /^mongodb:\/\/.*$/i,
     {
       message: Loader.errorMessageTemplate(
         'the database connection string is not valid',

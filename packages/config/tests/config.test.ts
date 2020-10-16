@@ -1,5 +1,5 @@
 // Libraries
-import 'reflect-metadata'; // Necessary for nested configurations
+import 'reflect-metadata';
 import path from 'path';
 
 // Dependencies
