@@ -86,8 +86,8 @@ export class Loader<K extends string = string> implements TypeName {
           // Throw error by default
           default: {
             throw new Error(Loader.errorMessageTemplate(
-              'the URI protocol is not supported',
-              `check that is equal to ${Object.values(FileProtocol).join(', ')} and try again`,
+              'the URI file extension is not supported',
+              `check that is equal to ${Object.values(FileExtension).join(', ')} and try again`,
             ));
           }
         }
