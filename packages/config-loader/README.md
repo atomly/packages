@@ -1,4 +1,4 @@
-# `@atomly/config`
+# `@atomly/config-loader`
 
 **NOTE: This is a work in progress**.
 
@@ -7,7 +7,7 @@
 ## Usage
 
 ```js
-const atomlyConfig = require('@atomly/config');
+const atomlyConfig = require('@atomly/config-loader');
 
 // TODO: DEMONSTRATE API
 ```

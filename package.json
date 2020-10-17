@@ -33,7 +33,7 @@
     "start": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up -d",
     "start:attached": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up",
     "stop": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env down",
-    "publish": "lerna publish"
+    "publish": "npm run build && lerna publish"
   },
   "config": {
     "commitizen": {
