@@ -1,6 +1,6 @@
 {
   "name": "@atomly/config-loader",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "> TODO: description",
   "author": "Robert Molina <rmolinamir@gmail.com>",
   "homepage": "https://github.com/atomly/config-loader#readme",
@@ -48,5 +48,5 @@
     "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "4.0.2"
   },
-  "gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
+  "gitHead": "de682bd21d62f6f981d206da91b6efe53b8ad19b"
 }
