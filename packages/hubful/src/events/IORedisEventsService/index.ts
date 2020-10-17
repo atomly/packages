@@ -6,8 +6,20 @@ import { v4 } from 'uuid';
 import { TEventHandler, IEventsServiceOptions } from '../EventsService';
 import { IIORedisEventsService, IIORedisEventsServiceArgs } from './types';
 
+/**
+ * TODO: Improve event filtering.
+ * 
+ * The events map should store subscription IDs rather than the  handlers themselves,
+ * this way if the handlers by events need to be executed, all there would need to be
+ * done is map the subscriptions IDs to their handlers using the handlers map.
+ * 
+ * This allows accessing the handlers data, such as options, inside the `onMessage` handler.
+ * With the options being available in the `onMessage` handler, we could only execute the handlers
+ * that match the filter.
+ */
+
 export class IORedisEventsService implements IIORedisEventsService { // TODO: Remove this interface and implement the base one.
-  public _eventsMap: IIORedisEventsService['_eventsMap']
+  public _eventsMap: IIORedisEventsService['_eventsMap'] // TODO: Events map should be a map of events pointing to an array of subscription IDs.
   public _handlersMap: IIORedisEventsService['_handlersMap']
   public _ioPublisherRedis: IIORedisEventsService['_ioPublisherRedis']
   public _ioSubscriberRedis: IIORedisEventsService['_ioSubscriberRedis']
@@ -31,6 +43,10 @@ export class IORedisEventsService implements IIORedisEventsService { // TODO: Re
    * events. Whenever an event is triggered, ALL of the handlers related to
    * the event will be executed and will receive the respective event
    * and payload.
+   * 
+   * TODO: Somehow receive or instantiate a third parameter `filter` to
+   * filter handlers that will be receiving messages.
+   * 
    * @param event - The triggered event that handlers are subscribed to.
    * @param payload - A payload that will be sent to the subscribed handlers.
    */
