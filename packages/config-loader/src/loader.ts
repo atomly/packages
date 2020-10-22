@@ -1,10 +1,7 @@
 // Libraries
 import path from 'path';
 import fs from 'fs';
-import {
-  validateOrReject,
-  IsString,
-} from 'class-validator';
+import { IsString } from 'class-validator';
 
 // Types
 import { Data, TypeName } from './types';
@@ -12,6 +9,7 @@ import { Data, TypeName } from './types';
 // Dependencies
 import { errorMessageTemplate, getFilePathExtension } from './utils';
 import { parseUri } from './uri';
+import { transformAndValidate, ClassType } from './transformAndValidate';
 
 enum FileProtocol {
   FILE = 'file',
@@ -26,8 +24,12 @@ export class Loader<K extends string = string> implements TypeName {
 
   static getFilePathExtension = getFilePathExtension;
 
+  static transformAndValidate = transformAndValidate;
+
   constructor(args: {
     fileLocationUri: string;
+  } = {
+    fileLocationUri: '',
   }) {
     this.__fileLocationUri = args.fileLocationUri;
   }
@@ -62,8 +64,8 @@ export class Loader<K extends string = string> implements TypeName {
    */
   public async __load(): Promise<Data<Loader<K>, K>> {
     const fileContents = await this.__loadFile(this.__fileLocationUri);
-    Object.assign(this, fileContents);
-    await this.__validate();
+    const data = await this.__validate(fileContents);
+    Object.assign(this, data);
     return this as Data<Loader<K>, K>;
   }
 
@@ -71,17 +73,17 @@ export class Loader<K extends string = string> implements TypeName {
    * Loads a Loader's file contents based on its .
    * @param parsedUri - Parsed URI from the Loader's config file location.
    */
-  public async __loadFile(fileLocationUri: string): Promise<Record<string, unknown>> {
+  public async __loadFile(fileLocationUri: string): Promise<object | object[]> {
     const parsedUri = await parseUri(fileLocationUri);
     const { path: filePath } = parsedUri;
+    const ext = Loader.getFilePathExtension(filePath!);
     switch(parsedUri.protocol) {
       // file://*.*
       case FileProtocol.FILE: {
-        const ext = Loader.getFilePathExtension(filePath!);
         switch(ext) {
           // file://*.json
           case FileExtension.JSON: {
-            return this.__loadFileJson(filePath!);
+            return await this.__loadFileJson(filePath!);
           }
           // Throw error by default
           default: {
@@ -106,15 +108,19 @@ export class Loader<K extends string = string> implements TypeName {
    * Loads and parses a config file in JSON format.
    * @param filePath - Path to the file to be loaded.
    */
-  public __loadFileJson(filePath: string): Record<string, unknown> {
-    const fileContents = fs.readFileSync(path.resolve(__dirname, filePath!)).toString('utf-8');
-    return JSON.parse(fileContents);
+  public async __loadFileJson(filePath: string): Promise<object | object[]> {
+    const jsonString = fs.readFileSync(path.resolve(__dirname, filePath!)).toString('utf-8');
+    return JSON.parse(jsonString);
   }
 
   /**
    * Asynchronously validates the config data.
    */
-  public async __validate(): Promise<void> {
-    await validateOrReject(this);
+  public async __validate(fileContents: string | object | object[]): Promise<this | this[]> {
+    const data = await transformAndValidate(
+      this.constructor as ClassType<this>,
+      fileContents as object | object[],
+    );
+    return data;
   }
 }

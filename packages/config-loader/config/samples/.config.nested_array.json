@@ -1,0 +1,10 @@
+{
+  "foo": [
+    {
+      "bar": {
+        "foobar": "ipsum"
+      },
+      "baz": "lorem"
+    }
+  ]
+}
