@@ -28,7 +28,7 @@ export async function batchFunctionOneToOne<T extends BaseEntity, K extends new(
   // Fetching entities, using the set entityIdKey parameter (defaults to `id`).
   const entities = await (entity as unknown as typeof BaseEntity).find(query);
   // Entities map that will hold the fetched entities. Each related entity ID will be assigned its respective entity.
-  const entitiesMap: { [key: string]: T } = {};0
+  const entitiesMap: { [key: string]: T } = {};
   // Key identifier of the entity.
   const key = entityIdKey as keyof typeof entities[number];
   // Assigning the respective entities then returning them:
