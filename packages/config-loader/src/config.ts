@@ -2,9 +2,6 @@
 import { KeyedByName } from './types';
 import { Loader } from './loader';
 
-// Dependencies
-import { errorMessageTemplate } from './utils';
-
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export class __Config<T extends Loader[]> {
   constructor(...loaders: T) {
@@ -27,10 +24,7 @@ export class __Config<T extends Loader[]> {
           { [key]: fileContents },
         );
       } else {
-        throw new Error(errorMessageTemplate(
-          `a duplicated config index key "${key}" was found`,
-          `check that your index keys are unique and try again`,
-        ));
+        throw new Error(`A duplicated config index key "${key}" was found. Check that your index keys are unique.`);
       }
     });
     await Promise.all(promises);

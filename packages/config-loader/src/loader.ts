@@ -1,13 +1,13 @@
 // Libraries
 import path from 'path';
 import fs from 'fs';
-import { IsString } from 'class-validator';
+import { IsString, ValidationError } from 'class-validator';
 
 // Types
 import { Data, TypeName } from './types';
 
 // Dependencies
-import { errorMessageTemplate, getFilePathExtension } from './utils';
+import { getFilePathExtension } from './utils';
 import { parseUri } from './uri';
 import { transformAndValidate, ClassType } from './transformAndValidate';
 
@@ -20,8 +20,6 @@ enum FileExtension {
 }
 
 export class Loader<K extends string = string> implements TypeName {
-  static errorMessageTemplate = errorMessageTemplate;
-
   static getFilePathExtension = getFilePathExtension;
 
   static transformAndValidate = transformAndValidate;
@@ -39,10 +37,7 @@ export class Loader<K extends string = string> implements TypeName {
    * object.
    */
   @IsString({
-    message: Loader.errorMessageTemplate(
-      'the `__name` index key is invalid',
-      'check that the value is a string and that it is set up in its config class and try again',
-    ),
+    message: '$property is invalid. Please check that the value is a string and that it is set up in its config class.',
   })
   public readonly __name: K;
 
@@ -51,10 +46,7 @@ export class Loader<K extends string = string> implements TypeName {
    * this location, then validated.
    */
   @IsString({
-    message: Loader.errorMessageTemplate(
-      'the `fileLocationUri` index key is invalid',
-      'check that the value is a string and try again',
-    ),
+    message: '$property is invalid. Please check that the value is a string.',
   })
   public __fileLocationUri: string;
 
@@ -64,8 +56,11 @@ export class Loader<K extends string = string> implements TypeName {
    */
   public async __load(): Promise<Data<Loader<K>, K>> {
     const fileContents = await this.__loadFile(this.__fileLocationUri);
+
     const data = await this.__validate(fileContents);
+
     Object.assign(this, data);
+
     return this as Data<Loader<K>, K>;
   }
 
@@ -87,19 +82,13 @@ export class Loader<K extends string = string> implements TypeName {
           }
           // Throw error by default
           default: {
-            throw new Error(Loader.errorMessageTemplate(
-              'the URI file extension is not supported',
-              `check that is equal to ${Object.values(FileExtension).join(', ')} and try again`,
-            ));
+            throw new Error(`URI file extension is not supported, received ${ext}. Check that is equal to ${Object.values(FileExtension).join(', ')}.`);
           }
         }
       }
       // Throw error by default
       default: {
-        throw new Error(Loader.errorMessageTemplate(
-          `the URI protocol is not supported, received ${parsedUri.protocol}`,
-          `check that is equal to one of these values and try again: ${Object.values(FileProtocol).join(', ')}`,
-        ));
+        throw new Error(`URI protocol is not supported, received ${parsedUri.protocol}. Check that is equal to ${Object.values(FileProtocol).join(', ')}.`);
       }
     }
   }
@@ -114,13 +103,19 @@ export class Loader<K extends string = string> implements TypeName {
   }
 
   /**
-   * Asynchronously validates the config data.
+   * Asynchronously validates the config data. If the data is invalid, it will return
+   * a readable error.
    */
   public async __validate(fileContents: string | object | object[]): Promise<this | this[]> {
-    const data = await transformAndValidate(
-      this.constructor as ClassType<this>,
-      fileContents as object | object[],
-    );
-    return data;
+    try {
+      const data = await transformAndValidate(
+        this.constructor as ClassType<this>,
+        fileContents as object | object[],
+      );
+  
+      return data;
+    } catch (error) {
+      throw new Error((error as ValidationError).toString());
+    }
   }
 }

@@ -33,7 +33,8 @@ describe('loaders API', () => {
           try {
             await nestedArrayLoader.__validate(invalidData);
           } catch (err) {
-            console.debug('DEBUG: ', err);
+            console.error('ERROR: ', err);
+            console.error('ERROR err.children: ', err.children);
             throw err;
           }
         },
@@ -61,7 +62,7 @@ describe('loaders API', () => {
           try {
             await nestedArrayLoader.__validate(invalidData);
           } catch (err) {
-            console.debug('DEBUG: ', err);
+            console.error('ERROR: ', err);
             throw err;
           }
         },
@@ -87,7 +88,7 @@ describe('loaders API', () => {
           try {
             await nestedArrayLoader.__validate(invalidData);
           } catch (err) {
-            console.debug('DEBUG: ', err);
+            console.error('ERROR: ', err);
             throw err;
           }
         },
@@ -115,7 +116,7 @@ describe('loaders API', () => {
           try {
             await nestedArrayLoader.__validate(invalidData);
           } catch (err) {
-            console.debug('DEBUG: ', err);
+            console.error('ERROR: ', err);
             throw err;
           }
         },
@@ -153,7 +154,7 @@ describe('loaders API', () => {
           try {
             await nestedArrayLoader.__validate(invalidData);
           } catch (err) {
-            console.debug('DEBUG: ', err);
+            console.error('ERROR: ', err);
             // eslint-disable-next-line jest/no-try-expect
             expect(err[0].children.length).toHaveLength(invalidData.foo.length);
             throw err;

@@ -14,46 +14,18 @@ enum RedisFamily {
 export class RedisLoader extends Loader<'redis'> {
   public readonly __name: 'redis' = 'redis';
 
-  @IsInt({
-    message: Loader.errorMessageTemplate(
-      'the port is not valid',
-      'check that the port is an integer and try again',
-    ),
-  })
+  @IsInt()
   port: number;
 
-  @IsString({
-    message: Loader.errorMessageTemplate(
-      'the host is not valid',
-      'check that the host is a valid string and try again',
-    ),
-  })
+  @IsString()
   host: string;
 
-  @IsEnum(
-    RedisFamily,
-    {
-      message: Loader.errorMessageTemplate(
-        'the family is not valid',
-        'check that the family value is "4" (IPv4) or "6" (IPv6) and try again',
-      ),
-    },
-  )
+  @IsEnum(RedisFamily)
   family: number;
 
-  @IsString({
-    message: Loader.errorMessageTemplate(
-      'the password is not valid',
-      'check that the password is a valid string and try again',
-    ),
-  })
+  @IsString()
   password: string;
 
-  @IsInt({
-    message: Loader.errorMessageTemplate(
-      'db is not valid',
-      'check that db is a valid integer and try again',
-    ),
-  })
+  @IsInt()
   db: number;
 }

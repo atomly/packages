@@ -10,6 +10,7 @@ describe('testing ParsedUri regex matches', () => {
     const parsedUri = new ParsedUri(uri);
     expect(parsedUri.protocol).toBe('mongodb');
   });
+
   test('SRV protocol is parsed correctly', () => {
     const uri = 'mongodb+srv://127.0.0.1:27017/surveyshark-api?readPreference=primary&appname=MongoDB%20Compass&ssl=false';
     const parsedUri = new ParsedUri(uri);

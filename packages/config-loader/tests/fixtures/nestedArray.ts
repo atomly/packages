@@ -12,12 +12,7 @@ import {
 } from '../../src';
 
 class Bar {
-  @IsString({
-    message: Loader.errorMessageTemplate(
-      'foobar is not valid',
-      'check that foobar is a valid string and try again',
-    ),
-  })
+  @IsString()
   foobar: string;
 }
 
@@ -29,12 +24,7 @@ class Foo {
   @Type(() => Bar)
   bar: Bar;
 
-  @IsString({
-    message: Loader.errorMessageTemplate(
-      'baz is not valid',
-      'check that baz is a valid string and try again',
-    ),
-  })
+  @IsString()
   baz: string;
 }
 

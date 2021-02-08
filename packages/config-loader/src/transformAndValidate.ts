@@ -45,9 +45,7 @@ export function transformAndValidate<T extends object>(
       object = somethingToTransform;
     } else {
       return reject(
-        new Error(
-          'Incorrect object param type! Only string, plain object and array of plain objects are valid.',
-        ),
+        new Error('Incorrect object param type! Only string, plain object and array of plain objects are valid.'),
       );
     }
 
@@ -90,6 +88,7 @@ export function transformAndValidateSync<T extends object>(
   options?: TransformValidationOptions,
 ): T|T[] {
   let object: object;
+
   if (typeof somethingToTransform === 'string') {
     object = JSON.parse(somethingToTransform);
   } else if (
@@ -98,9 +97,7 @@ export function transformAndValidateSync<T extends object>(
   ) {
     object = somethingToTransform;
   } else {
-    throw new Error(
-      'Incorrect object param type! Only string, plain object and array of plain objects are valid.',
-    );
+    throw new Error('Incorrect object param type! Only string, plain object and array of plain objects are valid.');
   }
 
   const classObject = plainToClass(

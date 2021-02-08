@@ -10,12 +10,7 @@ import {
 } from '../../src';
 
 class Baz {
-  @IsString({
-    message: Loader.errorMessageTemplate(
-      'the host is not valid',
-      'check that the host is a valid string and try again',
-    ),
-  })
+  @IsString()
   baz: string;
 }
 
