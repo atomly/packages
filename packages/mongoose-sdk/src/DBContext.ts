@@ -1,7 +1,8 @@
 // Types
 import { Connection, ConnectionOptions } from 'mongoose';
+import { DBCollection } from './DBCollection';
 
-export interface DBContext<T> {
+export interface DBContext<T extends Record<string, DBCollection<unknown>>> {
   connection: Connection | null;
 
   collections: T;
@@ -11,7 +12,7 @@ export interface DBContext<T> {
    * by the `open` method. Used to set up collections, and such.
    * @param connection - DB connection.
    */
-  setup(connection: Connection): Promise<void>;
+  setup(connection: Connection): void;
 
   /**
    * Opens the connection to the database.

@@ -6,9 +6,10 @@ import {
 } from 'mongoose';
 
 // Types
-import {  DBContext } from './DBContext';
+import { DBContext } from './DBContext';
+import { DBCollection } from './DBCollection';
 
-export abstract class DefaultDBContext<T> implements DBContext<T> {
+export class MongooseDBContext<T extends Record<string, DBCollection<unknown>>> implements DBContext<T> {
   public connection: Connection | null = null;
 
   public collections: T;
@@ -23,7 +24,11 @@ export abstract class DefaultDBContext<T> implements DBContext<T> {
     this.collections = args.collections;
   }
 
-  public abstract async setup(connection: Connection): Promise<void>;
+  public setup(connection: Connection): void {
+    for (const collection of Object.values(this.collections)) {
+      collection.setup(connection);
+    }
+  }
 
   public async open(options?: ConnectionOptions): Promise<void> {
     if (!this.connection) {
@@ -44,10 +49,12 @@ export abstract class DefaultDBContext<T> implements DBContext<T> {
           options ?? {},
         ),
       );
+
       // Bindings
       this.connection = connection;
     }
-    await this.setup(this.connection);
+
+    this.setup(this.connection);
   }
 
   public async close(callback?: (err?: unknown) => void): Promise<void> {

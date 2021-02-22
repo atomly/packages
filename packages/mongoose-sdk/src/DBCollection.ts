@@ -6,7 +6,7 @@ import {
   Model,
 } from 'mongoose';
 
-export interface DBCollection<T extends Document> {
+export interface DBCollection<T> {
   /**
    * The model name.
    */
@@ -21,15 +21,15 @@ export interface DBCollection<T extends Document> {
   /**
    * The schema of the collection (documents).
    */
-  schema: Schema<T>
+  schema: Schema<T>;
 
   /**
    * The model of the collection.
    */
-  model: Model<T>
+  model: Model<T & Document>;
 
   /**
    * Sets up the DB model within the context of the connection.
    */
-  setupModel(connection: Connection): Model<T>
+  setup(connection: Connection): Model<T & Document>;
 }

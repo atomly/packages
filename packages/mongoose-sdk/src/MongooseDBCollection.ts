@@ -7,22 +7,17 @@ import {
 } from 'mongoose';
 import { DBCollection } from './DBCollection';
 
-export class DefaultDBCollection<T extends Document> implements DBCollection<T> {
+export class MongooseDBCollection<T> implements DBCollection<T> {
   public name: string;
 
   public schema: Schema<T>;
 
   public collectionName?: string;
 
-  private _model: Model<T>;
+  private _model: Model<T & Document>;
 
-  get model(): Model<T> {
+  get model(): Model<T & Document> {
     return this._model;
-  }
-
-  public setupModel(connection: Connection): Model<T> {
-    this._model = connection.model<T>(this.name, this.schema, this.collectionName);
-    return this.model;
   }
 
   constructor(args: {
@@ -33,5 +28,11 @@ export class DefaultDBCollection<T extends Document> implements DBCollection<T> 
     this.name = args.name;
     this.schema = args.schema;
     this.collectionName = args.collectionName;
+  }
+
+  public setup(connection: Connection): Model<T & Document> {
+    this._model = connection.model<T & Document>(this.name, this.schema, this.collectionName);
+
+    return this.model;
   }
 }

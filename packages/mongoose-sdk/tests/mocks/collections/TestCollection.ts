@@ -1,14 +1,10 @@
 // Libraries
-import {
-  Document,
-  Schema,
-} from 'mongoose';
+import { Schema } from 'mongoose';
 
 // Dependencies
-import { DefaultDBCollection } from '../../../src';
+import { MongooseDBCollection } from '../../../src';
 
-interface TestCollection extends Document {
-  id: string;
+interface TestCollection {
   email: string
   fullName: string
   reference: string
@@ -34,7 +30,7 @@ const testCollectionSchema = new Schema<TestCollection>({
   },
 });
 
-export const testCollection = new DefaultDBCollection<TestCollection>({
+export const testCollection = new MongooseDBCollection<TestCollection>({
   name: 'TestCollection',
   schema: testCollectionSchema,
   collectionName: 'test_collection',

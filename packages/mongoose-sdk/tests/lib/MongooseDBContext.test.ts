@@ -1,9 +1,8 @@
 // Libraries
 import faker from 'faker';
-import { Connection } from 'mongoose';
 
 // Dependencies
-import { DefaultDBContext } from '../../src'
+import { MongooseDBContext } from '../../src';
 import { testCollection } from '../mocks';
 
 //
@@ -21,15 +20,7 @@ const collections = {
   TestCollection: testCollection,
 };
 
-class DummyDBContext<T extends typeof collections> extends DefaultDBContext<T> {
-  public async setup(connection: Connection): Promise<void> {
-    Object.values(this.collections).forEach((collection) => {
-      collection.setupModel(connection);
-    });
-  }
-}
-
-const dbContext = new DummyDBContext<typeof collections>({
+const dbContext = new MongooseDBContext({
   connectionString: DB_CONNECTION_STRING,
   collections,
 });
@@ -38,7 +29,7 @@ const randomTestCollectionEmails: string[] = new Array(TEST_ENTITITIES_AMOUNT)
   .fill(undefined)
   .map(() => faker.internet.email());
 
-describe('DefaultDBContext works correctly', () => {
+describe('MongooseDBContext works correctly', () => {
   beforeAll(
     async () => {
       await dbContext.open();
@@ -54,18 +45,18 @@ describe('DefaultDBContext works correctly', () => {
   );
 
   it('successfully opens the dbContext', async () => {
-    expect(dbContext.connection.readyState).toBe(1);
+    expect(dbContext.connection?.readyState).toBe(1);
   });
 
   test('connection has the correct model names', () => {
-    expect(dbContext.connection.modelNames()).toMatchObject(Object
+    expect(dbContext.connection?.modelNames()).toMatchObject(Object
       .values(collections)
       .map(collection => collection.name),
     );
   });
 
   test('connection has the correct collection names', () => {
-    expect(Object.keys(dbContext.connection.collections)).toMatchObject(Object
+    expect(Object.keys(dbContext.connection?.collections!)).toMatchObject(Object
       .values(collections)
       .map(collection => collection.collectionName),
     );
