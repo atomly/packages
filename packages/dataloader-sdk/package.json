@@ -25,6 +25,7 @@
 	"peerDependencies": {
 		"class-validator": "^0.12.2",
 		"dataloader": "^2.0.0",
+		"mongoose": "^5.11.17",
 		"typeorm": "^0.2.22"
 	},
 	"devDependencies": {

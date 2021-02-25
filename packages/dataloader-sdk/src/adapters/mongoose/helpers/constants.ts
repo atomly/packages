@@ -1,0 +1,3 @@
+export const DEFAULT_ENTITY_ID_KEY = 'id';
+export const DEFAULT_ORDER_BY_KEY = DEFAULT_ENTITY_ID_KEY;
+export const DEFAULT_ORDER_BY_VALUE = -1;
