@@ -67,7 +67,7 @@ export class IORedisStorageService implements IIORedisStorageService { // TODO: 
         case EStorageServiceValueType.UNKNOWN:
           return JSON.parse(value.payload as string).payload;
         case EStorageServiceValueType.BUFFER:
-          return Buffer.from(value.payload as string[]);
+          return Buffer.from(value.payload as Uint8Array);
         default:
           return value.payload;
       }
