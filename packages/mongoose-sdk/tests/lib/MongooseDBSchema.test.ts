@@ -49,6 +49,7 @@ describe('MongooseDBSchema extend API works correctly', () => {
 
   test('testSchema obj property is left intact', () => {
     console.log('testSchema.obj: ', testSchema.obj);
+
     expect(JSON.stringify(testSchema.obj)).toBe(JSON.stringify({
       id:  {
         type: String,

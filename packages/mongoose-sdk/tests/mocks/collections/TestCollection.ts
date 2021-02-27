@@ -1,16 +1,13 @@
-// Libraries
-import { Schema } from 'mongoose';
-
 // Dependencies
-import { MongooseDBCollection } from '../../../src';
+import { MongooseDBCollection, MongooseDBSchema } from '../../../src';
 
 interface TestCollection {
-  email: string
-  fullName: string
-  reference: string
+  email: string;
+  fullName: string;
+  reference: string;
 }
 
-const testCollectionSchema = new Schema<TestCollection>({
+const testCollectionSchema = new MongooseDBSchema<TestCollection>({
   email:  {
     type: String,
     required: true,

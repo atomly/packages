@@ -1,3 +1,4 @@
+export * from './database';
 export * from './TestEntity1';
 export * from './TestEntity2';
 export * from './TestEntity3';

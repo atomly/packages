@@ -7,9 +7,8 @@ import {
 
 // Types
 import { DBContext } from './DBContext';
-import { DBCollection } from './DBCollection';
 
-export class MongooseDBContext<T extends Record<string, DBCollection<unknown>>> implements DBContext<T> {
+export class MongooseDBContext<T extends object> implements DBContext<T> {
   public connection: Connection | null = null;
 
   public collections: T;

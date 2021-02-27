@@ -2,7 +2,8 @@
 import faker from 'faker';
 
 // Dependencies
-import { MongooseDBContext } from '../../src';
+import {
+  MongooseDBContext } from '../../src';
 import { testCollection } from '../mocks';
 
 //
@@ -67,28 +68,33 @@ describe('MongooseDBContext works correctly', () => {
       email,
       fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
       reference: faker.internet.domainName(),
-    }))
+    }));
+
     const createdTestCollections = await dbContext.collections
       .TestCollection
-      .model
+      .Model
       .insertMany(testCollections);
+
     expect(createdTestCollections).toHaveLength(TEST_ENTITITIES_AMOUNT);
   });
 
   it('successfully finds the documents for the test collection', async () => {
     const testCollections = await dbContext.collections
       .TestCollection
-      .model
+      .Model
       .find({});
+
     expect(testCollections).toHaveLength(TEST_ENTITITIES_AMOUNT);
   });
 
   it('successfully deletes the documents for the test collection', async () => {
     const testCollections = await dbContext.collections
       .TestCollection
-      .model
+      .Model
       .deleteMany({});
+
     expect(testCollections.deletedCount).toBe(TEST_ENTITITIES_AMOUNT);
+
     expect(testCollections.deletedCount).toBe(TEST_ENTITITIES_AMOUNT);
   });
 });

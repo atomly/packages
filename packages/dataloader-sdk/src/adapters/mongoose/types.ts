@@ -3,25 +3,31 @@ import {
   Document,
   FilterQuery,
   Model,
-  QueryOptions,
+  QueryFindOptions,
 } from 'mongoose';
 import { DataAdapterOptions } from '../types';
 
-export type MongooseDataAdapterOptions<T extends object, R = T> = (
+export type MongooseDataAdapterOptions<
+  T,
+  R extends object | Array<unknown>,
+> = (
   DataAdapterOptions<
     R,
     {
-      entityIdKey?: 'id' | string;
+      entityKey?: 'id' | string | number;
       filterQuery?: FilterQuery<T>;
       projectionOptions?: Record<keyof T, -1 | 1>;
-      queryOptions?: QueryOptions;
+      queryOptions?: QueryFindOptions;
       shouldLean?: boolean;
     }
   >
 );
 
-export type MongooseDataAdapterBatchLoadFn<T extends object, R = T> = (
-  keys: ReadonlyArray<string>,
-  entity: Model<Document<T>>,
+export type MongooseDataAdapterBatchLoadFn<
+  T extends object,
+  R extends object | Array<unknown>,
+> = (
+  keys: ReadonlyArray<string | number>,
+  entity: Model<T & Document>,
   batchFnOptions?: MongooseDataAdapterOptions<T, R>['batchFnOptions'],
 ) => PromiseLike<ArrayLike<R | Error>>;

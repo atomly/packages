@@ -4,6 +4,7 @@ import {
   SchemaType,
   SchemaOptions,
   Schema,
+  Document,
 } from 'mongoose';
 
 // Types
@@ -14,7 +15,7 @@ import { DBSchema } from './DBSchema';
  */
 type MongooseSchemaDefinition<T extends object> = Record<keyof T, SchemaTypeOpts<unknown> | Schema | SchemaType>;
 
-export class MongooseDBSchema<T extends object> extends Schema<T> implements DBSchema<T> {
+export class MongooseDBSchema<T extends object> extends Schema<T & Document> implements DBSchema<T> {
   /**
    * Schema constructor.
    * When nesting schemas, (children in the example above), always declare
@@ -25,6 +26,8 @@ export class MongooseDBSchema<T extends object> extends Schema<T> implements DBS
     super(definition, options);
   }
 
+  // TODO: Improve this method. It shouldn't be done this way because ONLY the
+  // schema will carry over losing information such as set methods, etc.
   public extend<S extends object>(definition: MongooseSchemaDefinition<S>, options?: SchemaOptions): DBSchema<T & S> {
     const newSchemaDefinition = Object.assign(
       {},

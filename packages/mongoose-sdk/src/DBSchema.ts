@@ -1,5 +1,6 @@
 // Types
 import {
+  Document,
   SchemaTypeOpts,
   SchemaType,
   SchemaOptions,
@@ -11,7 +12,7 @@ import {
  */
 export type MongooseSchemaDefinition<T extends object> = Record<keyof T, SchemaTypeOpts<unknown> | Schema | SchemaType>;
 
-export interface DBSchema<T> extends Schema<T> {
+export interface DBSchema<T> extends Schema<T & Document> {
   /**
    * Extends the schema.
    * @param definition -  Can be one of: object describing schema paths, or schema to copy, or array of objects and schemas.

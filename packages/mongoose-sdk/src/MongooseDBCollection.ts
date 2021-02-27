@@ -4,6 +4,7 @@ import {
   Schema,
   Model,
   Connection,
+  model,
 } from 'mongoose';
 import { DBCollection } from './DBCollection';
 
@@ -14,11 +15,7 @@ export class MongooseDBCollection<T> implements DBCollection<T> {
 
   public collectionName?: string;
 
-  private _model: Model<T & Document>;
-
-  get model(): Model<T & Document> {
-    return this._model;
-  }
+  public Model: Model<T & Document>;
 
   constructor(args: {
     name: string;
@@ -28,11 +25,12 @@ export class MongooseDBCollection<T> implements DBCollection<T> {
     this.name = args.name;
     this.schema = args.schema;
     this.collectionName = args.collectionName;
+    this.Model = model(this.name, this.schema, this.collectionName);
   }
 
   public setup(connection: Connection): Model<T & Document> {
-    this._model = connection.model<T & Document>(this.name, this.schema, this.collectionName);
+    this.Model = connection.model<T & Document>(this.name, this.schema, this.collectionName);
 
-    return this.model;
+    return this.Model;
   }
 }

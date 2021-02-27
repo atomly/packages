@@ -1,8 +1,7 @@
 // Types
 import { Connection, ConnectionOptions } from 'mongoose';
-import { DBCollection } from './DBCollection';
 
-export interface DBContext<T extends Record<string, DBCollection<unknown>>> {
+export interface DBContext<T extends object> {
   connection: Connection | null;
 
   collections: T;

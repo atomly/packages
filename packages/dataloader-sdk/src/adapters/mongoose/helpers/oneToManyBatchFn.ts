@@ -7,7 +7,7 @@ import {
 
 // Dependencies
 import {
-  DEFAULT_ENTITY_ID_KEY,
+  DEFAULT_ENTITY_PROPERTY_KEY,
   DEFAULT_ORDER_BY_KEY,
   DEFAULT_ORDER_BY_VALUE,
 } from './constants';
@@ -21,18 +21,21 @@ import { MongooseDataAdapterOptions } from '../types';
  * @param entityModel - Mongoose Model of the entity that will be batched.
  * @param batchFnOptions - Parameters for the batch function query. 
  */
-export async function oneToManyBatchFn<T extends object>(
-  ids: readonly string[],
-  entityModel: Model<Document<T>>,
-  batchFnOptions: MongooseDataAdapterOptions<T>['batchFnOptions'] = {},
+export async function oneToManyBatchFn<
+  T extends object,
+  R extends object | Array<unknown>,
+>(
+  ids: readonly (string | number)[],
+  entityModel: Model<T & Document>,
+  batchFnOptions: MongooseDataAdapterOptions<T, R>['batchFnOptions'] = { entityKey: DEFAULT_ENTITY_PROPERTY_KEY },
 ): Promise<T[][]> {
   const {
-    entityIdKey = DEFAULT_ENTITY_ID_KEY,
+    entityKey,
     filterQuery = Object.assign(
       {},
       batchFnOptions.filterQuery ?? {},
       {
-        [entityIdKey]: { $in: ids },
+        [entityKey]: { $in: ids },
       },
     ),
     projectionOptions = {},
@@ -50,23 +53,23 @@ export async function oneToManyBatchFn<T extends object>(
 
   // Setting up the default query object properties:
 
-  const query = entityModel.find(filterQuery as FilterQuery<T>, projectionOptions, queryOptions);
+  let query = entityModel.find(filterQuery as FilterQuery<T & Document>, projectionOptions, queryOptions);
 
-  if (shouldLean) { query.lean(); }
+  if (shouldLean) { query = query.lean(); }
 
   const entities = await query.exec();
 
   // Entities map that will hold the fetched entities. Each related entity ID will be assigned its respective entity.
   const entitiesMap = ids.reduce(
     (map: Record<string, T[]>, id) => {
-    map[id] = [];
-    return map;
-    },
+      map[id] = [];
+      return map;
+      },
     {},
   );
 
   // Key identifier of the entity.
-  const key = entityIdKey as keyof typeof entities[number];
+  const key = entityKey as keyof typeof entities[number];
 
   // Assigning the respective entities then returning them:
   entities.forEach(entity => {

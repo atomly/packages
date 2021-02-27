@@ -13,20 +13,20 @@ export interface DBCollection<T> {
   name: string;
 
   /**
+   * The schema of the collection (documents).
+   */
+  schema: Schema<T>;
+
+  /**
    * The name of the MongoDB collection (optional). If not given it will be
    * induced from the model name.
    */
   collectionName?: string;
 
   /**
-   * The schema of the collection (documents).
-   */
-  schema: Schema<T>;
-
-  /**
    * The model of the collection.
    */
-  model: Model<T & Document>;
+  Model: Model<T & Document>;
 
   /**
    * Sets up the DB model within the context of the connection.
