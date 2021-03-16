@@ -28,12 +28,13 @@
     "clean-output": "rm -fr output && rm -fr */**/output",
     "commit": "npx git-cz",
     "test": "lerna run test",
+    "update:wizard": "npx lerna-update-wizard",
     "lint": "eslint --ext .ts --ext .js src tests",
     "readme": "ts-node ./utils/table-of-contents/index.ts",
     "watch": "lerna run watch --parallel",
-    "start": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up -d",
-    "start:attached": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env up",
-    "stop": "docker-compose -f ./setup/docker-compose.yml --env-file ./setup/.env down",
+    "start": "docker-compose -f ./setup/docker-compose.yml up -d",
+    "start:attached": "docker-compose -f ./setup/docker-compose.yml up",
+    "stop": "docker-compose -f ./setup/docker-compose.yml down",
     "publish": "npm run build && lerna publish"
   },
   "config": {

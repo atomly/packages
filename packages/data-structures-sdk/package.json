@@ -20,7 +20,7 @@
 				"cli": "ts-node cli/index.ts",
 				"build": "tsc -b",
 				"watch": "tsc -b -w",
-				"test": "npx jest",
+				"test": "npx jest --runInBand",
 				"test:watch": "npx jest --watch --runInBand"
 		},
 		"devDependencies": {

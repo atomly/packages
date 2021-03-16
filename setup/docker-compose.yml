@@ -3,6 +3,8 @@ services:
   atomly_redis:
     container_name: atomly_redis
     image: redis
+    env_file:
+      - .env
     ports:
       - "${REDIS_CONTAINER_PORT}"
     # Setting the server password on start.
@@ -10,6 +12,8 @@ services:
   atomly_redis_hubful:
     container_name: atomly_redis_hubful
     image: redis
+    env_file:
+      - .env
     ports:
       - "${REDIS_HUBFUL_CONTAINER_PORT}"
     # Setting the server password on start.
@@ -17,6 +21,8 @@ services:
   atomly_postgres_db:
     container_name: atomly_postgres_db
     image: postgres:alpine
+    env_file:
+      - .env
     ports:
       - "${DB_CONTAINER_PORT}"
     # # Runs every shell script found in this directory by using volumes.

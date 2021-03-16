@@ -20,7 +20,7 @@
     "cli": "ts-node cli/index.ts",
     "build": "tsc -b",
     "watch": "tsc -b -w",
-    "test": "npx jest",
+    "test": "npx jest --runInBand",
     "test:watch": "npx jest --watch --runInBand"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "class-validator": "^0.12.2"
   },
   "devDependencies": {
+    "@atomly/mongoose-sdk": "1.0.6-alpha.0",
     "@types/faker": "^5.1.0",
     "@types/jest": "^26.0.13",
     "@types/jest-dev-server": "^4.2.0",

@@ -1,6 +1,5 @@
 // Libraries
 import faker from 'faker';
-import { Document } from 'mongoose';
 
 // Dependencies
 import {
@@ -21,8 +20,6 @@ const COLLECTION_NAME = faker.random.uuid();
 interface TestCollection {
   id: number;
 }
-
-interface TestCollectionDocument extends TestCollection, Omit<Document, 'id'> { }
 
 const testCollectionSchema = new MongooseDBSchema<TestCollection>({
   id:  {
@@ -63,8 +60,8 @@ describe('MongooseDBCollection instantiated correctly', () => {
     expect(testCollection.collectionName).toBe(COLLECTION_NAME);
   });
 
-  test('model should initially be undefined until it is set up with the connection', () => {
-    expect(testCollection.Model).toBeUndefined();
+  test('model should initially be defined', () => {
+    expect(testCollection.Model).toBeTruthy();
   });
 
   it('correctly instantiates the fooCollection using MongooseDBSchema for the schema', () => {
