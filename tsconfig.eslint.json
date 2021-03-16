@@ -6,10 +6,13 @@
       "tests"
     ]
   },
+  "files": [
+    ".eslintrc.js"
+  ],
   "include": [
-    ".eslintrc.js",
     "./packages/*/src/**/*",
-    "./packages/*/tests/**/*"
+    "./packages/*/tests/**/*",
+    "./utils/**/*"
   ],
   "exclude": [
     "node_modules",
