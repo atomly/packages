@@ -7,28 +7,29 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Packages](#packages)
-- [Installation](#installation)
-- [Commiting code changes](#commiting-code-changes)
-- [Versioning a package](#versioning-a-package)
-- [Creating a new package](#creating-a-new-package)
-- [Add a dependency](#add-a-dependency)
-- [Building](#building)
-- [EOL](#eol)
+- [atomly](#atomly)
+  - [Packages](#packages)
+  - [Installation](#installation)
+  - [Commiting code changes](#commiting-code-changes)
+  - [Versioning a package](#versioning-a-package)
+  - [Creating a new package](#creating-a-new-package)
+  - [Add a dependency](#add-a-dependency)
+  - [Building](#building)
+  - [EOL](#eol)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Packages
 
 <!-- START custom generated Lerna Packages please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN `npm run doc` TO UPDATE -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN `npm run readme` TO UPDATE -->
 
+- [@atomly/config-loader](https://github.com/atomly/atomly/tree/master/packages/config-loader "@atomly/config-loader package homepage")
 - [@atomly/data-structures-sdk](https://github.com/atomly/atomly/tree/master/packages/data-structures-sdk "@atomly/data-structures-sdk package homepage")
 - [@atomly/dataloader-sdk](https://github.com/atomly/atomly/tree/master/packages/dataloader-sdk "@atomly/dataloader-sdk package homepage")
 - [@atomly/hubful](https://github.com/atomly/atomly/tree/master/packages/hubful "@atomly/hubful package homepage")
 - [@atomly/mongoose-sdk](https://github.com/atomly/atomly/tree/master/packages/mongoose-sdk "@atomly/mongoose-sdk package homepage")
-- [@atomly/config](https://github.com/atomly/atomly/tree/master/packages/config "@atomly/config package homepage")
-- [@atomly/typeorm-sdk](https://github.com/atomly/atomly/tree/master/packages/typeorm-sdk "@atomly/typeorm-sdk package homepage")
+- [@atomly/typeorm-entity-semver-manager](https://github.com/atomly/atomly/tree/master/packages/typeorm-entity-semver-manager "@atomly/typeorm-entity-semver-manager package homepage")
 
 <!-- END custom generated Lerna Packages please keep comment here to allow auto update -->
 

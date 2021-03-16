@@ -7,7 +7,7 @@
 ## Usage
 
 ```js
-const atomlyConfig = require('@atomly/typeorm-entity-semver-manager');
+const entitySemVerManager = require('@atomly/typeorm-entity-semver-manager');
 
 // TODO: DEMONSTRATE API
 ```
