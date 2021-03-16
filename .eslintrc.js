@@ -23,12 +23,23 @@ module.exports = {
    */
   parser: '@typescript-eslint/parser',
   parserOptions: { // Parser options: https://miro.medium.com/max/1640/1*HRABdfNr2DHpNfrgpjqO0Q.png
-      ecmaVersion: 10,
-      project: './tsconfig.json',
-      sourceType: 'module',
-      ecmaFeatures: {
-        "modules": true
-      }
+    ecmaVersion: 10,
+    sourceType: 'module',
+    ecmaFeatures: {
+      "modules": true,
+    },
+    /**
+     * NOTE:
+     * You can create a separate TypeScript config file (tsconfig.eslint.json)
+     * intended for eslint configuration. That file extends tsconfig configuration
+     * and setups include key for files that have to be linted.
+     * 
+     * This solves errors such as:
+     *    Parsing error: "parserOptions.project" has been set for @typescript-eslint/parser.
+     *    - The file does not match your project config: tests\**\index.ts.
+     *    - The file must be included in at least one of the projects provided
+     */
+    project: ['./tsconfig.eslint.json'],
   },
   /**
    * plugins: ['@typescript-eslint'] tells ESLint to load the plugin package you
@@ -57,7 +68,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended', // A plugin that contains a bunch of ESLint rules that are TypeScript specific.
-    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'eslint-config-prettier', // Disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     'plugin:jest/recommended',
   ],
   rules: {
@@ -112,7 +123,7 @@ module.exports = {
         'jest/no-jasmine-globals': 'error',
         'jest/no-jest-import': 'error',
         'jest/no-test-prefixes': 'error',
-        'jest/no-test-callback': 'error',
+        // 'jest/no-test-callback': 'error',
         'jest/no-test-return-statement': 'error',
         'jest/prefer-to-have-length': 'warn',
         'jest/prefer-spy-on': 'error',

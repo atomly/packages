@@ -21,7 +21,7 @@
 				"build": "tsc -b",
 				"watch": "tsc -b -w",
 				"test": "npx jest",
-				"test:watch": "npx jest --watch"
+				"test:watch": "npx jest --watch --runInBand"
 		},
 		"devDependencies": {
 				"@types/faker": "^4.1.9",

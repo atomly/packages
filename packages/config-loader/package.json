@@ -5,7 +5,7 @@
   "author": "Robert Molina <rmolinamir@gmail.com>",
   "homepage": "https://github.com/atomly/config-loader#readme",
   "license": "ISC",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -21,7 +21,7 @@
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "test": "npx jest",
-    "test:watch": "npx jest --watch"
+    "test:watch": "npx jest --watch --runInBand"
   },
   "dependencies": {
     "class-transformer": "^0.3.1",

@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": [
+      "src",
+      "tests"
+    ]
+  },
+  "include": [
+    ".eslintrc.js",
+    "./packages/*/src/**/*",
+    "./packages/*/tests/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

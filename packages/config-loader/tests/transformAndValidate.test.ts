@@ -8,6 +8,20 @@
 import { ValidationError, IsEmail } from 'class-validator';
 import { transformAndValidate, transformAndValidateSync } from '../src';
 
+/**
+ * Executes a function that is expected to throw an error.
+ * @param callback - Callback that should throw error.
+ * @returns - Error or Error arrays.
+ */
+function shouldThrow(callback: () => Promise<void> | void): any {
+  try {
+    callback();
+    throw new Error('error should be thrown');
+  } catch (error) {
+    return error;
+  }
+}
+
 class User {
   @IsEmail()
   public email!: string;
@@ -222,13 +236,12 @@ describe('transformAndValidateSync()', () => {
       email: 'test@test',
     } as User;
 
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, sampleUser);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toHaveLength(1);
-      expect(error[0]).toBeInstanceOf(ValidationError);
-    }
+    });
+
+    expect(error).toHaveLength(1);
+    expect(error[0]).toBeInstanceOf(ValidationError);
   });
 
   it('should throw ValidationError array when json\'s property is not passing validation', async () => {
@@ -237,13 +250,12 @@ describe('transformAndValidateSync()', () => {
     } as User;
     const userJson: string = JSON.stringify(sampleUser);
 
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, userJson);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toHaveLength(1);
-      expect(error[0]).toBeInstanceOf(ValidationError);
-    }
+    });
+
+    expect(error).toHaveLength(1);
+    expect(error[0]).toBeInstanceOf(ValidationError);
   });
 
   it('should throw array of ValidationError arrays when properties of objects from array are not passing validation', async () => {
@@ -252,76 +264,69 @@ describe('transformAndValidateSync()', () => {
     } as User;
     const users = [sampleUser, sampleUser, sampleUser];
 
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, users);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toHaveLength(users.length);
-      expect(error[0]).toHaveLength(1);
-      expect(error[0][0]).toBeInstanceOf(ValidationError);
-    }
+    });
+
+    expect(error).toHaveLength(users.length);
+    expect(error[0]).toHaveLength(1);
+    expect(error[0][0]).toBeInstanceOf(ValidationError);
   });
 
   it('should throw SyntaxError while parsing invalid JSON string', async () => {
     const userJson = JSON.stringify(user) + 'error';
 
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, userJson);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeInstanceOf(SyntaxError);
-    }
+    });
+
+    expect(error).toBeInstanceOf(SyntaxError);
   });
 
   it('should throw Error when object parameter is a number', async () => {
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, 2 as any);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeTruthy();
-      expect(error.message).toBe(rejectMessage);
-    }
+    });
+
+    expect(error).toBeTruthy();
+    expect(error.message).toBe(rejectMessage);
   });
 
   it('should throw Error when object parameter is a function', async () => {
     const func = (): unknown => ({ email: 'test@test.com' });
 
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, func);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeTruthy();
-      expect(error.message).toBe(rejectMessage);
-    }
+    });
+
+    expect(error).toBeTruthy();
+    expect(error.message).toBe(rejectMessage);
   });
 
   it('should throw Error when object parameter is a boolean value', async () => {
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, true as any);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeTruthy();
-      expect(error.message).toBe(rejectMessage);
-    }
+    });
+
+    expect(error).toBeTruthy();
+    expect(error.message).toBe(rejectMessage);
   });
 
   it('should throw Error when object parameter is a null', async () => {
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, null as any);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeTruthy();
-      expect(error.message).toBe(rejectMessage);
-    }
+    });
+
+    expect(error).toBeTruthy();
+    expect(error.message).toBe(rejectMessage);
   });
 
   it('should throw Error when object parameter is an undefined', async () => {
-    try {
+    const error = shouldThrow(() => {
       transformAndValidateSync(User, void 0 as any);
-      throw new Error('error should be thrown');
-    } catch (error) {
-      expect(error).toBeTruthy();
-      expect(error.message).toBe(rejectMessage);
-    }
+    });
+
+    expect(error).toBeTruthy();
+    expect(error.message).toBe(rejectMessage);
   });
 });
