@@ -15,7 +15,7 @@ export interface DBCollection<T> {
   /**
    * The schema of the collection (documents).
    */
-  schema: Schema<T>;
+  schema: Schema<T & Document>;
 
   /**
    * The name of the MongoDB collection (optional). If not given it will be

@@ -86,7 +86,7 @@ describe('RIORedisStorageService works correctly', () => {
 
   it('correctly (re)connects', async () => {
     await expect(ioRedisStorageService.connect()).resolves.not.toThrow();
-    expect(ioRedisStorageService._redis.status).toBe('connect');
+    expect(ioRedisStorageService._redis.status).toBe('ready');
     expect(async () => {
       const key = 'foo';
       const value = 'bar';

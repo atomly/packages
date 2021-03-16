@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // Types
 import { Connection, ConnectionOptions } from 'mongoose';
 

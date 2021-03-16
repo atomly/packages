@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // Libraries
 import {
   SchemaTypeOpts,
@@ -35,6 +36,6 @@ export class MongooseDBSchema<T extends object> extends Schema<T & Document> imp
       definition,
     ) as MongooseSchemaDefinition<T & S>;
 
-    return new MongooseDBSchema(newSchemaDefinition, options) as DBSchema<T & S>;
+    return new MongooseDBSchema<T & S>(newSchemaDefinition, options);
   }
 }

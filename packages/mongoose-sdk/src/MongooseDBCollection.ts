@@ -11,7 +11,7 @@ import { DBCollection } from './DBCollection';
 export class MongooseDBCollection<T> implements DBCollection<T> {
   public name: string;
 
-  public schema: Schema<T>;
+  public schema: Schema<T & Document>;
 
   public collectionName?: string;
 
@@ -19,7 +19,7 @@ export class MongooseDBCollection<T> implements DBCollection<T> {
 
   constructor(args: {
     name: string;
-    schema: Schema<T>;
+    schema: Schema<T & Document>;
     collectionName?: string;
   }) {
     this.name = args.name;

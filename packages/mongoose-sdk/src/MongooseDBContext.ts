@@ -8,6 +8,7 @@ import {
 // Types
 import { DBContext } from './DBContext';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class MongooseDBContext<T extends object> implements DBContext<T> {
   public connection: Connection | null = null;
 

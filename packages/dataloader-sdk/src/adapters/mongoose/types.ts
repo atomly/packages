@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // Types
 import {
   Document,
   FilterQuery,
   Model,
-  QueryFindOptions,
+  QueryOptions,
 } from 'mongoose';
 import { DataAdapterOptions } from '../types';
 
@@ -17,7 +18,7 @@ export type MongooseDataAdapterOptions<
       entityKey?: 'id' | string | number;
       filterQuery?: FilterQuery<T>;
       projectionOptions?: Record<keyof T, -1 | 1>;
-      queryOptions?: QueryFindOptions;
+      queryOptions?: QueryOptions;
       shouldLean?: boolean;
     }
   >
