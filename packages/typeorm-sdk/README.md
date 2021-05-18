@@ -1,11 +1,11 @@
-# `@atomly/typeorm-sdk`
+# `@atomly/mongoose-sdk`
 
-> TODO: description
+> Wrappers for MongoDB connections and collections through `mongoose`.
 
 ## Usage
 
 ```js
-const atomlyTypeORMSdk = require('@atomly/typeorm-sdk');
+const atomlyMongooseSdk = require('@atomly/mongoose-sdk');
 
 // TODO: DEMONSTRATE API
 ```
