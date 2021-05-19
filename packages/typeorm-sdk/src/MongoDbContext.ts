@@ -12,9 +12,8 @@ import {
 import { DbContext } from './DbContext';
 import { MongoConnectionOptions, MongoRepositories, TypeOrmEntitiesMap } from './types';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export class TypeOrmMongoDbContext<T extends TypeOrmEntitiesMap> implements DbContext {
-  public connection: Connection | null = null;
+export class MongoDbContext<T extends TypeOrmEntitiesMap> implements DbContext {
+  public connection: Connection;
 
   public repositories: MongoRepositories<T>;
 
@@ -22,13 +21,18 @@ export class TypeOrmMongoDbContext<T extends TypeOrmEntitiesMap> implements DbCo
 
   constructor(entities: T) {
     this.entities = entities;
-    this.repositories = TypeOrmMongoDbContext.setup(this.entities);
   }
 
-  public async open(options: MongoConnectionOptions): Promise<void> {
-    this.connection = await createConnection(options as ConnectionOptions);
+  public async open(mongoOptions: MongoConnectionOptions): Promise<void> {
+    console.log('this.entities: ', this.entities);
+    const options: ConnectionOptions = {
+      ...mongoOptions as ConnectionOptions,
+      entities: Object.values(this.entities),
+    };
 
-    this.repositories = TypeOrmMongoDbContext.setup(this.entities, this.connection.name);
+    this.connection = await createConnection(options);
+
+    this.repositories = MongoDbContext.setup(this.entities, this.connection.name);
   }
 
   public async close(callback?: (err?: unknown) => void): Promise<void> {
@@ -37,8 +41,6 @@ export class TypeOrmMongoDbContext<T extends TypeOrmEntitiesMap> implements DbCo
       if (callback) { callback(); }
     } catch (err) {
       if (callback) { callback(err); }
-    } finally {
-      this.connection = null;
     }
   }
 
