@@ -1,11 +1,11 @@
 {
-  "name": "atomly",
+  "name": "@atomly/sdk-monorepo",
   "version": "1.0.0",
-  "description": "Atomly monorepo.",
-  "homepage": "https://github.com/atomly/atomly/tree/master",
+  "description": "Atomly SDK monorepo.",
+  "homepage": "https://github.com/atomly/sdk-monorepo/tree/master",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atomly/atomly.git"
+    "url": "git+https://github.com/atomly/sdk-monorepo.git"
   },
   "license": "ISC",
   "author": "Robert Molina <rmolinamir@gmail.com>",
@@ -63,6 +63,6 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/atomly/atomly/issues"
+    "url": "https://github.com/atomly/sdk-monorepo/issues"
   }
 }
