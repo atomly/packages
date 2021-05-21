@@ -12,6 +12,11 @@
   ]
  */
 
+// const fs = require('fs');
+// const path = require('path');
+
+const prettierOptions = require('./.prettierrc.js');
+
 module.exports = {
   root: true,
   /**
@@ -22,18 +27,19 @@ module.exports = {
    * code as if it were regular JavaScript.
    */
   parser: '@typescript-eslint/parser',
-  parserOptions: { // Parser options: https://miro.medium.com/max/1640/1*HRABdfNr2DHpNfrgpjqO0Q.png
+  parserOptions: {
+    // Parser options: https://miro.medium.com/max/1640/1*HRABdfNr2DHpNfrgpjqO0Q.png
     ecmaVersion: 10,
     sourceType: 'module',
     ecmaFeatures: {
-      "modules": true,
+      modules: true,
     },
     /**
      * NOTE:
      * You can create a separate TypeScript config file (tsconfig.eslint.json)
      * intended for eslint configuration. That file extends tsconfig configuration
      * and setups include key for files that have to be linted.
-     * 
+     *
      * This solves errors such as:
      *    Parsing error: "parserOptions.project" has been set for @typescript-eslint/parser.
      *    - The file does not match your project config: tests\**\index.ts.
@@ -46,10 +52,7 @@ module.exports = {
    * installed (@typescript-eslint/eslint-plugin). This allows you to use the rules
    * within your codebase.
    */
-  plugins: [
-    '@typescript-eslint',
-    'jest',
-  ],
+  plugins: ['@typescript-eslint', 'prettier', 'jest'],
   env: {
     es6: true,
     node: true,
@@ -69,6 +72,8 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended', // A plugin that contains a bunch of ESLint rules that are TypeScript specific.
     'eslint-config-prettier', // Disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'react-app',
+    'prettier',
     'plugin:jest/recommended',
   ],
   rules: {
@@ -86,10 +91,7 @@ module.exports = {
     '@typescript-eslint/prefer-optional-chain': 'error',
     '@typescript-eslint/unbound-method': 'off',
     'no-empty-function': 'off', // replaced by @typescript-eslint/no-empty-function
-    '@typescript-eslint/no-empty-function': [
-      'error',
-      { allow: ['arrowFunctions'] },
-    ],
+    '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     //
@@ -104,13 +106,12 @@ module.exports = {
     //
     // More imports below
     //
+    'prettier/prettier': ['error', prettierOptions],
   },
   overrides: [
     // all test files
     {
-      files: [
-        '**/*.test.ts',
-      ],
+      files: ['**/*.test.ts'],
       env: {
         'jest/globals': true,
       },
@@ -129,6 +130,11 @@ module.exports = {
         'jest/prefer-spy-on': 'error',
         'jest/valid-expect': 'error',
       },
+    },
+    // prettier TSX files (e.g. React)
+    {
+      files: ['**/*.tsx'],
+      rules: { 'prettier/prettier': ['warn', prettierOptions] },
     },
     // tools and tests
     {

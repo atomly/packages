@@ -33,9 +33,6 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "files": [
-    "package.json"
-  ],
   "exclude": [
     "node_modules",
     "dist"

@@ -5,7 +5,7 @@ import { omitBy, isEmpty } from 'lodash-es';
 // Relatives
 import { Customer } from './lib/interfaces';
 
-class CustomerService implements Omit<CrudService, 'readList'> {
+export class CustomerService implements Omit<CrudService, 'readList'> {
   private stripe: Stripe;
 
   constructor(stripe: Stripe) {

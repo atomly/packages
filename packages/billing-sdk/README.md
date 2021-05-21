@@ -1,11 +1,11 @@
-# `stripe-sdk`
+# `billing-sdk`
 
 > TODO: description
 
 ## Usage
 
 ```
-const stripeSdk = require('stripe-sdk');
+const stripeSdk = require('billing-sdk');
 
 // TODO: DEMONSTRATE API
 ```

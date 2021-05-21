@@ -1,10 +1,10 @@
 {
-	"name": "@atomly/stripe-sdk",
+	"name": "@atomly/billing-sdk",
 	"version": "1.0.0-alpha.0",
 	"description": "> TODO: description",
   "keywords": [],
 	"author": "Robert Molina <rmolinamir@gmail.com>",
-	"homepage": "https://github.com/atomly/stripe-sdk#readme",
+	"homepage": "https://github.com/atomly/billing-sdk#readme",
   "license": "ISC",
   "main": "dist/src/index",
   "files": [
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atomly/stripe-sdk.git"
+    "url": "git+https://github.com/atomly/billing-sdk.git"
   },
   "scripts": {
     "build": "tsc -b",
@@ -56,6 +56,6 @@
     "node": ">=8.10.0"
   },
   "bugs": {
-    "url": "https://github.com/atomly/stripe-sdk/issues"
+    "url": "https://github.com/atomly/billing-sdk/issues"
   }
 }
