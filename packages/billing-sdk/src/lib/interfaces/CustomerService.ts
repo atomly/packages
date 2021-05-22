@@ -2,7 +2,6 @@ import { CrudService, CrudServiceListParams, CrudServiceListResponse } from './C
 import { Customer } from './Customer';
 
 export interface CustomerService extends CrudService {
-
   /**
    * Create a customer.
    */

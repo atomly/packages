@@ -2,7 +2,6 @@ import { CrudService, CrudServiceListParams, CrudServiceListResponse } from './C
 import { PaymentMethod } from './PaymentMethod';
 
 export interface PaymentMethodService extends CrudService {
-
   /**
    * Creates a PaymentMethod object and attaches it to a Customer.
    */

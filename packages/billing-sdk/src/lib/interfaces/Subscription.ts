@@ -5,7 +5,14 @@ import { CollectionMethod, SubscriptionStatus } from '../../utils/enums';
  */
 export interface Subscription {
   subscriptionId: string;
+  /**
+   * The ID of the customer who owns the subscription.
+   */
   customerId: string;
+  /**
+   * ID of the default payment method for the subscription. It must belong to the customer associated with the subscription.
+   */
+  paymentMethodId: string;
   /**
     * Subscription items allow you to create customer subscriptions with more than one plan,
     * making it easy to represent complex billing relationships.

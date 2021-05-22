@@ -6,6 +6,10 @@ import { Currency } from '../../utils/enums';
 export interface Price<Metadata extends object> {
   priceId: string;
   /**
+   * Whether the price can be used for new purchases.
+   */
+  active: boolean;
+  /**
    * A brief description of the price, hidden from customers.
    */
   nickname: string;

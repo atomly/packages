@@ -11,6 +11,10 @@ export interface Product<Metadata extends object> {
    */
   name: string;
   /**
+   * Whether the product is currently available for purchase. Defaults to true.
+   */
+  active: boolean;
+  /**
    * The product’s description, meant to be displayable to the customer.
    */
   description?: string;

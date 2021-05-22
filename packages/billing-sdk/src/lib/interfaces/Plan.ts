@@ -5,7 +5,8 @@ import { Price } from './Price';
  * Plans define the base price, currency, and billing cycle for recurring purchases of products.
  * Plans extends the Prices API with a defined recurring property.
  */
-export interface Plan<Metadata extends object> extends Price<Metadata> {
+export interface Plan<Metadata extends object> extends Omit<Price<Metadata>, 'priceId'> {
+  planId: string;
   /**
    * The recurring components of a price such as `interval`
    * and `usage_type`.
