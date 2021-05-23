@@ -11,9 +11,9 @@ import { StripeProductService } from './StripeProductService';
 import { StripeSubscriptionService } from './StripeSubscriptionService';
 
 export class StripeBillingService<
-  PlanMetadata extends Stripe.Metadata,
-  PriceMetadata extends Stripe.Metadata,
-  ProductMetadata extends Stripe.Metadata,
+  PlanMetadata extends Stripe.Metadata = Stripe.Metadata,
+  PriceMetadata extends Stripe.Metadata = Stripe.Metadata,
+  ProductMetadata extends Stripe.Metadata = Stripe.Metadata,
 > implements BillingService<PlanMetadata, PriceMetadata, ProductMetadata> {
   private stripe: Stripe;
 
@@ -30,5 +30,4 @@ export class StripeBillingService<
       subscription: new StripeSubscriptionService(this.stripe),
     }
   }
-
 }

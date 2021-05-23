@@ -19,7 +19,7 @@ enum FileExtension {
   JSON = 'json',
 }
 
-export class Loader<K extends string = string> implements TypeName {
+export abstract class Loader<K extends string = string> implements TypeName {
   static getFilePathExtension = getFilePathExtension;
 
   static transformAndValidate = transformAndValidate;
@@ -57,9 +57,9 @@ export class Loader<K extends string = string> implements TypeName {
   public async __load(): Promise<Data<Loader<K>, K>> {
     const fileContents = await this.__loadFile(this.__fileLocationUri);
 
-    const data = await this.__validate(fileContents);
+    await this.__validate(fileContents);
 
-    Object.assign(this, data);
+    Object.assign(this, fileContents);
 
     return this as Data<Loader<K>, K>;
   }
@@ -106,14 +106,12 @@ export class Loader<K extends string = string> implements TypeName {
    * Asynchronously validates the config data. If the data is invalid, it will return
    * a readable error.
    */
-  public async __validate(fileContents: string | object | object[]): Promise<this | this[]> {
+  public async __validate(fileContents: string | object | object[]): Promise<void> {
     try {
-      const data = await transformAndValidate(
+      await transformAndValidate(
         this.constructor as ClassType<this>,
         fileContents as object | object[],
       );
-  
-      return data;
     } catch (error) {
       throw new Error((error as ValidationError).toString());
     }

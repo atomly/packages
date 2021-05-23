@@ -17,7 +17,9 @@ export class __Config<T extends Loader[]> {
   public async load(): Promise<void> {
     const promises = this.__loaders.map(async loader => {
       const fileContents = await loader.__load();
+
       const key = loader.__name as keyof KeyedByName<T>;
+
       if (!this[key as keyof this]) {
         Object.assign(
           this,
@@ -27,6 +29,7 @@ export class __Config<T extends Loader[]> {
         throw new Error(`A duplicated config index key "${key}" was found. Check that your index keys are unique.`);
       }
     });
+
     await Promise.all(promises);
   }
 }

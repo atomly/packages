@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash-es';
+import { omitBy, isEmpty } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, Plan, PlanService, PlanServiceCreateParams, PlanServiceListParams, PlanServiceUpdateParams } from '../../lib';

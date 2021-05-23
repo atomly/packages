@@ -13,10 +13,6 @@ import {
   ValidateNested,
   Loader,
 } from '@atomly/config-loader';
-import {
-  Currency,
-  RecurringInterval,
-} from '@atomly/surveyshark-collections-lib';
 
 class Product {
   @IsString()
@@ -83,14 +79,8 @@ class Plan {
   metadata: Record<string, string>;
 }
 
-export class StripeLoader extends Loader<'stripe'> {
-  public readonly __name: 'stripe' = 'stripe';
-
-  @IsString()
-  publicKey: string;
-
-  @IsString()
-  secretKey: string;
+export class PlanLoader extends Loader<'plans'> {
+  public readonly __name: 'plans' = 'plans';
 
   @IsDefined()
   @IsArray()

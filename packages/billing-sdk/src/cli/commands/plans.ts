@@ -63,7 +63,7 @@ export async function handler(rawArgs: unknown): Promise<void> {
   }
 
   // eslint-disable-next-line no-console
-  console.log('DEBUG: Initiating process with config: ', JSON.stringify(config.stripe, null, 2));
+  console.log('[DEBUG] Initiating process with config: ', JSON.stringify(config.stripe, null, 2));
 
   const dbContext = getDbContext(config.db.dbConnectionString);
 
@@ -171,7 +171,7 @@ export async function handler(rawArgs: unknown): Promise<void> {
         .lean();
 
       // eslint-disable-next-line no-console
-      console.log('DEBUG: Updated plan:\n', JSON.stringify(updatedPlanDocument, null, 2));
+      console.log('[DEBUG] Updated plan:\n', JSON.stringify(updatedPlanDocument, null, 2));
 
     // 3. Otherwise, create plan in Stripe and in the local database.
     } else {
@@ -223,12 +223,12 @@ export async function handler(rawArgs: unknown): Promise<void> {
         .save();
 
       // eslint-disable-next-line no-console
-      console.log('DEBUG: Created plan:\n', JSON.stringify(planDocument, null, 2), '\n');
+      console.log('[DEBUG] Created plan:\n', JSON.stringify(planDocument, null, 2), '\n');
     }
   }
 
   await dbContext.close();
 
   // eslint-disable-next-line no-console
-  console.log('DEBUG: Exiting...');
+  console.log('[DEBUG] Exiting...');
 }
