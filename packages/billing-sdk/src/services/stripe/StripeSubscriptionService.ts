@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash';
+import { omitBy, isNil } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, Subscription, SubscriptionService, SubscriptionServiceCreateParams, SubscriptionServiceListParams, SubscriptionServiceUpdateParams } from '../../lib';
@@ -69,7 +69,7 @@ export class StripeSubscriptionService implements SubscriptionService {
         collection_method: params.collectionMethod,
         
       } as Stripe.SubscriptionUpdateParams,
-      isEmpty,
+      isNil,
     );
 
     const res = await this.stripe.subscriptions.update(subscriptionId, stripeParams);

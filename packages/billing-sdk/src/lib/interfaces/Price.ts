@@ -6,6 +6,10 @@ import { Currency } from '../../utils/enums';
 export interface Price<Metadata extends object> {
   priceId: string;
   /**
+   * The ID of the product that this price will belong to.
+   */
+  productId: string;
+  /**
    * Whether the price can be used for new purchases.
    */
   active: boolean;
@@ -20,10 +24,6 @@ export interface Price<Metadata extends object> {
    * - [Supported currencies](https://stripe.com/docs/currencies).
    */
   currency: Currency;
-  /**
-   * The ID of the product that this price will belong to.
-   */
-  productId: string;
   /**
    * A positive integer in cents (or 0 for a free price)
    * representing how much to charge.

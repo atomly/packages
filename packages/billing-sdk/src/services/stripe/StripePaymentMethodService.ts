@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash';
+import { omitBy, isNil } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, PaymentMethod, PaymentMethodService, PaymentMethodServiceCreateParams, PaymentMethodServiceListParams, PaymentMethodServiceUpdateParams } from '../../lib';
@@ -14,9 +14,10 @@ export class StripePaymentMethodService implements PaymentMethodService {
   }
 
   public async create(params: PaymentMethodServiceCreateParams): Promise<PaymentMethod> {
-    const res = await this.stripe.paymentMethods.create({
+    let res: Stripe.Response<Stripe.PaymentMethod>;
+
+    res = await this.stripe.paymentMethods.create({
       type: 'card',
-      customer: params.customerId,
       card: {
         number: params.card.number,
         exp_month: params.card.expMonth,
@@ -36,6 +37,10 @@ export class StripePaymentMethodService implements PaymentMethodService {
         name: params.details.name,
         phone: params.details.phone,
       },
+    });
+
+    res = await this.stripe.paymentMethods.attach(res.id, {
+      customer: params.customerId,
     });
 
     return {
@@ -103,7 +108,7 @@ export class StripePaymentMethodService implements PaymentMethodService {
           phone: params.details?.phone,
         },
       } as Stripe.PaymentMethodUpdateParams,
-      isEmpty,
+      isNil,
     );
 
     const res = await this.stripe.paymentMethods.update(id, stripeParams);

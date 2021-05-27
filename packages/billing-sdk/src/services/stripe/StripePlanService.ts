@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash';
+import { omitBy, isNil } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, Plan, PlanService, PlanServiceCreateParams, PlanServiceListParams, PlanServiceUpdateParams } from '../../lib';
@@ -67,7 +67,7 @@ export class StripePlanService<PlanMetadata extends Stripe.Metadata> implements 
         nickname: params.nickname,
         metadata: params.metadata,
       } as Stripe.PlanUpdateParams,
-      isEmpty,
+      isNil,
     );
 
     const res = await this.stripe.prices.update(planId, stripeParams);

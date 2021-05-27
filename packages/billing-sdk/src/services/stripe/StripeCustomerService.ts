@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash';
+import { omitBy, isNil } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, Customer, CustomerService, CustomerServiceCreateParams, CustomerServiceListParams, CustomerServiceUpdateParams } from '../../lib';
@@ -49,7 +49,7 @@ export class StripeCustomerService implements CustomerService {
         default_source: params.defaultPaymentMethodId,
         invoice_prefix: params.invoicePrefix,
       } as Stripe.CustomerUpdateParams,
-      isEmpty,
+      isNil,
     );
 
     const res = await this.stripe.customers.update(customerId, stripeParams);

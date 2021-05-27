@@ -1,6 +1,6 @@
 // Libraries
 import { Stripe } from 'stripe';
-import { omitBy, isEmpty } from 'lodash';
+import { omitBy, isNil } from 'lodash';
 
 // Relatives
 import { CrudServiceListResponse, Product, ProductService, ProductServiceCreateParams, ProductServiceListParams, ProductServiceUpdateParams } from '../../lib';
@@ -50,7 +50,7 @@ export class StripeProductService<ProductMetadata extends Stripe.MetadataParam> 
         description: params.description,
         metadata: params.metadata,
       } as Stripe.ProductUpdateParams,
-      isEmpty,
+      isNil,
     );
 
     const res = await this.stripe.products.update(productId, stripeParams);
