@@ -33,7 +33,11 @@ export interface SubscriptionService extends CrudService {
   list(params: SubscriptionServiceListParams): Promise<CrudServiceListResponse<Subscription>>;
 }
 
-export type SubscriptionServiceCreateParams = Omit<Subscription, 'subscriptionId' | 'status'>;
+export type SubscriptionServiceCreateParams = (
+  Omit<Subscription, 'subscriptionId' | 'status' | 'items' | 'latestInvoiceId'> & {
+    items: Array<Omit<Subscription['items'][number], 'subscriptionItemId'>>;
+  }
+);
 
 export interface SubscriptionServiceListParams extends CrudServiceListParams {
   /**
@@ -43,7 +47,7 @@ export interface SubscriptionServiceListParams extends CrudServiceListParams {
   /**
    * Filter for subscriptions that contain this recurring price ID.
    */
-  priceId?: string;
+  planId?: string;
   /**
    * The status of the subscriptions to retrieve. Passing in a value of canceled will return all canceled subscriptions, including those belonging to deleted customers.
    */
@@ -77,4 +81,4 @@ export interface SubscriptionServiceListParams extends CrudServiceListParams {
     }
 };
 
-export type SubscriptionServiceUpdateParams = Partial<Pick<Subscription, 'paymentMethodId' | 'items' | 'collectionMethod'>>;
+export type SubscriptionServiceUpdateParams = Partial<Pick<Subscription, 'paymentMethodId' | 'items' | 'collectionMethod' | 'daysUntilDue'>>;
