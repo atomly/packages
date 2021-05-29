@@ -1,15 +1,14 @@
 // Libraries
 import path from 'path';
 import fs from 'fs';
-import { IsString, ValidationError } from 'class-validator';
+import { IsString } from 'class-validator';
 
 // Types
 import { Data, TypeName } from './types';
 
 // Dependencies
-import { getFilePathExtension } from './utils';
-import { parseUri } from './uri';
-import { transformAndValidate, ClassType } from './transformAndValidate';
+import { getFilePathExtension, parseUri } from './utils';
+import { ClassTransformValidator } from './ClassTransformValidator';
 
 enum FileProtocol {
   FILE = 'file',
@@ -19,16 +18,15 @@ enum FileExtension {
   JSON = 'json',
 }
 
-export abstract class Loader<K extends string = string> implements TypeName {
+export abstract class Loader<K extends string = string> extends ClassTransformValidator implements TypeName {
   static getFilePathExtension = getFilePathExtension;
-
-  static transformAndValidate = transformAndValidate;
 
   constructor(args: {
     fileLocationUri: string;
   } = {
     fileLocationUri: '',
   }) {
+    super();
     this.__fileLocationUri = args.fileLocationUri;
   }
 
@@ -57,7 +55,7 @@ export abstract class Loader<K extends string = string> implements TypeName {
   public async __load(): Promise<Data<Loader<K>, K>> {
     const fileContents = await this.__loadFile(this.__fileLocationUri);
 
-    await this.__validate(fileContents);
+    await this.__transformAndValidateOrReject(fileContents);
 
     Object.assign(this, fileContents);
 
@@ -100,20 +98,5 @@ export abstract class Loader<K extends string = string> implements TypeName {
   public async __loadFileJson(filePath: string): Promise<object | object[]> {
     const jsonString = fs.readFileSync(path.resolve(__dirname, filePath!)).toString('utf-8');
     return JSON.parse(jsonString);
-  }
-
-  /**
-   * Asynchronously validates the config data. If the data is invalid, it will return
-   * a readable error.
-   */
-  public async __validate(fileContents: string | object | object[]): Promise<void> {
-    try {
-      await transformAndValidate(
-        this.constructor as ClassType<this>,
-        fileContents as object | object[],
-      );
-    } catch (error) {
-      throw new Error((error as ValidationError).toString());
-    }
   }
 }

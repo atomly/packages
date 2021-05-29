@@ -1,9 +1,9 @@
-// Types
+// Relatives
+import { Loader } from './Loader';
 import { KeyedByName } from './types';
-import { Loader } from './loader';
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
-export class __Config<T extends Loader[]> {
+class __Config<T extends Loader[]> {
   constructor(...loaders: T) {
     this.__loaders = loaders;
   }

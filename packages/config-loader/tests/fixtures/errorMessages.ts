@@ -1,7 +1,6 @@
-// Dependencies
+// Libraries
+import { Type } from 'class-transformer';
 import {
-  Loader,
-  Type,
   IsString,
   IsDefined,
   IsNotEmptyObject,
@@ -9,7 +8,10 @@ import {
   ValidateNested,
   IsArray,
   ArrayMinSize,
-} from '../../src';
+} from 'class-validator';
+
+// Dependencies
+import { Loader } from '../../src';
 
 class ErrorMessage {
   @IsString({

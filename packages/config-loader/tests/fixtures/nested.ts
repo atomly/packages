@@ -1,13 +1,15 @@
-// Dependencies
+// Libraries
+import { Type } from 'class-transformer';
 import {
-  Loader,
-  Type,
   IsString,
   IsDefined,
   IsNotEmptyObject,
   IsObject,
   ValidateNested,
-} from '../../src';
+} from 'class-validator';
+
+// Dependencies
+import { Loader } from '../../src';
 
 class Baz {
   @IsString()

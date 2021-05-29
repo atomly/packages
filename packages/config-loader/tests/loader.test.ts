@@ -31,7 +31,7 @@ describe('loaders API', () => {
       await expect(
         async () => {
           try {
-            await nestedArrayLoader.__validate(invalidData);
+            await nestedArrayLoader.__transformAndValidateOrReject(invalidData);
           } catch (err) {
             console.error('ERROR: ', err);
             console.error('ERROR err.children: ', err.children);
@@ -60,7 +60,7 @@ describe('loaders API', () => {
       await expect(
         async () => {
           try {
-            await nestedArrayLoader.__validate(invalidData);
+            await nestedArrayLoader.__transformAndValidateOrReject(invalidData);
           } catch (err) {
             console.error('ERROR: ', err);
             throw err;
@@ -86,7 +86,7 @@ describe('loaders API', () => {
       await expect(
         async () => {
           try {
-            await nestedArrayLoader.__validate(invalidData);
+            await nestedArrayLoader.__transformAndValidateOrReject(invalidData);
           } catch (err) {
             console.error('ERROR: ', err);
             throw err;
@@ -114,7 +114,7 @@ describe('loaders API', () => {
       await expect(
         async () => {
           try {
-            await nestedArrayLoader.__validate(invalidData);
+            await nestedArrayLoader.__transformAndValidateOrReject(invalidData);
           } catch (err) {
             console.error('ERROR: ', err);
             throw err;
@@ -152,7 +152,7 @@ describe('loaders API', () => {
       await expect(
         async () => {
           try {
-            await nestedArrayLoader.__validate(invalidData);
+            await nestedArrayLoader.__transformAndValidateOrReject(invalidData);
           } catch (err) {
             console.error('ERROR: ', err);
             // eslint-disable-next-line jest/no-try-expect
@@ -166,7 +166,7 @@ describe('loaders API', () => {
     test('nestedArray should throw no errors with valid data', async () => {
       const nestedArrayLoader = new NestedArrayLoader({ fileLocationUri: '' });
 
-      await expect(nestedArrayLoader.__validate(validData)).resolves.toMatchObject(validData);
+      await expect(nestedArrayLoader.__transformAndValidateOrReject(validData)).resolves.toBeFalsy();
     });
   })
 });

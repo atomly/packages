@@ -23,9 +23,9 @@
     "test": "npx jest --runInBand",
     "test:watch": "npx jest --watch --runInBand"
   },
-  "dependencies": {
-    "class-transformer": "~0.4.0",
-    "class-validator": "~0.13.1"
+  "peerDependencies": {
+    "class-transformer": ">=0.4.0",
+    "class-validator": ">=0.13.1"
   },
   "devDependencies": {
     "@atomly/mongoose-sdk": "^1.0.7-alpha.0",
@@ -35,6 +35,8 @@
     "@types/node": "~14.14.35",
     "@typescript-eslint/eslint-plugin": "~4.18.0",
     "@typescript-eslint/parser": "~4.18.0",
+    "class-transformer": "~0.4.0",
+    "class-validator": "~0.13.1",
     "dotenv": "~8.2.0",
     "eslint": "~7.22.0",
     "eslint-config-prettier": "~8.1.0",

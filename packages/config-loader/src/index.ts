@@ -1,6 +1,6 @@
-export * from 'class-validator';
-export { Type } from 'class-transformer';
-export * from './config';
-export * from './loader';
-export * from './transformAndValidate';
-export * from './uri';
+// Relatives
+export * from './Config';
+export * from './Loader';
+export * from './utils/transformAndValidate';
+export * from './ParsedUri';
+export * from './ClassTransformValidator';

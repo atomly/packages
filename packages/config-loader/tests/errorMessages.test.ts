@@ -22,7 +22,7 @@ describe('config using .env.test works correctly', () => {
     let error;
 
     try {
-      await errorMessagesLoader.__validate(invalidData);
+      await errorMessagesLoader.__transformAndValidateOrReject(invalidData);
     } catch (err) {
       console.debug('ERROR: ', err);
 
@@ -55,7 +55,7 @@ describe('config using .env.test works correctly', () => {
     let error;
 
     try {
-      await errorMessagesLoader.__validate(invalidData);
+      await errorMessagesLoader.__transformAndValidateOrReject(invalidData);
     } catch (err) {
       console.debug('ERROR: ', err);
 

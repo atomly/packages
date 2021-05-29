@@ -1,8 +1,3 @@
-/**
- * Forked from [class-transformer-validator](https://github.com/MichalLytek/class-transformer-validator).
- * By [Michał Lytek](https://github.com/MichalLytek).
- */
-
 // Libraries
 import {
   validate,

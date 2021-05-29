@@ -1,8 +1,3 @@
-/**
- * Based on [URI Regular Expression](https://github.com/jhermsmeier/uri.regex).
- * By [Jonas Hermsmeier](https://github.com/jhermsmeier).
- */
-
 // Libraries
 import {
   validateOrReject,
@@ -10,6 +5,10 @@ import {
   IsOptional,
 } from 'class-validator';
 
+/**
+ * Based on [URI Regular Expression](https://github.com/jhermsmeier/uri.regex).
+ * By [Jonas Hermsmeier](https://github.com/jhermsmeier).
+ */
 export class ParsedUri {
   // static NAMED_CAPTURE_GROUPS_URI_REGEXP = /^(?<scheme>[a-z][a-z0-9+.-]+):(?<authority>\/\/(?<user>[^@]+@)?(?<host>[a-z0-9.\-_~]+)(?<port>:\d+)?)?(?<path>(?:[a-z0-9-._~]|%[a-f0-9]|[!$&'()*+,;=:@])+(?:\/(?:[a-z0-9-._~]|%[a-f0-9]|[!$&'()*+,;=:@])*)*|(?:\/(?:[a-z0-9-._~]|%[a-f0-9]|[!$&'()*+,;=:@])+)*)?(?<query>\?(?:[a-z0-9-._~]|%[a-f0-9]|[!$&'()*+,;=:@]|[/?])+)?(?<fragment>#(?:[a-z0-9-._~]|%[a-f0-9]|[!$&'()*+,;=:@]|[/?])+)?$/i
 
@@ -88,20 +87,7 @@ export class ParsedUri {
   /**
    * Asynchronously validates the validator's data.
    */
-  public async validate(): Promise<void> {
+  public async validateOrReject(): Promise<void> {
     await validateOrReject(this);
   }
-}
-
-/**
- * Parses an URI string and returns a parsed URI object containing its components.
- * If the URI is invalid, an error is thrown.
- * @param uri - URI string.
- */
-export async function parseUri(uri: string): Promise<ParsedUri> {
-  const parsedUri = new ParsedUri(uri);
-
-  await parsedUri.validate();
-
-  return parsedUri;
 }

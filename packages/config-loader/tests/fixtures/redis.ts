@@ -1,10 +1,12 @@
-// Dependencies
+// Libraries
 import {
-  Loader,
   IsInt,
   IsString,
   IsEnum,
-} from '../../src';
+} from 'class-validator';
+
+// Dependencies
+import { Loader } from '../../src';
 
 enum RedisFamily {
   IPv4 = 4,
