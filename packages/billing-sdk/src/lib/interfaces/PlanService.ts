@@ -1,4 +1,4 @@
-import { Currency } from 'src/utils/enums';
+import { Currency } from '../../utils';
 import { CrudService, CrudServiceListParams, CrudServiceListResponse } from './CrudService';
 import { Plan } from './Plan';
 

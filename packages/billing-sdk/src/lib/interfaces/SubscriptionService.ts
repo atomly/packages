@@ -1,4 +1,4 @@
-import { CollectionMethod, SubscriptionStatus } from 'src/utils/enums';
+import { CollectionMethod, SubscriptionStatus } from '../../utils';
 import { CrudService, CrudServiceListParams, CrudServiceListResponse } from './CrudService';
 import { Subscription } from './Subscription';
 
