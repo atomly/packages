@@ -24,7 +24,7 @@ export abstract class ClassTransformValidator {
         data as object | object[],
       );
     } catch (error) {
-      throw new Error((error as ValidationError).toString());
+      throw new Error((error as ValidationError).toString(true));
     }
   }
 
@@ -39,7 +39,7 @@ export abstract class ClassTransformValidator {
         data as object | object[],
       );
     } catch (error) {
-      throw new Error((error as ValidationError).toString());
+      throw new Error((error as ValidationError).toString(true));
     }
   }
 }
