@@ -7,11 +7,13 @@ import {
   IsDefined,
   IsNotEmptyObject,
   IsObject,
+  IsOptional,
 } from 'class-validator';
 
-export class ProductValidator<T extends object = Record<string, string>> extends ClassTransformValidator implements Product<T> {
+export class ProductValidator<T extends object = Record<string, string>> extends ClassTransformValidator implements Omit<Product<T>, 'productId'> {
+  @IsOptional()
   @IsString()
-  productId: string;
+  productId?: string;
 
   @IsString()
   name: string;

@@ -11,6 +11,7 @@ import {
   IsNotEmptyObject,
   IsObject,
   ValidateNested,
+  IsOptional,
 } from 'class-validator';
 
 class PlanRecurringValidator {
@@ -21,9 +22,10 @@ class PlanRecurringValidator {
   intervalCount: number;
 }
 
-export class PlanValidator<T extends object = Record<string, string>> extends ClassTransformValidator implements Plan<T> {
+export class PlanValidator<T extends object = Record<string, string>> extends ClassTransformValidator implements Omit<Plan<T>, 'planId'> {
+  @IsOptional()
   @IsString()
-  planId: string;
+  planId?: string;
 
   @IsDefined()
   @IsNotEmptyObject()

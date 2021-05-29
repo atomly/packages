@@ -1,0 +1,24 @@
+{
+  "products": [
+    {
+      "__comment": "Fill the productId if you want to update.",
+      "productId": "prod_JZjZOn1rRsoIsG",
+      "name": "Free Plan",
+      "active": true,
+      "description": "Free product with limited usage and features.",
+      "metadata": {
+        "createdBy": "Robert Molina"
+      }
+    },
+    {
+      "__comment": "Fill the productId if you want to update.",
+      "productId": "prod_JZjZtafsO0xWIL",
+      "name": "Paid Plan",
+      "active": true,
+      "description": "Paid product with full usage and features.",
+      "metadata": {
+        "createdBy": "Robert Molina"
+      }
+    }
+  ]
+}

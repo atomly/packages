@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "start": "ts-node-dev --respawn ./src/index.ts",
+    "start": "ts-node ./src/cli.ts",
     "test": "npx jest --runInBand",
     "test:watch": "npx jest --watch --runInBand",
     "watch": "tsc -b -w"

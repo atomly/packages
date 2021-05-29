@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 // Libraries
-import yargs from 'yargs';
+import yargs, { CommandModule } from 'yargs';
 
-yargs(process.argv.slice(2))
-  .commandDir('commands')
+// Relatives
+import { commands } from './commands';
+import { hideBin } from './utils';
+
+yargs(hideBin(process.argv))
+  .command(commands as unknown as CommandModule)
   .demandCommand()
   .help()
   .argv

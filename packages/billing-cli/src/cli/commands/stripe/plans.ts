@@ -1,5 +1,6 @@
 // Libraries
 import 'reflect-metadata';
+import { Plan, StripeBillingService } from '@atomly/billing-sdk';
 import {
   ClassTransformValidator,
   Config,
@@ -13,7 +14,7 @@ import {
   PlansCommandOptionsLoader,
   StripeLoader,
 } from '../../config';
-import { Plan, StripeBillingService } from '@atomly/billing-sdk';
+import { resolveAbsolutePath } from '../../utils/resolveAbsolutePath';
 
 class ArgsValidator extends ClassTransformValidator {
   @IsString()
@@ -25,11 +26,11 @@ class ArgsValidator extends ClassTransformValidator {
 
 export default {
   command: 'plans',
-  desc: 'Creates or updates (fixed) Subscription Plans with Stripe Products and Prices using local configurations',
+  desc: 'Creates or updates plans.',
   builder: {
     plansCommandOptionsFileLocation: {
-      alias: 'c',
-      describe: 'TODO',
+      alias: 'o',
+      describe: 'Plans command options.',
     },
     stripeOptionsFileLocation: {
       alias: 'b',
@@ -44,8 +45,8 @@ export default {
     args.__transformAndValidateOrRejectSync(args);
 
     const config = new Config(
-      new PlansCommandOptionsLoader({ fileLocationUri: `file://${args.plansCommandOptionsFileLocation}` }),
-      new StripeLoader({ fileLocationUri: `file://${args.stripeOptionsFileLocation}` }),
+      new PlansCommandOptionsLoader({ fileLocationUri: `file://${resolveAbsolutePath(args.plansCommandOptionsFileLocation)}` }),
+      new StripeLoader({ fileLocationUri: `file://${resolveAbsolutePath(args.stripeOptionsFileLocation)}` }),
     );
   
     await config.load();
@@ -66,14 +67,16 @@ export default {
         throw new Error(`Product ${p.productId} not found.`);
       }
 
-      let plan: Plan<Stripe.Metadata> | null;
+      let plan: Plan<Stripe.Metadata> | null = null;
 
-      plan = await billing.services.plan.retrieve(p.planId);
+      if (p.planId) {
+        plan = await billing.services.plan.retrieve(p.planId);
+      }
 
       // If the plan exists, update. Otherwise, create new plan.
 
       if (plan) {
-        console.debug(`[DEBUG] Updating Stripe plan ${plan.nickname}`);
+        console.debug(`[DEBUG] Updating plan ${plan.nickname}`);
 
         const shouldUpdatePlan = (
           plan.currency !== p.currency ||
@@ -86,7 +89,7 @@ export default {
           !config.plansCommandOptions.forceUpdatePlan &&
           shouldUpdatePlan
         ) {
-          console.warn('[WARN] Sorry, prices on Stripe are immutable. Most of its properties cannot be updated by design. However, the plan can be deleted then re-created programmatically. To do this, pass the forcePlanUpdate flag as true in the options.');
+          console.warn('[WARN] Sorry, prices on are immutable. Most of its properties cannot be updated by design. However, the plan can be deleted then re-created programmatically. To do this, pass the forcePlanUpdate flag as true in the options.');
         } else if (
           config.plansCommandOptions.forceUpdatePlan &&
           shouldUpdatePlan
@@ -96,6 +99,8 @@ export default {
           await billing.services.plan.delete(plan.planId);
 
           plan = await billing.services.plan.create(p);
+        } else {
+          plan = await billing.services.plan.update(plan.planId, p);
         }
 
         // eslint-disable-next-line no-console

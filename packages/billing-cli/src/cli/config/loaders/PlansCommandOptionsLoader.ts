@@ -1,6 +1,5 @@
 // Libraries
 import { Loader } from '@atomly/config-loader';
-import { Plan } from '@atomly/billing-sdk';
 import { Type } from 'class-transformer';
 import {
   IsDefined,
@@ -24,5 +23,5 @@ export class PlansCommandOptionsLoader<T extends object = Record<string, string>
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => PlanValidator)
-  plans: Plan<T>[];
+  plans: PlanValidator<T>[];
 }
