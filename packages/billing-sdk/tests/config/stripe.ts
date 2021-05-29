@@ -1,8 +1,6 @@
 // Libraries
-import {
-  IsString,
-  Loader,
-} from '@atomly/config-loader';
+import { Loader } from '@atomly/config-loader';
+import { IsString } from 'class-validator';
 
 export class StripeLoader extends Loader<'stripe'> {
   public readonly __name: 'stripe' = 'stripe';

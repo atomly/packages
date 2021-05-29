@@ -6,13 +6,10 @@
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/billing-sdk#readme",
   "license": "ISC",
-  "main": "dist/src/index",
+  "main": "dist/index.js",
   "files": [
-    "src"
+    "dist"
   ],
-  "bin": {
-    "stripe": "dist/src/cli.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atomly/billing-sdk.git"
@@ -29,8 +26,7 @@
     "@atomly/config-loader": "~1.0.3-alpha.0",
     "reflect-metadata": "~0.1.13",
     "lodash": "~4.17.21",
-    "stripe": "~8.148.0",
-    "yargs": "~17.0.1"
+    "stripe": "~8.148.0"
   },
   "devDependencies": {
 		"@types/faker": "^5.1.7",
@@ -40,6 +36,8 @@
 		"@typescript-eslint/eslint-plugin": "~4.18.0",
 		"@typescript-eslint/parser": "~4.18.0",
     "dotenv": "~9.0.2",
+    "class-transformer": "~0.4.0",
+    "class-validator": "~0.13.1",
 		"eslint": "~7.22.0",
 		"eslint-config-prettier": "~8.1.0",
 		"eslint-plugin-jest": "~24.3.1",
