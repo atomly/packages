@@ -3,17 +3,17 @@ import { Stripe } from 'stripe';
 import faker from 'faker';
 
 // Relatives
-import { Customer, Subscription, StripeBillingService, Product, Plan, RecurringInterval, Currency, PaymentMethod, CollectionMethod } from '../../src';
-import { config } from '../config';
+import { Customer, Subscription, StripeBilling, Product, Plan, RecurringInterval, Currency, PaymentMethod, CollectionMethod } from '../../../../../src';
+import { config } from '../../../../config';
 
-let billing: StripeBillingService;
+let billing: StripeBilling;
 let customer: Customer;
 let paymentMethod: PaymentMethod;
 let product: Product<Stripe.Metadata>;
 let plan: Plan<Stripe.Metadata>;
 let subscription: Subscription;
 
-describe('StripeBillingService works correctly', () => {
+describe('StripeBilling works correctly', () => {
   beforeAll(async () => {
     await config.load();
 
@@ -22,7 +22,7 @@ describe('StripeBillingService works correctly', () => {
       { apiVersion: '2020-08-27' },
     );
 
-    billing = new StripeBillingService(stripe);
+    billing = new StripeBilling(stripe);
 
     customer = await billing.services.customer.create({
       description: faker.random.words(),

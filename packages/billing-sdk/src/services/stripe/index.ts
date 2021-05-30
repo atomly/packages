@@ -1,4 +1,4 @@
-export * from './StripeBillingService';
+export * from './StripeBilling';
 export * from './StripeCustomerService';
 export * from './StripePaymentMethodService';
 export * from './StripePlanService';

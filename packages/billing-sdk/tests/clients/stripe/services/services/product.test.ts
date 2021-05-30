@@ -3,13 +3,13 @@ import { Stripe } from 'stripe';
 import faker from 'faker';
 
 // Relatives
-import { Product, StripeBillingService } from '../../src';
-import { config } from '../config';
+import { Product, StripeBilling } from '../../../../../src';
+import { config } from '../../../../config';
 
-let billing: StripeBillingService;
+let billing: StripeBilling;
 let product: Product<Stripe.Metadata>;
 
-describe('StripeBillingService works correctly', () => {
+describe('StripeBilling works correctly', () => {
   beforeAll(async () => {
     await config.load();
 
@@ -18,7 +18,7 @@ describe('StripeBillingService works correctly', () => {
       { apiVersion: '2020-08-27' },
     );
 
-    billing = new StripeBillingService(stripe);
+    billing = new StripeBilling(stripe);
   });
 
   //

@@ -1,6 +1,6 @@
 // Libraries
 import 'reflect-metadata';
-import { Plan, StripeBillingService } from '@atomly/billing-sdk';
+import { Plan, StripeBilling } from '@atomly/billing-sdk';
 import {
   ClassTransformValidator,
   Config,
@@ -58,7 +58,7 @@ export default {
       { apiVersion: '2020-08-27' },
     );
 
-    const billing = new StripeBillingService(stripe);
+    const billing = new StripeBilling(stripe);
   
     for await (const p of config.plansCommandOptions.plans) {
       const product = await billing.services.product.retrieve(p.productId);

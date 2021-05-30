@@ -3,14 +3,14 @@ import { Stripe } from 'stripe';
 import faker from 'faker';
 
 // Relatives
-import { Product, Plan, StripeBillingService, RecurringInterval, Currency } from '../../src';
-import { config } from '../config';
+import { Product, Plan, StripeBilling, RecurringInterval, Currency } from '../../../../../src';
+import { config } from '../../../../config';
 
-let billing: StripeBillingService;
+let billing: StripeBilling;
 let product: Product<Stripe.Metadata>;
 let plan: Plan<Stripe.Metadata>;
 
-describe('StripeBillingService works correctly', () => {
+describe('StripeBilling works correctly', () => {
   beforeAll(async () => {
     await config.load();
 
@@ -19,7 +19,7 @@ describe('StripeBillingService works correctly', () => {
       { apiVersion: '2020-08-27' },
     );
 
-    billing = new StripeBillingService(stripe);
+    billing = new StripeBilling(stripe);
 
     product = await billing.services.product.create({
       name: faker.commerce.product(),
