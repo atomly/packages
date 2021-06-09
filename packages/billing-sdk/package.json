@@ -1,6 +1,6 @@
 {
   "name": "@atomly/billing-sdk",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.2-alpha.0",
   "description": "> TODO: description",
   "keywords": [],
   "author": "Robert Molina <rmolinamir@gmail.com>",
@@ -22,7 +22,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@atomly/config-loader": "^1.0.4-alpha.0",
+    "@atomly/config-loader": "^1.0.5-alpha.0",
     "@types/lodash": "~4.14.170",
     "lodash": "~4.17.21",
     "reflect-metadata": "~0.1.13",
