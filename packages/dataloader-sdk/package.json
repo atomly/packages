@@ -1,6 +1,6 @@
 {
 	"name": "@atomly/dataloader-sdk",
-	"version": "1.0.6-alpha.0",
+	"version": "1.0.7-alpha.0",
 	"description": "> TODO: description",
 	"author": "Robert Molina <rmolinamir@gmail.com>",
 	"homepage": "https://github.com/atomly/dataloader-sdk#readme",
@@ -29,7 +29,7 @@
 		"typeorm": "~0.2.31"
 	},
 	"devDependencies": {
-		"@atomly/mongoose-sdk": "^1.0.8-alpha.0",
+		"@atomly/mongoose-sdk": "^1.0.9-alpha.0",
 		"@types/faker": "^5.1.7",
 		"@types/jest": "~26.0.20",
 		"@types/uuid": "~8.3.0",
@@ -47,5 +47,5 @@
 		"typeorm": "~0.2.31",
 		"typescript": "~4.2.3"
 	},
-	"gitHead": "df67801c66c8ae2bc047e0a6a3e843b9bebfba00"
+	"gitHead": "2e812aa26ac4f3d50419bffa0d3d35972d366b68"
 }
